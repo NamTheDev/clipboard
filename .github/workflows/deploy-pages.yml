@@ -18,7 +18,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Lucide icon assets
+      - name: Prepare favicon asset
         run: |
           npm install --no-audit --no-fund
           npm run icons
@@ -30,8 +30,6 @@ jobs:
           test -s public/style.css
           test -s public/clipboard.css
           test -s public/favicon.svg
-          test -s public/icons/settings.svg
-          test -s public/icons/clipboard.svg
       - name: Configure public API URL
         env:
           CLIPBOARD_API_BASE: ${{ vars.CLIPBOARD_API_BASE }}
