@@ -22,6 +22,28 @@ with sync_playwright() as playwright:
     assert page.locator(".taskbar").count() == 0
     assert page.locator("link[href=\"./clipboard.css\"]").count() == 1
     assert page.locator(".note-window").count() >= 2
+    # The shared design contract must match keep rather than diverge in overrides.
+    spacing=page.evaluate("""() => {
+      const root=getComputedStyle(document.documentElement);
+      const style=(s)=>getComputedStyle(document.querySelector(s));
+      return {
+        gutter:root.getPropertyValue('--content-gutter').trim(),
+        gap:root.getPropertyValue('--content-gap').trim(),
+        cardInset:root.getPropertyValue('--card-inset').trim(),
+        sidebarWidth:style('#sidebar').width,
+        headingLeft:style('.content-heading').paddingLeft,
+        cardInsetActual:style('.home-choices .note-paper').paddingLeft,
+        gridGap:style('.home-choices').columnGap
+      };
+    }""")
+    assert spacing == {
+        'gutter':'20px','gap':'12px','cardInset':'14px',
+        'sidebarWidth':'224px','headingLeft':'20px',
+        'cardInsetActual':'14px','gridGap':'12px'
+    }, spacing
+    heading_x=page.locator('.home-screen .page-title').bounding_box()['x']
+    cards_x=page.locator('.home-choices').bounding_box()['x']
+    assert abs(heading_x-cards_x)<=1, (heading_x,cards_x)
     assert page.locator(".toolbar, .menu-bar").count() == 0
     assert page.locator(".page-kicker, .home-intro").count() == 0
     assert page.locator(".sidebar-heading").first.inner_text() == "Navigation"
@@ -76,6 +98,7 @@ with sync_playwright() as playwright:
     page.locator("#dialog-actions .primary").click()
     page.locator("#room-screen").wait_for(state="visible", timeout=15000)
     assert page.locator("#sidebar-room-actions").is_visible()
+    assert page.locator('.preview-pane').evaluate("(e)=>getComputedStyle(e).paddingLeft") == '12px'
     assert page.locator("#room-refresh").is_visible()
     code = page.locator("#room-code").inner_text()
     assert len(code) == 7 and code[3] == "-", code
@@ -97,6 +120,7 @@ with sync_playwright() as playwright:
     guest.on("pageerror", lambda error: errors.append(str(error)))
     guest.goto(BASE + "/?room=" + quote(code), wait_until="load")
     guest.locator("#room-screen").wait_for(state="visible", timeout=15000)
+    assert guest.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--content-gutter').trim()") == '12px'
     assert guest.locator("#room-code").inner_text() == code
     guest.locator("#toggle-nav").click()
     assert guest.locator("#sidebar").is_visible()
