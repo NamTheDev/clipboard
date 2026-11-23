@@ -1,0 +1,80 @@
+"""Chromium regression for the public clipboard interface, backed by a local test API."""
+import os
+from pathlib import Path
+from urllib.parse import quote
+from playwright.sync_api import sync_playwright
+
+BASE = os.environ.get("CLIPBOARD_BASE_URL", "http://127.0.0.1:34567").rstrip("/")
+EVIDENCE = Path("test-results")
+EVIDENCE.mkdir(exist_ok=True)
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.launch(headless=True)
+    errors = []
+    owner = browser.new_context(viewport={"width": 1280, "height": 900}, permissions=["clipboard-read", "clipboard-write"])
+    page = owner.new_page()
+    page.on("pageerror", lambda error: errors.append(str(error)))
+    page.goto(BASE, wait_until="load")
+    assert page.locator("#home-screen").is_visible()
+    classic = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--desktop').trim()")
+    assert classic == "#008080", classic
+    page.screenshot(path=str(EVIDENCE / "clipboard-classic.png"))
+
+    page.locator("#toolbar-settings").click()
+    assert page.locator("#setting-theme").input_value() == "light"
+    assert page.locator("#setting-duration").input_value() == "24h"
+    assert page.locator("#setting-refresh").input_value() == "5"
+    page.locator("#setting-theme").select_option("dark")
+    page.locator("#setting-duration").select_option("7d")
+    page.locator("#setting-refresh").select_option("0")
+    page.locator("#dialog-actions .primary").click()
+    assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
+    dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--surface').trim()")
+    assert dark == "#3c3c3c", dark
+    close_color = page.locator("#win-close").evaluate("(el) => getComputedStyle(el).color")
+    assert close_color == "rgb(255, 255, 255)", close_color
+    page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
+    page.reload(wait_until="load")
+    assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
+    prefs = page.evaluate("JSON.parse(localStorage.getItem('clipboard.preferences.v1'))")
+    assert prefs == {"theme": "dark", "defaultDuration": "7d", "refreshSeconds": 0}, prefs
+
+    page.locator(".toolbar [data-action='new']").click()
+    assert page.locator("#new-vault-duration").input_value() == "7d"
+    page.locator("#new-vault-name").fill("QA Shared Vault")
+    page.locator("#dialog-actions .primary").click()
+    page.locator("#room-screen").wait_for(state="visible", timeout=15000)
+    code = page.locator("#room-code").inner_text()
+    assert len(code) == 7 and code[3] == "-", code
+    page.locator("#toolbar-add").click()
+    page.locator("#item-title").fill("Snippet one")
+    text = "  exact indentation\nline 2\n"
+    page.locator("#item-content").fill(text)
+    page.locator("#dialog-actions .primary").click()
+    page.get_by_role("button", name="Copy text").wait_for(state="visible", timeout=15000)
+    page.locator("#copy-selected").click()
+    copied = page.evaluate("navigator.clipboard.readText()")
+    assert copied == text, repr(copied)
+    page.screenshot(path=str(EVIDENCE / "clipboard-owner-vault.png"))
+
+    guest_context = browser.new_context(viewport={"width": 390, "height": 844}, permissions=["clipboard-read", "clipboard-write"])
+    guest = guest_context.new_page()
+    guest.on("pageerror", lambda error: errors.append(str(error)))
+    guest.goto(BASE + "/?room=" + quote(code), wait_until="load")
+    guest.locator("#room-screen").wait_for(state="visible", timeout=15000)
+    assert guest.locator("#room-code").inner_text() == code
+    assert guest.locator("#toolbar-add").is_disabled()
+    assert guest.locator("#add-item").is_hidden()
+    guest.locator("#copy-selected").click()
+    guest_copied = guest.evaluate("navigator.clipboard.readText()")
+    assert guest_copied == text, repr(guest_copied)
+    no_overflow = guest.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+    assert no_overflow, "Mobile viewport has horizontal overflow"
+    guest.screenshot(path=str(EVIDENCE / "clipboard-guest-mobile.png"))
+
+    assert not errors, "Browser errors: " + " | ".join(errors)
+    print("✓ Classic and dark Windows 98 appearance, including white dark close controls")
+    print("✓ Settings persisted and 7-day vault default applied")
+    print("✓ Owner added/copy-pasted exact text; guest joined/copied on mobile")
+    print("✓ No JavaScript exceptions or mobile horizontal overflow")
+    browser.close()
