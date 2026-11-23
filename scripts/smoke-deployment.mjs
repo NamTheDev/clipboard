@@ -34,6 +34,11 @@ const preflight = await req(api + '/api/rooms', { method: 'OPTIONS', headers: {
 assert.equal(preflight.status, 204);
 assert.equal(preflight.headers.get('access-control-allow-origin'), origin);
 console.log('✓ Backend healthy and accepts GitHub Pages CORS requests');
+const landing = await req(api + '/?room=ABC-234', { redirect: 'manual' });
+assert.equal(landing.status, 302, 'The Railway home page should redirect, not render a second public site');
+assert.equal(landing.headers.get('location'), site + '?room=ABC-234');
+console.log('✓ Railway home page redirects to canonical GitHub Pages and keeps room links');
+
 
 const create = await req(api + '/api/rooms', { method: 'POST', headers: {
   Origin: origin,
