@@ -56,7 +56,7 @@ function setStatus(text) {
 function showError(error) {
   const msg = error instanceof Error ? error.message : String(error);
   setStatus('Error: ' + msg);
-  openDialog('clipboard - Error', '<p>⚠ <span id="error-message"></span></p>', [
+  openDialog('clipboard - Error', '<p><strong aria-hidden="true">!</strong> <span id="error-message"></span></p>', [
     { text: 'OK', primary: true, onClick: closeDialog },
   ]);
   $('#error-message').textContent = msg;

@@ -78,11 +78,13 @@ Until `CLIPBOARD_API_BASE` is configured and the API is online, the GitHub
 Pages frontend shows an **explicit not-connected notice** rather than
 pretending that shared vaults are available.
 
-## Deploy as a complete web app on Railway (simplest public setup)
+## Railway API hosting (backend for the public GitHub Pages site)
 
-Railway can run **the whole Node + SQLite app on one HTTPS domain**. In this
-mode, you do **not** need GitHub Pages, Cloudflare, CORS, or an API base URL:
-the server serves the interface and API together.
+The deployed application uses GitHub Pages for its public interface and Railway for the
+sharing API and persistent SQLite database. Browser visits to the Railway homepage
+redirect to GitHub Pages; `/api/` endpoints remain available. A 500 MB persistent
+volume is mounted at `/data`. When self-hosted on a non-Railway domain, the
+same Node server can serve the interface and API together.
 
 1. Publish this repository to GitHub (`NamTheDev/clipboard`).
 2. In Railway, create a project/service from this GitHub repository. Railway
