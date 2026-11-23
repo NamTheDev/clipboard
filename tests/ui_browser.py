@@ -80,6 +80,7 @@ with sync_playwright() as playwright:
     text = "  exact indentation\nline 2\n"
     page.locator("#item-content").fill(text)
     page.locator("#dialog-actions .primary").click()
+    page.locator(".file-row.note-window").first.wait_for(state="visible", timeout=15000)
     assert page.locator(".file-row.note-window").count() == 1
     page.get_by_role("button", name="Copy text").wait_for(state="visible", timeout=15000)
     page.locator("#copy-selected").click()
