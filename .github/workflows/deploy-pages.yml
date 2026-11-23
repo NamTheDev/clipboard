@@ -36,3 +36,7 @@ jobs:
           path: public
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Smoke test public Pages and shared-room API
+        env:
+          CLIPBOARD_API_BASE: ${{ vars.CLIPBOARD_API_BASE }}
+        run: node scripts/smoke-deployment.mjs
