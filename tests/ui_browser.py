@@ -17,6 +17,10 @@ with sync_playwright() as playwright:
     page.goto(BASE + "/?utm_source=chatgpt.com", wait_until="load")
     assert "utm_source" not in page.url, "Tracking query should be removed from canonical app URL"
     assert page.locator("#home-screen").is_visible()
+    assert page.locator("#app-window").evaluate("(e) => Math.round(e.getBoundingClientRect().height) == Math.round(window.innerHeight)")
+    assert page.locator("#win-min").count() == 0 and page.locator("#win-max").count() == 0
+    assert page.locator(".taskbar").count() == 0
+    assert page.locator(".tool-button .ui-icon").first.evaluate("(e) => e.complete && e.naturalWidth > 0")
     assert page.title() == "clipboard"
     assert page.locator('link[rel="icon"]').get_attribute("href") == "./favicon.svg"
     classic = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--desktop').trim()")
@@ -24,18 +28,18 @@ with sync_playwright() as playwright:
     page.screenshot(path=str(EVIDENCE / "clipboard-classic.png"))
 
     page.locator("#toolbar-settings").click()
-    assert page.locator("#setting-theme").input_value() == "light"
+    assert not page.locator("#setting-dark").is_checked()
     assert page.locator("#setting-duration").input_value() == "24h"
     assert page.locator("#setting-refresh").input_value() == "5"
-    page.locator("#setting-theme").select_option("dark")
+    page.locator("#setting-dark").check()
     page.locator("#setting-duration").select_option("7d")
     page.locator("#setting-refresh").select_option("0")
     page.locator("#dialog-actions .primary").click()
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--surface').trim()")
     assert dark == "#303030", dark
-    close_color = page.locator("#win-close").evaluate("(el) => getComputedStyle(el).color")
-    assert close_color == "rgb(255, 255, 255)", close_color
+    filter_value = page.locator(".tool-button .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
+    assert "invert(1)" in filter_value, filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
     page.reload(wait_until="load")
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
@@ -76,7 +80,7 @@ with sync_playwright() as playwright:
     guest.screenshot(path=str(EVIDENCE / "clipboard-guest-mobile.png"))
 
     assert not errors, "Browser errors: " + " | ".join(errors)
-    print("✓ Classic and dark Windows 98 appearance, including white dark close controls")
+    print("✓ Fullscreen Windows 98 classic/dark appearance and white Lucide dark icons")
     print("✓ Settings persisted and 7-day vault default applied")
     print("✓ Owner added/copy-pasted exact text; guest joined/copied on mobile")
     print("✓ No JavaScript exceptions or mobile horizontal overflow")
