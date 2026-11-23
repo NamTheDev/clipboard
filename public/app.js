@@ -64,6 +64,7 @@ function renderHome() {
   stopPolling(); setUrl();
   $('#home-screen').hidden = false;
   $('#room-screen').hidden = true;
+  $('#sidebar-room-actions').hidden = true;
   $('#sidebar-active').hidden = true; $('#sidebar-none').hidden = false;
   $('#status-count').textContent = '0 item(s)';
   $('#status-mode').textContent = 'Vault Explorer';
@@ -90,6 +91,7 @@ function renderRoom() {
   if (!room) return;
   $('#home-screen').hidden = true;
   $('#room-screen').hidden = false;
+  $('#sidebar-room-actions').hidden = false;
   $('#sidebar-active').hidden = false;
   $('#sidebar-none').hidden = true;
   $('#sidebar-room').textContent = displayCode(room.code);
@@ -305,9 +307,9 @@ function infoDialog(privacy = false) {
     <p>A random owner key is stored only in the creator's browser. It is never included in the share link. Anyone who obtains that key can edit the vault.</p>
     <p>Rooms expire after 24 hours or 7 days. Use HTTPS when running on the internet. Do not store secrets, passwords, or sensitive personal information.</p>
   ` : `
-    <p><strong>clipboard 1.0</strong></p><p>A tiny cross-device clipboard vault with a Windows 95/98 interface.</p>
+    <p><strong>clipboard 1.0</strong></p><p>A compact cross-device clipboard vault with a shared Material Design 3 interface.</p>
     <p>Create a room, paste text items, then enter the six-character room ID on another device.</p>
-    <p class="modal-hint">Visual style follows Chris Lemke's Windows 95/98 design reference.</p>
+    <p class="modal-hint">Visual style uses the shared monochrome Material Design 3 system.</p>
   `, [{ text: 'OK', primary: true, onClick: closeDialog }]);
 }
 async function action(name) {
@@ -357,7 +359,6 @@ $('#copy-link').addEventListener('click', () => {
 $('#copy-selected').addEventListener('click', () => action('copy'));
 $('#edit-selected').addEventListener('click', () => action('edit'));
 $('#delete-selected').addEventListener('click', () => action('remove'));
-$('#add-item').addEventListener('click', () => action('add'));
 $('#file-list').addEventListener('keydown', e => {
   const index = state.items.findIndex(x => x.id === state.selectedId);
   const next = e.key === 'ArrowDown' ? Math.min(state.items.length - 1, index + 1) : e.key === 'ArrowUp' ? Math.max(0, index - 1) : -1;

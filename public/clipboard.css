@@ -1,18 +1,4 @@
-/* Clipboard-specific layouts on shared monochrome MD3 v1.2 tokens. */
-.menu-wrap{
-  position:relative
-}
-.menu-wrap>.popup-menu{
-  position:absolute;
-  top:100%;
-  left:0;
-  z-index:70
-}
-.popup-menu .popup-item kbd{
-  margin-left:auto;
-  font-size:11px;
-  opacity:.7
-}
+/* Clipboard-only layout overrides; tokens/components from util/css/material_design.css. */
 .sidebar-none{
   padding:16px;
   color:var(--muted)
@@ -24,11 +10,6 @@
 }
 .home-body{
   padding:16px 32px 48px
-}
-.home-intro{
-  margin:0 0 24px;
-  color:var(--muted);
-  line-height:1.6
 }
 .home-choices{
   display:grid;
@@ -176,10 +157,6 @@
   gap:8px;
   flex-wrap:wrap
 }
-.room-footer{
-  padding:12px 0;
-  color:var(--muted)
-}
 .modal{
   z-index:100
 }
@@ -200,9 +177,6 @@
 }
 .simple-choice{
   border-bottom:1px solid var(--outline-soft)
-}
-.toolbar-caption{
-  display:none
 }
 .mobile-nav-toggle{
   display:inline-flex!important
@@ -260,8 +234,9 @@
 .home-choices{
   gap:12px
 }
+.sidebar-expiry{padding:8px 20px;color:var(--muted);font-size:12px;line-height:18px}
 .home-choices .note-paper{
-  min-height:112px;
+  min-height:80px;
   padding:14px
 }
 .home-choices .note-foot{
@@ -316,16 +291,6 @@
 .room-details .chrome-btn{
   min-height:36px
 }
-.room-footer{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  padding:10px 20px
-}
-.room-footer #room-expiry{
-  margin-right:auto
-}
 #delete-room{
   color:var(--error)
 }
@@ -346,7 +311,4 @@
   .home-screen>.content-heading,.room-bar.content-heading{
     padding-left:64px
   }
-  .room-footer{
-    padding:10px 12px
   }
-}

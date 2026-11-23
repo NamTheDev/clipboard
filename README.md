@@ -6,13 +6,13 @@ A temporary shared clipboard with short vault IDs and a compact, monochrome Mate
 
 ## Using clipboard
 
-Create or join a vault from the home cards or sidebar. Inside a vault, use the room ID, **Copy ID**, **Copy link**, and **Refresh** controls near its heading. The list/preview interface provides **Copy text**, **Edit**, and **Delete** on selected items; **New item** and **Paste text** are below the list. **Leave vault** and owner-only **Delete vault** are also in the room actions. **Settings**, **Privacy & sharing**, and **About** are in the sidebar, accessible with the menu button on smaller screens. The redundant File/Edit/View/Help menu and separate toolbar are removed.
+Create or join a vault from the home cards or sidebar. Inside a vault, **New item**, **Paste text**, **Copy ID**, **Copy link**, **Refresh**, **Leave vault**, and owner-only **Delete vault** live in the sidebar. The list/preview interface provides **Copy text**, **Edit**, and **Delete** for selected items. **Settings**, **Privacy & sharing**, and **About** are also in the sidebar; use the menu button on smaller screens. The redundant File/Edit/View/Help menu and separate toolbar are removed.
 
 Vaults expire after 24 hours or seven days. Settings include the light/dark toggle, default expiry, and automatic refresh (off / 5 / 15 / 30 seconds). Preference keys, owner tokens and API routes remain compatible with earlier builds.
 
 ## Architecture and hosting
 
-The public frontend is served exclusively from **GitHub Pages**. `public/index.html`, `public/app.js`, `public/js/core/` and `public/js/ui/` are native browser modules. The shared Material Design 3 stylesheet is synchronized from [keep](https://github.com/NamTheDev/keep); `public/clipboard.css` contains app-specific layouts. See [Architecture](docs/ARCHITECTURE.md) for module responsibilities.
+The public frontend is served exclusively from **GitHub Pages**. `public/index.html`, `public/app.js`, `public/js/core/` and `public/js/ui/` are native browser modules. The shared Material Design 3 stylesheet is synchronized from [util/css/material_design.css](https://github.com/NamTheDev/util/blob/main/css/material_design.css); `public/clipboard.css` contains app-specific layouts. See [Architecture](docs/ARCHITECTURE.md) for module responsibilities.
 
 The cross-device vault backend is separate. Railway hosts the Node.js/SQLite API at `https://clipboard-production-afe5e7e4.up.railway.app/api/` and redirects visits to its homepage to GitHub Pages. The repository variable `CLIPBOARD_API_BASE` configures the public frontend; credentials must never be placed in public JS. Keep `server.mjs`, `server/security.mjs`, `Dockerfile`, and the persisted SQLite volume for sharing. The API permits the configured origin through `ALLOWED_ORIGIN`.
 

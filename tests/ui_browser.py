@@ -23,6 +23,8 @@ with sync_playwright() as playwright:
     assert page.locator("link[href=\"./clipboard.css\"]").count() == 1
     assert page.locator(".note-window").count() >= 2
     assert page.locator(".toolbar, .menu-bar").count() == 0
+    assert page.locator(".page-kicker, .home-intro").count() == 0
+    assert page.locator(".sidebar-heading").first.inner_text() == "Navigation"
     assert page.locator('#sidebar [data-action="settings"]').is_visible()
     assert page.locator(".dialog-window").count() == 1
     assert page.locator(".sidebar .ui-icon").first.evaluate("(e) => e.textContent.trim().length > 0")
@@ -73,6 +75,8 @@ with sync_playwright() as playwright:
     page.locator("#new-vault-name").fill("QA Shared Vault")
     page.locator("#dialog-actions .primary").click()
     page.locator("#room-screen").wait_for(state="visible", timeout=15000)
+    assert page.locator("#sidebar-room-actions").is_visible()
+    assert page.locator("#room-refresh").is_visible()
     code = page.locator("#room-code").inner_text()
     assert len(code) == 7 and code[3] == "-", code
     page.locator("#add-item").click()
@@ -94,8 +98,11 @@ with sync_playwright() as playwright:
     guest.goto(BASE + "/?room=" + quote(code), wait_until="load")
     guest.locator("#room-screen").wait_for(state="visible", timeout=15000)
     assert guest.locator("#room-code").inner_text() == code
+    guest.locator("#toggle-nav").click()
+    assert guest.locator("#sidebar").is_visible()
+    assert guest.locator("#copy-link").is_visible()
     assert guest.locator("#add-item").is_hidden()
-    assert guest.locator("#add-item").is_hidden()
+    guest.locator("#mobile-scrim").click(position={"x":345,"y":20})
     guest.locator("#copy-selected").click()
     guest_copied = guest.evaluate("navigator.clipboard.readText()")
     assert guest_copied == text, repr(guest_copied)

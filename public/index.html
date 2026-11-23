@@ -23,41 +23,53 @@
     <main id="app-window" class="window main-window" aria-label="clipboard application">
       <div class="workspace app-content">
         <aside class="sidebar" aria-label="Vault navigation" id="sidebar">
-          <div class="sidebar-heading">Clipboard Explorer</div>
-          <div class="sidebar-group">
-            <button type="button" class="nav-btn active" data-action="home" id="sidebar-home"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder_open</span> Vault Explorer</button>
+          <div class="sidebar-heading">Navigation</div>
+          <nav class="sidebar-group" aria-label="Vault navigation">
+            <button type="button" class="nav-btn active" data-action="home" id="sidebar-home"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder_open</span> Vaults</button>
             <button type="button" class="nav-btn" data-action="new"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> Create vault</button>
             <button type="button" class="nav-btn" data-action="join"><span class="ui-icon material-symbols-rounded" aria-hidden="true">login</span> Join vault</button>
+          </nav>
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-heading">Current vault</div>
+          <nav class="sidebar-group" aria-label="Current vault">
+            <button type="button" class="nav-btn" id="sidebar-active" hidden><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder</span><span id="sidebar-room"></span></button>
+            <span class="sidebar-none" id="sidebar-none">None</span>
+          </nav>
+          <div class="sidebar-section" id="sidebar-room-actions" hidden>
+            <div class="sidebar-divider"></div>
+            <div class="sidebar-heading">Actions</div>
+            <nav class="sidebar-group" aria-label="Vault actions">
+              <button type="button" class="nav-btn" id="add-item" data-action="add"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> New item</button>
+              <button type="button" class="nav-btn" id="paste-item" data-action="paste"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_paste</span> Paste text</button>
+              <button type="button" class="nav-btn" id="copy-code"><span class="ui-icon material-symbols-rounded" aria-hidden="true">tag</span> Copy ID</button>
+              <button type="button" class="nav-btn" id="copy-link"><span class="ui-icon material-symbols-rounded" aria-hidden="true">link</span> Copy link</button>
+              <button type="button" class="nav-btn" id="room-refresh" data-action="refresh"><span class="ui-icon material-symbols-rounded" aria-hidden="true">refresh</span> Refresh</button>
+              <button type="button" class="nav-btn" data-action="leave"><span class="ui-icon material-symbols-rounded" aria-hidden="true">logout</span> Leave vault</button>
+              <button type="button" class="nav-btn" id="delete-room" data-action="delete-room" hidden><span class="ui-icon material-symbols-rounded" aria-hidden="true">delete</span> Delete vault</button>
+            </nav>
+            <div class="sidebar-expiry" id="room-expiry"></div>
           </div>
           <div class="sidebar-divider"></div>
-          <div class="sidebar-heading">Active vault</div>
-          <button type="button" class="nav-btn" id="sidebar-active" hidden><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder</span><span id="sidebar-room"></span></button>
-          <div class="sidebar-none" id="sidebar-none">(none)</div>
-          <div class="sidebar-divider"></div>
-          <div class="sidebar-group" aria-label="Application options">
+          <div class="sidebar-heading">Preferences</div>
+          <nav class="sidebar-group" aria-label="Settings and information">
             <button type="button" class="nav-btn" data-action="settings"><span class="ui-icon material-symbols-rounded" aria-hidden="true">settings</span> Settings</button>
             <button type="button" class="nav-btn" data-action="privacy"><span class="ui-icon material-symbols-rounded" aria-hidden="true">policy</span> Privacy &amp; sharing</button>
             <button type="button" class="nav-btn" data-action="about"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span> About</button>
-          </div>
-          <div class="sidebar-foot"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span><span>Vaults are temporary. Anyone with a room ID can read its contents.</span></div>
+          </nav>
+          <div class="sidebar-foot"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span><span>Vault IDs allow anyone who has them to read shared content.</span></div>
         </aside>
         <div class="mobile-scrim" id="mobile-scrim"></div>
         <section class="content-pane" id="content" aria-label="Vault contents">
           <button type="button" class="chrome-btn mobile-nav-toggle" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded" aria-hidden="true">menu</span></button>
           <div class="home-screen" id="home-screen">
-            <div class="content-heading">
-              <div><div class="page-kicker">Your shared clipboard</div><h1 class="page-title">clipboard</h1><p class="page-desc">Copy here. Paste anywhere.</p></div>
-            </div>
+            <div class="content-heading"><h1 class="page-title">Vaults</h1></div>
             <div class="home-body">
-              <p class="home-intro">Store text snippets in a temporary vault, then open them on another device with a room ID.</p>
               <div class="home-choices note-grid">
                 <section class="groupbox note-window">
-                  <div class="note-titlebar"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span><span class="note-titlebar-text">new_vault</span></div>
-                  <div class="note-paper"><h2 class="note-heading">Create a vault</h2><p class="note-text">Make a temporary space for one or more clipboard items.</p></div>
+                  <div class="note-paper"><h2 class="note-heading">Create a vault</h2><p class="note-text">Share temporary snippets.</p></div>
                   <div class="note-foot"><button class="chrome-btn primary" type="button" data-action="new">Create Vault...</button></div>
                 </section>
                 <section class="groupbox note-window">
-                  <div class="note-titlebar"><span class="ui-icon material-symbols-rounded" aria-hidden="true">login</span><span class="note-titlebar-text">join_vault</span></div>
                   <form id="join-form">
                     <div class="note-paper"><h2 class="note-heading">Join a vault</h2><label class="field-label" for="join-code">Room ID</label><input class="win-input code-input" id="join-code" maxlength="7" autocomplete="off" spellcheck="false" placeholder="ABC-234" required></div>
                     <div class="note-foot"><button type="submit" class="chrome-btn primary">Join</button></div>
@@ -65,20 +77,14 @@
                 </section>
               </div>
               <p class="dialog-note" id="deployment-notice" hidden></p>
-              <p class="dialog-note">No account required. Vaults expire automatically. Do not share passwords or sensitive information.</p>
             </div>
           </div>
           <div class="room-screen" id="room-screen" hidden>
             <div class="room-bar content-heading">
-              <div><div class="page-kicker">Active shared vault</div><h1 class="page-title" id="room-title"></h1><p class="page-desc" id="room-caption"></p></div>
+              <div><h1 class="page-title" id="room-title"></h1><p class="page-desc" id="room-caption"></p></div>
               <span class="room-badge address-badge" id="access-badge">READ ONLY</span>
             </div>
-            <div class="room-details quick-bar">
-              <span class="toolbar-caption">Room ID</span><strong class="room-code" id="room-code"></strong>
-              <button type="button" class="chrome-btn" id="copy-code">Copy ID</button>
-              <button type="button" class="chrome-btn" id="copy-link">Copy link</button>
-              <button type="button" class="chrome-btn" data-action="refresh" id="room-refresh" title="Refresh vault"><span class="ui-icon material-symbols-rounded" aria-hidden="true">refresh</span> Refresh</button>
-            </div>
+            <div class="room-details quick-bar"><strong class="room-code" id="room-code" aria-label="Room ID"></strong></div>
             <div class="file-surface">
               <div class="file-list-pane board-scroll">
                 <div class="board-label">Clipboard items</div>
@@ -96,13 +102,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="room-footer">
-              <button type="button" class="chrome-btn" id="add-item"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> New item...</button>
-              <button type="button" class="chrome-btn" data-action="paste" id="paste-item"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_paste</span> Paste text...</button>
-              <span id="room-expiry"></span>
-              <button type="button" class="chrome-btn" data-action="leave">Leave vault</button>
-              <button type="button" class="chrome-btn" id="delete-room" data-action="delete-room" hidden>Delete vault...</button>
             </div>
           </div>
         </section>
