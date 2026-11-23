@@ -160,6 +160,7 @@ const staticFiles = new Map([
   ['/theme-signal.js', ['theme-signal.js', 'text/javascript; charset=utf-8']],
   ['/config.js', ['config.js', 'text/javascript; charset=utf-8']],
   ['/style.css', ['style.css', 'text/css; charset=utf-8']],
+  ['/clipboard.css', ['clipboard.css', 'text/css; charset=utf-8']],
   ['/favicon.svg', ['favicon.svg', 'image/svg+xml']],
 ]);
 const staticCache = new Map();

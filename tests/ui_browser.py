@@ -20,6 +20,10 @@ with sync_playwright() as playwright:
     assert page.locator("#app-window").evaluate("(e) => Math.round(e.getBoundingClientRect().height) == Math.round(window.innerHeight)")
     assert page.locator("#win-min").count() == 0 and page.locator("#win-max").count() == 0
     assert page.locator(".taskbar").count() == 0
+    assert page.locator("link[href=\"./clipboard.css\"]").count() == 1
+    assert page.locator(".note-window").count() >= 2
+    assert page.locator(".toolbar .tool-btn").count() >= 6
+    assert page.locator(".dialog-window").count() == 1
     assert page.locator(".tool-button .ui-icon").first.evaluate("(e) => e.complete && e.naturalWidth > 0")
     assert page.title() == "clipboard"
     def assert_theme_signal(expected):
@@ -51,8 +55,10 @@ with sync_playwright() as playwright:
     page.locator("#dialog-actions .primary").click()
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     assert_theme_signal("dark")
-    dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--surface').trim()")
+    dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--face').trim()")
     assert dark == "#303030", dark
+    bevel = page.locator(".chrome-btn").first.evaluate("(el) => ({top:getComputedStyle(el).borderTopColor,right:getComputedStyle(el).borderRightColor})")
+    assert bevel == {"top":"rgb(112, 112, 112)","right":"rgb(9, 9, 9)"}, bevel
     filter_value = page.locator(".tool-button .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
     assert "invert(1)" in filter_value, filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
@@ -74,6 +80,7 @@ with sync_playwright() as playwright:
     text = "  exact indentation\nline 2\n"
     page.locator("#item-content").fill(text)
     page.locator("#dialog-actions .primary").click()
+    assert page.locator(".file-row.note-window").count() == 1
     page.get_by_role("button", name="Copy text").wait_for(state="visible", timeout=15000)
     page.locator("#copy-selected").click()
     copied = page.evaluate("navigator.clipboard.readText()")

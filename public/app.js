@@ -118,6 +118,11 @@ function startRoomRefresh(code) {
   }, preferences.refreshSeconds * 1000);
 }
 
+function closeSidebar() {
+  $('#sidebar').classList.remove('mobile-open');
+  $('#mobile-scrim').classList.remove('show');
+  $('#toggle-nav').setAttribute('aria-expanded','false');
+}
 function closeMenus() {
   $$('[data-menu-popup]').forEach(x => { x.hidden = true; });
   $$('[data-menu]').forEach(x => x.setAttribute('aria-expanded', 'false'));
@@ -134,12 +139,16 @@ function openDialog(title, html, actions = []) {
   previousFocus = document.activeElement;
   $('#dialog-title').textContent = title;
   $('#dialog-body').innerHTML = html; // Only application-owned constant markup; never untrusted vault content.
+  $('#dialog-body').querySelectorAll('.modal-field').forEach(field => field.classList.add('field'));
+  $('#dialog-body').querySelectorAll('.modal-field label').forEach(label => label.classList.add('field-label'));
+  $('#dialog-body').querySelectorAll('.modal-field input, .modal-field textarea, .modal-field select').forEach(input => input.classList.add('win-input'));
+  $('#dialog-body').querySelectorAll('.modal-hint').forEach(hint => hint.classList.add('dialog-note'));
   $('#dialog-actions').replaceChildren();
   for (const action of actions) {
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = action.text;
-    button.className = 'win98-button' + (action.primary ? ' primary' : '');
+    button.className = 'chrome-btn' + (action.primary ? ' primary' : '');
     button.addEventListener('click', action.onClick);
     $('#dialog-actions').append(button);
   }
@@ -163,6 +172,9 @@ function renderHome() {
   $('#window-title').textContent = 'clipboard - Vault Explorer';
   $('#status-count').textContent = '0 item(s)';
   $('#status-mode').textContent = 'Vault Explorer';
+  $('#sidebar-home').classList.add('active');
+  $('#sidebar-active').classList.remove('active');
+  closeSidebar();
   syncButtons();
   setStatus('Ready');
 }
@@ -188,6 +200,9 @@ function renderRoom() {
   $('#sidebar-active').hidden = false;
   $('#sidebar-none').hidden = true;
   $('#sidebar-room').textContent = displayCode(room.code);
+  $('#sidebar-home').classList.remove('active');
+  $('#sidebar-active').classList.add('active');
+  closeSidebar();
   $('#room-title').textContent = room.title;
   $('#room-caption').textContent = `Created ${timeLabel(room.createdAt)}`;
   $('#room-code').textContent = displayCode(room.code);
@@ -211,14 +226,21 @@ function renderItems() {
   } else {
     for (const item of state.items) {
       const row = document.createElement('button');
-      row.type = 'button'; row.className = 'file-row'; row.setAttribute('role', 'option');
+      row.type = 'button';
+      row.className = 'file-row note-window';
+      row.setAttribute('role', 'option');
       row.setAttribute('aria-selected', String(state.selectedId === item.id));
       row.dataset.itemId = item.id;
-      const name = document.createElement('span'); name.className = 'file-name';
-      const fileIcon = document.createElement('img'); fileIcon.className = 'ui-icon'; fileIcon.src = './icons/file-text.svg'; fileIcon.alt = ''; fileIcon.setAttribute('aria-hidden', 'true');
-      name.append(fileIcon, document.createTextNode(item.title));
-      const date = document.createElement('span'); date.className = 'file-date'; date.textContent = dateLabel(item.created_at);
-      row.append(name, date);
+      const top = document.createElement('span'); top.className = 'note-titlebar';
+      const fileIcon = document.createElement('img'); fileIcon.className = 'ui-icon'; fileIcon.src = './icons/file-text.svg'; fileIcon.alt = ''; fileIcon.setAttribute('aria-hidden','true');
+      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text'; descriptor.textContent = 'text_snippet';
+      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date'; date.textContent = dateLabel(item.created_at);
+      top.append(fileIcon, descriptor, date);
+      const paper = document.createElement('span'); paper.className = 'note-paper';
+      const name = document.createElement('span'); name.className = 'note-heading file-name'; name.textContent = item.title;
+      const excerpt = document.createElement('span'); excerpt.className = 'note-text file-excerpt'; excerpt.textContent = item.content.length > 175 ? item.content.slice(0,175) + '…' : item.content;
+      paper.append(name,excerpt);
+      row.append(top,paper);
       row.addEventListener('click', () => { state.selectedId = item.id; renderItems(); });
       row.addEventListener('dblclick', () => copyText(item.content).catch(showError));
       list.append(row);
@@ -423,9 +445,15 @@ async function action(name) {
   } catch (e) { showError(e); }
 }
 
-// Window chrome and menus.
+// Application menus and persistent navigation.
 $$('[data-action]').forEach(el => el.addEventListener('click', () => action(el.dataset.action)));
 $$('[data-menu]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); openMenu(el.dataset.menu); }));
+$('#toggle-nav').addEventListener('click', () => {
+  const open = $('#sidebar').classList.toggle('mobile-open');
+  $('#mobile-scrim').classList.toggle('show',open);
+  $('#toggle-nav').setAttribute('aria-expanded',String(open));
+});
+$('#mobile-scrim').addEventListener('click', closeSidebar);
 document.addEventListener('click', event => {
   if (!event.target.closest('.menu-wrap')) closeMenus();
 });
