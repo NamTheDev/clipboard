@@ -36,29 +36,28 @@ with sync_playwright() as playwright:
         })""")
         assert values == {
           "meta": expected, "root": expected, "computed": expected,
-          "browser": "#181818" if expected == "dark" else "#008080",
+          "browser": "#121212" if expected == "dark" else "#fafafa",
           "locked": False
         }, values
-    assert_theme_signal("light")
+    assert_theme_signal("dark")
     assert page.locator('link[rel="icon"]').get_attribute("href") == "./favicon.svg"
-    classic = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--desktop').trim()")
-    assert classic == "#008080", classic
-    page.screenshot(path=str(EVIDENCE / "clipboard-classic.png"))
+    md3 = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--bg').trim()")
+    assert md3 == "#121212", md3
+    page.screenshot(path=str(EVIDENCE / "clipboard-md3-dark.png"))
 
     page.locator("#toolbar-settings").click()
-    assert not page.locator("#setting-dark").is_checked()
+    assert page.locator("#setting-dark").is_checked()
     assert page.locator("#setting-duration").input_value() == "24h"
     assert page.locator("#setting-refresh").input_value() == "5"
-    page.locator("#setting-dark").check()
     page.locator("#setting-duration").select_option("7d")
     page.locator("#setting-refresh").select_option("0")
     page.locator("#dialog-actions .primary").click()
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     assert_theme_signal("dark")
     dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--face').trim()")
-    assert dark == "#303030", dark
-    bevel = page.locator(".chrome-btn").first.evaluate("(el) => ({top:getComputedStyle(el).borderTopColor,right:getComputedStyle(el).borderRightColor})")
-    assert bevel == {"top":"rgb(112, 112, 112)","right":"rgb(9, 9, 9)"}, bevel
+    assert dark == "#1e1e1e", dark
+    radius = page.locator(".note-window").first.evaluate("(el) => getComputedStyle(el).borderRadius")
+    assert radius == "16px", radius
     filter_value = page.locator(".tool-button .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
     assert "invert(1)" in filter_value, filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
@@ -111,7 +110,7 @@ with sync_playwright() as playwright:
     page.reload(wait_until="load")
     assert_theme_signal("light")
     assert not errors, "Browser errors: " + " | ".join(errors)
-    print("✓ Fullscreen Windows 98 classic/dark appearance and white Lucide dark icons")
+    print("✓ Fullscreen monochrome MD3 dark/light appearance")
     print("✓ Settings persisted and 7-day vault default applied")
     print("✓ Owner added/copy-pasted exact text; guest joined/copied on mobile")
     print("✓ No JavaScript exceptions or mobile horizontal overflow")
