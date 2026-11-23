@@ -84,6 +84,11 @@ test('validation, limits, static response headers', async () => {
   assert.equal(signalScript.status, 200);
   assert.match(signalScript.headers.get('content-type'), /text\/javascript/);
   assert.match(await signalScript.text(), /color-scheme/);
+  const nestedModule = await fetch(base + '/js/core/api.js');
+  assert.equal(nestedModule.status, 200);
+  assert.match(nestedModule.headers.get('content-type'), /text\/javascript/);
+  assert.match(await nestedModule.text(), /createApi/);
+  assert.match(staticPage.headers.get('content-security-policy'), /fonts.googleapis.com/);
   assert.match(staticPage.headers.get('content-security-policy'), /script-src 'self'/);
   assert.equal(staticPage.headers.get('x-content-type-options'), 'nosniff');
 });
