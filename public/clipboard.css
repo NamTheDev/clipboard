@@ -1,116 +1,112 @@
-/* Clipboard-only layout overrides; tokens/components from util/css/material_design.css. */
-.sidebar-none{
-  padding:16px;
-  color:var(--muted)
-}
+/* Clipboard-only layout. Shared tokens and components live in
+ * https://github.com/NamTheDev/util/blob/main/css/material_design.css
+ * Keep margins, insets, and gaps on the shared spacing tokens.
+ */
+
+/* Home: two compact actions, using the same card insets as keep notes. */
 .home-screen{
   flex:1;
+  min-height:0;
   overflow:auto;
-  min-height:0
 }
 .home-body{
-  padding:16px 32px 48px
+  padding:0 var(--content-gutter) 24px;
 }
 .home-choices{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));
-  gap:24px;
-  max-width:1000px
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));
+  gap:var(--content-gap);
+  max-width:652px;
 }
 .home-choices>.note-window{
-  width:100%
+  min-width:0;
 }
 .home-choices .note-paper{
-  min-height:180px;
-  padding:24px
-}
-.home-choices .note-text{
-  line-height:1.6
+  min-height:72px;
 }
 .home-choices .note-foot{
-  justify-content:flex-end
+  justify-content:flex-end;
 }
+
+/* Vault information and split list/preview workspace. */
 .code-input,.room-code{
   font-family:Roboto,Arial,sans-serif;
   font-weight:500;
-  letter-spacing:.06em
+  letter-spacing:.06em;
 }
 .room-code{
   font-size:22px;
   user-select:all;
-  overflow-wrap:anywhere
+  overflow-wrap:anywhere;
 }
 .room-screen{
-  height:100%;
-  min-height:0;
   display:flex;
-  flex-direction:column
+  flex-direction:column;
+  min-height:0;
+  height:100%;
 }
 .room-badge{
   border-radius:999px;
   padding:6px 12px;
   background:var(--raised);
   color:var(--muted);
-  font-size:12px
+  font-size:12px;
 }
 .room-badge.owner{
-  color:var(--text)
+  color:var(--text);
 }
 .room-details.quick-bar{
-  margin:0 32px 16px;
-  flex-wrap:wrap
-}
-.room-details .room-code{
-  margin-right:auto
+  margin-bottom:var(--content-gap);
 }
 .file-surface{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(260px,42%);
   flex:1;
   min-height:0;
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(300px,40%);
-  gap:20px;
-  padding:0 32px 24px
+  gap:var(--content-gap);
+  padding:0 var(--content-gutter) 16px;
 }
 .file-list-pane,.preview-pane{
   min-width:0;
   min-height:0;
   overflow:auto;
+  padding:var(--pane-inset);
   background:var(--surface);
   border:1px solid var(--outline-soft);
   border-radius:16px;
-  padding:20px
 }
 .file-list{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));
-  gap:16px;
-  align-items:start
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
+  align-items:start;
+  gap:var(--content-gap);
 }
 .file-row{
   display:block;
-  text-align:left;
   width:100%;
-  border:1px solid var(--outline-soft);
-  background:var(--raised);
-  border-radius:16px;
+  min-width:0;
   padding:0;
+  text-align:left;
   cursor:pointer;
-  overflow:hidden
+  overflow:hidden;
+  border:1px solid var(--outline-soft);
+  border-radius:16px;
+  background:var(--raised);
 }
 .file-row:hover{
-  border-color:var(--outline)
+  border-color:var(--outline);
 }
 .file-row .note-titlebar{
-  display:flex
+  display:flex;
 }
 .file-row .note-paper{
   display:block;
-  min-height:104px
+  min-height:72px;
 }
 .file-row .file-name{
   display:block;
   font-weight:500;
-  margin:0 0 8px
+  margin-bottom:8px;
 }
 .file-row .file-excerpt{
   display:block;
@@ -118,197 +114,134 @@
   overflow:hidden;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  color:var(--muted)
+  color:var(--muted);
 }
 .file-row .file-date{
   margin-left:auto;
   white-space:nowrap;
-  color:var(--muted)
+  color:var(--muted);
 }
 .file-row[aria-selected="true"]{
   outline:2px solid var(--primary);
   outline-offset:2px;
-  background:var(--high)
+  background:var(--high);
 }
 .file-empty{
-  padding:24px;
-  color:var(--muted)
+  padding:var(--pane-inset);
+  color:var(--muted);
 }
 .preview-card{
   display:flex;
   flex-direction:column;
+  gap:var(--content-gap);
   min-height:200px;
   max-height:100%;
-  gap:16px
 }
 .preview-content.note-paper{
-  font:14px/1.65 Roboto,Arial,sans-serif;
+  flex:1;
+  min-height:100px;
+  padding:12px var(--card-inset);
+  overflow:auto;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  overflow:auto;
-  flex:1;
-  min-height:140px;
   background:var(--raised)!important;
   border-radius:16px;
-  padding:20px
+  font:14px/1.65 Roboto,Arial,sans-serif;
 }
 .preview-actions{
   display:flex;
+  flex-wrap:wrap;
   gap:8px;
-  flex-wrap:wrap
 }
+
+/* Shared navigation pattern, clipboard-only supporting information. */
+.sidebar-expiry{
+  padding:8px 20px;
+  color:var(--muted);
+  font-size:12px;
+  line-height:18px;
+}
+#delete-room{
+  color:var(--error);
+}
+
+/* Modal and settings structure. */
 .modal{
-  z-index:100
+  z-index:100;
 }
 .modal-body{
-  max-height:65dvh
+  max-height:65dvh;
 }
 .modal-actions{
-  justify-content:flex-end
+  justify-content:flex-end;
 }
 .modal-room-id{
   font-size:22px;
   font-weight:500;
-  letter-spacing:.08em
+  letter-spacing:.08em;
 }
 .settings-group{
   display:grid;
-  gap:12px
+  gap:12px;
 }
 .simple-choice{
-  border-bottom:1px solid var(--outline-soft)
+  border-bottom:1px solid var(--outline-soft);
 }
-.mobile-nav-toggle{
-  display:inline-flex!important
-}
-@media(max-width:839px){
-  .home-body{
-    padding:16px 20px 32px
-  }
-  .file-surface{
-    padding:0 16px 20px;
-    gap:12px;
-    grid-template-columns:minmax(0,1fr) minmax(240px,42%)
-  }
-  .room-details.quick-bar{
-    margin:0 16px 12px
-  }
-  .file-list-pane,.preview-pane{
-    padding:12px
-  }
-}
-@media(max-width:599px){
-  .home-choices{
-    grid-template-columns:1fr
-  }
-  .file-surface{
-    grid-template-columns:1fr;
-    overflow:auto;
-    display:flex;
-    flex-direction:column
-  }
-  .file-list-pane,.preview-pane{
-    overflow:visible;
-    flex:none
-  }
-  .preview-pane{
-    min-height:220px
-  }
-  .file-list{
-    grid-template-columns:1fr
-  }
-  .room-code{
-    font-size:18px
-  }
-  .home-body{
-    padding:12px 16px 24px
-  }
-}
-/* v1.3 compact vault layouts */
-.home-body{
-  padding:12px 20px 24px
-}
-.home-intro{
-  margin-bottom:12px
-}
-.home-choices{
-  gap:12px
-}
-.sidebar-expiry{padding:8px 20px;color:var(--muted);font-size:12px;line-height:18px}
-.home-choices .note-paper{
-  min-height:80px;
-  padding:14px
-}
-.home-choices .note-foot{
-  padding:8px 12px
-}
-.room-details.quick-bar{
-  margin:0 20px 10px
-}
-.file-surface{
-  gap:12px;
-  padding:0 20px 16px
-}
-.file-list-pane,.preview-pane{
-  padding:12px
-}
-.file-list{
-  gap:10px
-}
-.file-row .note-paper{
-  min-height:68px
-}
-.preview-card{
-  gap:10px
-}
-.preview-content.note-paper{
-  min-height:100px;
-  padding:12px
-}
-@media(max-width:839px){
-  .home-body{
-    padding:10px 12px 20px
-  }
-  .room-details.quick-bar{
-    margin:0 12px 8px
-  }
-  .file-surface{
-    padding:0 12px 12px
-  }
-}
-@media(max-width:599px){
-  .home-choices{
-    gap:10px
-  }
-  .file-list-pane,.preview-pane{
-    padding:10px
-  }
-}
-/* Navigation without legacy menu/toolbar chrome. */
+
+/* Clipboard opens the same mobile drawer as keep. */
 .content-pane{
-  position:relative
-}
-.room-details .chrome-btn{
-  min-height:36px
-}
-#delete-room{
-  color:var(--error)
+  position:relative;
 }
 .mobile-nav-toggle{
+  display:inline-flex!important;
   position:absolute;
-  top:8px;
-  left:10px;
+  top:10px;
+  left:12px;
   z-index:5;
   min-width:40px;
-  min-height:40px
+  min-height:40px;
 }
 @media(min-width:840px){
   .mobile-nav-toggle{
-    display:none!important
+    display:none!important;
   }
 }
 @media(max-width:839px){
-  .home-screen>.content-heading,.room-bar.content-heading{
-    padding-left:64px
+  .home-screen>.content-heading,
+  .room-bar.content-heading{
+    padding-left:64px;
   }
+  .home-body{
+    padding-bottom:20px;
   }
+  .file-surface{
+    grid-template-columns:minmax(0,1fr) minmax(220px,42%);
+    padding-bottom:12px;
+  }
+  .room-details.quick-bar{
+    margin-bottom:8px;
+  }
+}
+@media(max-width:599px){
+  .home-choices{
+    grid-template-columns:1fr;
+  }
+  .file-surface{
+    display:flex;
+    flex-direction:column;
+    overflow:auto;
+  }
+  .file-list-pane,.preview-pane{
+    flex:none;
+    overflow:visible;
+  }
+  .preview-pane{
+    min-height:220px;
+  }
+  .file-list{
+    grid-template-columns:1fr;
+  }
+  .room-code{
+    font-size:18px;
+  }
+}
