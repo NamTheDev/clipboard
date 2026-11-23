@@ -117,25 +117,9 @@ function startRoomRefresh(code) {
   }, preferences.refreshSeconds * 1000);
 }
 
-function setWindowVisible(visible) {
-  state.minimized = !visible;
-  $('#app-window').hidden = !visible;
-  $('#taskbar-app').classList.toggle('win98-sunken', visible);
-  $('#taskbar-app').classList.toggle('win98-raised', !visible);
-  if (visible) $('#app-window').focus?.();
-  closeMenus();
-}
-function toggleMaximize() {
-  if (matchMedia('(max-width: 650px)').matches) return;
-  state.maximized = !state.maximized;
-  $('#app-window').classList.toggle('maximized', state.maximized);
-  $('#win-max').textContent = state.maximized ? '❐' : '□';
-  $('#win-max').title = state.maximized ? 'Restore' : 'Maximize';
-}
 function closeMenus() {
   $$('[data-menu-popup]').forEach(x => { x.hidden = true; });
   $$('[data-menu]').forEach(x => x.setAttribute('aria-expanded', 'false'));
-  $('#start-menu').hidden = true;
 }
 function openMenu(name) {
   const popup = $(`[data-menu-popup="${name}"]`);
@@ -180,7 +164,6 @@ function renderHome() {
   $('#status-mode').textContent = 'Vault Explorer';
   syncButtons();
   setStatus('Ready');
-  setWindowVisible(true);
 }
 function syncButtons() {
   const canEdit = Boolean(state.room && state.ownerToken);
@@ -231,7 +214,8 @@ function renderItems() {
       row.setAttribute('aria-selected', String(state.selectedId === item.id));
       row.dataset.itemId = item.id;
       const name = document.createElement('span'); name.className = 'file-name';
-      name.textContent = '▤ ' + item.title;
+      const fileIcon = document.createElement('img'); fileIcon.className = 'ui-icon'; fileIcon.src = './icons/file-text.svg'; fileIcon.alt = ''; fileIcon.setAttribute('aria-hidden', 'true');
+      name.append(fileIcon, document.createTextNode(item.title));
       const date = document.createElement('span'); date.className = 'file-date'; date.textContent = dateLabel(item.created_at);
       row.append(name, date);
       row.addEventListener('click', () => { state.selectedId = item.id; renderItems(); });
@@ -273,7 +257,6 @@ async function joinRoom(rawCode) {
   state.ownerToken = localStorage.getItem(ownerStorageKey(code));
   setUrl(code);
   renderRoom();
-  setWindowVisible(true);
   setStatus('Connected to ' + displayCode(code));
   startRoomRefresh(code);
 }
@@ -374,8 +357,7 @@ function deleteVaultDialog() {
 function settingsDialog() {
   openDialog('clipboard - Settings', [
     '<fieldset class="settings-group"><legend>Appearance</legend>',
-    '<label for="setting-theme">Color scheme</label>',
-    '<select id="setting-theme"><option value="light">Classic Windows 98</option><option value="dark">Dark Windows 98</option></select>',
+    '<label class="simple-choice" for="setting-dark"><input type="checkbox" id="setting-dark"> Dark mode</label>',
     '</fieldset>',
     '<fieldset class="settings-group"><legend>Vault defaults</legend>',
     '<label for="setting-duration">New vault expires after</label>',
@@ -388,7 +370,7 @@ function settingsDialog() {
     { text: 'Save', primary: true, onClick: () => {
       try {
         savePreferences({
-          theme: $('#setting-theme').value,
+          theme: $('#setting-dark').checked ? 'dark' : 'light',
           defaultDuration: $('#setting-duration').value,
           refreshSeconds: Number($('#setting-refresh').value)
         });
@@ -398,7 +380,7 @@ function settingsDialog() {
     }},
     { text: 'Cancel', onClick: closeDialog }
   ]);
-  $('#setting-theme').value = preferences.theme;
+  $('#setting-dark').checked = preferences.theme === 'dark';
   $('#setting-duration').value = preferences.defaultDuration;
   $('#setting-refresh').value = String(preferences.refreshSeconds);
 }
@@ -433,7 +415,6 @@ async function action(name) {
       case 'remove': deleteSelectedDialog(); break;
       case 'delete-room': deleteVaultDialog(); break;
       case 'refresh': if (state.room) await fetchRoom(state.room.code); break;
-      case 'maximize': toggleMaximize(); break;
       case 'settings': settingsDialog(); break;
       case 'about': infoDialog(); break;
       case 'privacy': infoDialog(true); break;
@@ -445,15 +426,8 @@ async function action(name) {
 $$('[data-action]').forEach(el => el.addEventListener('click', () => action(el.dataset.action)));
 $$('[data-menu]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); openMenu(el.dataset.menu); }));
 document.addEventListener('click', event => {
-  if (!event.target.closest('.menu-wrap') && !event.target.closest('.taskbar-start-wrap')) closeMenus();
+  if (!event.target.closest('.menu-wrap')) closeMenus();
 });
-$('#start-button').addEventListener('click', e => { e.stopPropagation(); const open = $('#start-menu').hidden; closeMenus(); $('#start-menu').hidden = !open; });
-$('#taskbar-app').addEventListener('click', () => setWindowVisible(state.minimized));
-$('#desktop-shortcut').addEventListener('click', () => setWindowVisible(true));
-$('#win-min').addEventListener('click', () => setWindowVisible(false));
-$('#win-close').addEventListener('click', () => setWindowVisible(false));
-$('#win-max').addEventListener('click', toggleMaximize);
-$('#dialog-close').addEventListener('click', closeDialog);
 $('#modal-backdrop').addEventListener('click', e => { if (e.target === $('#modal-backdrop')) closeDialog(); });
 $('#join-form').addEventListener('submit', async e => { e.preventDefault(); try { await joinRoom($('#join-code').value); } catch(error) { showError(error); } });
 $('#join-code').addEventListener('input', formatRoomCodeInput);
@@ -493,8 +467,6 @@ document.addEventListener('keydown', e => {
   if (e.ctrlKey && e.key.toLowerCase() === 'o') { e.preventDefault(); action('join'); }
   if (e.key === 'F5') { e.preventDefault(); action('refresh'); }
 });
-function updateClock() { $('#clock').textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
-updateClock(); setInterval(updateClock, 15000);
 // Keep the canonical GitHub Pages address free of click-source tracking parameters.
 const pageAddress = new URL(location.href);
 let cleanTracking = false;

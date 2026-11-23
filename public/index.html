@@ -14,19 +14,8 @@
 </head>
 <body>
   <div class="desktop">
-    <button id="desktop-shortcut" type="button" class="desktop-icon" aria-label="Open clipboard">
-      <img src="./favicon.svg" width="32" height="32" alt="">
-      <span>clipboard</span>
-    </button>
     <main id="app-window" class="window win98-raised" aria-label="Clipboard application">
-      <header class="titlebar" id="titlebar">
-        <span class="title-group"><img src="./favicon.svg" width="16" height="16" alt=""><span id="window-title">clipboard - Vault Explorer</span></span>
-        <span class="title-controls">
-          <button class="title-button" type="button" id="win-min" title="Minimize" aria-label="Minimize">_</button>
-          <button class="title-button" type="button" id="win-max" title="Maximize" aria-label="Maximize">□</button>
-          <button class="title-button close" type="button" id="win-close" title="Close" aria-label="Close">×</button>
-        </span>
-      </header>
+      <header class="titlebar app-header"><span class="title-group"><img src="./favicon.svg" width="18" height="18" alt=""><span id="window-title">clipboard — Vault Explorer</span></span></header>
       <nav class="menu-bar" aria-label="Application menu">
         <div class="menu-wrap">
           <button class="menu-trigger" type="button" data-menu="file">File</button>
@@ -53,7 +42,6 @@
           <button class="menu-trigger" type="button" data-menu="view">View</button>
           <div class="popup-menu" data-menu-popup="view" hidden>
             <button type="button" data-action="refresh">Refresh vault <kbd>F5</kbd></button>
-            <button type="button" data-action="maximize">Maximize / Restore</button>
             <div class="menu-separator"></div>
             <button type="button" data-action="settings">Settings...</button>
           </div>
@@ -67,31 +55,31 @@
         </div>
       </nav>
       <div class="toolbar" aria-label="Quick actions">
-        <button type="button" class="tool-button" data-action="new"><span class="mini-icon">▣</span> New vault</button>
-        <button type="button" class="tool-button" data-action="join"><span class="mini-icon">▤</span> Join</button>
+        <button type="button" class="tool-button" data-action="new"><img class="ui-icon" src="./icons/plus.svg" alt="" aria-hidden="true"> New vault</button>
+        <button type="button" class="tool-button" data-action="join"><img class="ui-icon" src="./icons/log-in.svg" alt="" aria-hidden="true"> Join</button>
         <div class="toolbar-divider"></div>
-        <button type="button" class="tool-button" data-action="add" id="toolbar-add"><span class="mini-icon">✎</span> New item</button>
-        <button type="button" class="tool-button" data-action="paste" id="toolbar-paste"><span class="mini-icon">▣</span> Paste text</button>
-        <button type="button" class="tool-button" data-action="copy" id="toolbar-copy"><span class="mini-icon">▦</span> Copy</button>
-        <button type="button" class="tool-button" data-action="refresh" id="toolbar-refresh"><span class="mini-icon">↻</span> Refresh</button>
+        <button type="button" class="tool-button" data-action="add" id="toolbar-add"><img class="ui-icon" src="./icons/pencil.svg" alt="" aria-hidden="true"> New item</button>
+        <button type="button" class="tool-button" data-action="paste" id="toolbar-paste"><img class="ui-icon" src="./icons/clipboard-paste.svg" alt="" aria-hidden="true"> Paste text</button>
+        <button type="button" class="tool-button" data-action="copy" id="toolbar-copy"><img class="ui-icon" src="./icons/copy.svg" alt="" aria-hidden="true"> Copy</button>
+        <button type="button" class="tool-button" data-action="refresh" id="toolbar-refresh"><img class="ui-icon" src="./icons/refresh-cw.svg" alt="" aria-hidden="true"> Refresh</button>
         <div class="toolbar-divider"></div>
-        <button type="button" class="tool-button" data-action="settings" id="toolbar-settings"><span class="mini-icon">⚙︎</span> Settings</button>
+        <button type="button" class="tool-button" data-action="settings" id="toolbar-settings"><img class="ui-icon" src="./icons/settings.svg" alt="" aria-hidden="true"> Settings</button>
       </div>
       <div class="address-bar"><span class="address-label">Address</span><div class="win98-sunken address-field" id="breadcrumb">C:\Clipboard\</div><button type="button" class="win98-button compact" data-action="home">Go</button></div>
       <div class="app-content">
         <aside class="sidebar win98-sunken" aria-label="Vault navigation">
-          <div class="tree-row tree-root">▣ <strong>Clipboard</strong></div>
-          <button type="button" class="tree-row tree-child" data-action="home">▤ Vault Explorer</button>
-          <button type="button" class="tree-row tree-child" data-action="new">▣ Create vault</button>
-          <button type="button" class="tree-row tree-child" data-action="join">▤ Join vault</button>
+          <div class="tree-row tree-root"><img class="ui-icon" src="./icons/clipboard.svg" alt="" aria-hidden="true"> <strong>clipboard</strong></div>
+          <button type="button" class="tree-row tree-child" data-action="home"><img class="ui-icon" src="./icons/folder-open.svg" alt="" aria-hidden="true"> Vault Explorer</button>
+          <button type="button" class="tree-row tree-child" data-action="new"><img class="ui-icon" src="./icons/plus.svg" alt="" aria-hidden="true"> Create vault</button>
+          <button type="button" class="tree-row tree-child" data-action="join"><img class="ui-icon" src="./icons/log-in.svg" alt="" aria-hidden="true"> Join vault</button>
           <div class="tree-rule"></div>
           <div class="tree-heading">ACTIVE VAULT</div>
-          <button type="button" class="tree-row tree-child tree-current" id="sidebar-active" hidden>▣ <span id="sidebar-room"></span></button>
+          <button type="button" class="tree-row tree-child tree-current" id="sidebar-active" hidden><img class="ui-icon" src="./icons/folder.svg" alt="" aria-hidden="true"> <span id="sidebar-room"></span></button>
           <div id="sidebar-none" class="tree-row tree-child muted">(none)</div>
         </aside>
         <section class="content-pane win98-sunken" id="content" aria-label="Vault contents">
           <div class="home-screen" id="home-screen">
-            <div class="content-heading"><img src="./favicon.svg" width="34" height="34" alt=""><div><h1>Clipboard Vault Explorer</h1><p>Copy here. Paste anywhere.</p></div></div>
+            <div class="content-heading"><div><div class="page-kicker">YOUR SHARED CLIPBOARD</div><h1>clipboard</h1><p>Copy here. Paste anywhere.</p></div></div>
             <div class="section-line"></div>
             <p>Store text snippets in a temporary vault, then open the vault on another device using its room ID.</p>
             <div class="home-choices">
@@ -112,8 +100,6 @@
       <footer class="status-bar"><span id="status-text" class="status-pane win98-sunken" role="status">Ready</span><span class="status-pane win98-sunken" id="status-count">0 item(s)</span><span class="status-pane win98-sunken" id="status-mode">Vault Explorer</span></footer>
     </main>
   </div>
-  <div class="taskbar win98-raised"><div class="taskbar-start-wrap"><button type="button" id="start-button" class="win98-button start-btn"><span class="start-logo">▦</span> Start</button><div id="start-menu" class="start-menu win98-raised" hidden><div class="start-brand">clipboard 98</div><div class="start-options"><button type="button" data-action="home">▣ Vault Explorer</button><button type="button" data-action="new">▣ New Vault</button><button type="button" data-action="join">▤ Join Room</button><div class="menu-separator"></div><button type="button" data-action="settings">⚙︎ Settings</button><button type="button" data-action="about">ⓘ About</button></div></div></div><div class="taskbar-divider"></div><button type="button" id="taskbar-app" class="taskbar-app win98-sunken"><img src="./favicon.svg" width="16" height="16" alt=""> clipboard</button><div class="taskbar-spacer"></div><div class="clock win98-sunken" id="clock" aria-label="Local time"></div></div>
-
-  <div class="modal-backdrop" id="modal-backdrop" hidden><section class="modal win98-raised" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header class="titlebar"><span class="title-group"><img src="./favicon.svg" width="16" height="16" alt=""><span id="dialog-title">Dialog</span></span><button type="button" class="title-button close" id="dialog-close" aria-label="Close dialog">×</button></header><div class="modal-body" id="dialog-body"></div><div class="modal-actions" id="dialog-actions"></div></section></div>
+  <div class="modal-backdrop" id="modal-backdrop" hidden><section class="modal win98-raised" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header class="titlebar dialog-heading"><span class="title-group"><img src="./favicon.svg" width="16" height="16" alt=""><span id="dialog-title">Dialog</span></span></header><div class="modal-body" id="dialog-body"></div><div class="modal-actions" id="dialog-actions"></div></section></div>
 </body>
 </html>
