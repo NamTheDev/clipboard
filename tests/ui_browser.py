@@ -24,7 +24,7 @@ with sync_playwright() as playwright:
     assert page.locator(".note-window").count() >= 2
     assert page.locator(".toolbar .tool-btn").count() >= 6
     assert page.locator(".dialog-window").count() == 1
-    assert page.locator(".tool-button .ui-icon").first.evaluate("(e) => e.complete && e.naturalWidth > 0")
+    assert page.locator(".tool-button .ui-icon").first.evaluate("(e) => e.textContent.trim().length > 0")
     assert page.title() == "clipboard"
     def assert_theme_signal(expected):
         values = page.evaluate("""() => ({
@@ -59,7 +59,7 @@ with sync_playwright() as playwright:
     radius = page.locator(".note-window").first.evaluate("(el) => getComputedStyle(el).borderRadius")
     assert radius == "16px", radius
     filter_value = page.locator(".tool-button .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
-    assert "invert(1)" in filter_value, filter_value
+    assert filter_value == "none", filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
     page.reload(wait_until="load")
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
