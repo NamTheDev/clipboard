@@ -10,15 +10,15 @@
     root.dataset.theme = scheme;
     root.style.colorScheme = scheme;
     schemeMeta?.setAttribute('content', scheme);
-    themeColor?.setAttribute('content', dark ? '#181818' : '#008080');
+    themeColor?.setAttribute('content', dark ? '#121212' : '#fafafa');
   }
   window.addEventListener('app-theme-change', (event) => {
     signal(event.detail?.dark === true);
   });
   try {
     const saved = JSON.parse(localStorage.getItem('clipboard.preferences.v1') || 'null');
-    signal(saved?.theme === 'dark');
+    signal(saved?.theme !== 'light');
   } catch {
-    signal(false);
+    signal(true);
   }
 })();
