@@ -2,7 +2,7 @@
   "name": "clipboard",
   "version": "1.0.0",
   "private": true,
-  "description": "Windows 95/98 inspired short-code clipboard vaults",
+  "description": "Temporary shared clipboard vaults with compact monochrome Material Design 3",
   "type": "module",
   "engines": {
     "node": ">=22.13.0"
