@@ -14,8 +14,11 @@ with sync_playwright() as playwright:
     owner = browser.new_context(viewport={"width": 1280, "height": 900}, permissions=["clipboard-read", "clipboard-write"])
     page = owner.new_page()
     page.on("pageerror", lambda error: errors.append(str(error)))
-    page.goto(BASE, wait_until="load")
+    page.goto(BASE + "/?utm_source=chatgpt.com", wait_until="load")
+    assert "utm_source" not in page.url, "Tracking query should be removed from canonical app URL"
     assert page.locator("#home-screen").is_visible()
+    assert page.title() == "clipboard"
+    assert page.locator('link[rel="icon"]').get_attribute("href") == "./favicon.svg"
     classic = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--desktop').trim()")
     assert classic == "#008080", classic
     page.screenshot(path=str(EVIDENCE / "clipboard-classic.png"))
@@ -30,7 +33,7 @@ with sync_playwright() as playwright:
     page.locator("#dialog-actions .primary").click()
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--surface').trim()")
-    assert dark == "#3c3c3c", dark
+    assert dark == "#303030", dark
     close_color = page.locator("#win-close").evaluate("(el) => getComputedStyle(el).color")
     assert close_color == "rgb(255, 255, 255)", close_color
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))

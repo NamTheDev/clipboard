@@ -179,24 +179,24 @@ input,textarea,select { background: white; border: none; box-shadow: inset -1px 
 
 /* A neutral dark adaptation of the same four-tone raised/sunken system.
    The Chris Lemke reference defines the classic light theme, not an official dark palette. */
-body.dark-mode { background: #252525; color: #efefef; color-scheme: dark; }
+body.dark-mode { background: #181818; color: #f0f0f0; color-scheme: dark; }
 .desktop.dark-mode {
-  --desktop: #252525;
-  --surface: #3c3c3c;
-  --lightest: #878787;
-  --light: #606060;
-  --shadow: #242424;
-  --dark: #0c0c0c;
-  --navy: #22345d;
-  --title-end: #374c75;
-  --text: #efefef;
+  --desktop: #181818;
+  --surface: #303030;
+  --lightest: #707070;
+  --light: #505050;
+  --shadow: #202020;
+  --dark: #090909;
+  --navy: #163c70;
+  --title-end: #225a86;
+  --text: #f0f0f0;
   background: var(--desktop);
   color: var(--text);
 }
 .dark-mode .window, .dark-mode .modal { color: var(--text); }
 .dark-mode .win98-raised, .dark-mode .win98-button { background: var(--surface); }
-.dark-mode .win98-sunken { background: #272727; }
-.dark-mode :is(.sidebar,.content-pane,.groupbox) { background: #292929; }
+.dark-mode .win98-sunken { background: #1b1b1b; }
+.dark-mode :is(.sidebar,.content-pane,.groupbox) { background: #252525; }
 .dark-mode :is(.menu-bar,.toolbar,.address-bar,.preview-pane,.room-footer,.list-header,.taskbar,.status-pane,.start-menu,.popup-menu) { background: var(--surface); color: var(--text); }
 .dark-mode :is(.popup-menu,.start-menu,.title-button) {
   box-shadow: inset -1px -1px 0 var(--dark), inset 1px 1px 0 var(--lightest), inset -2px -2px 0 var(--shadow), inset 2px 2px 0 var(--light);
@@ -204,20 +204,20 @@ body.dark-mode { background: #252525; color: #efefef; color-scheme: dark; }
 .dark-mode .title-button { background: var(--surface); color: #fff; }
 .dark-mode .menu-trigger, .dark-mode .tool-button, .dark-mode .taskbar-app { color: var(--text); background: var(--surface); }
 .dark-mode .tool-button:hover:not(:disabled) { border-color: var(--lightest) var(--dark) var(--dark) var(--lightest); }
-.dark-mode :is(.file-row,.preview-content,input,textarea,select) { color: var(--text); background: #202020; }
+.dark-mode :is(.file-row,.preview-content,input,textarea,select) { color: var(--text); background: #1b1b1b; }
 .dark-mode :is(input,textarea,select) {
   box-shadow: inset -1px -1px 0 var(--lightest), inset 1px 1px 0 var(--dark), inset -2px -2px 0 var(--light), inset 2px 2px 0 var(--shadow);
 }
 .dark-mode input::placeholder, .dark-mode textarea::placeholder { color: #aaa; opacity: 1; }
 .dark-mode :is(.content-heading p,.hint,.room-caption,.file-row .file-date,.preview-meta,.room-footer span,.tree-heading,.address-label,.modal-hint,.muted) { color: #c6c6c6; }
 .dark-mode .groupbox { border-color: var(--light); }
-.dark-mode .groupbox h2 { background: #292929; }
-.dark-mode :is(.room-badge,.room-badge.owner) { background: #454545; color: var(--text); border-color: var(--light); }
+.dark-mode .groupbox h2 { background: #252525; }
+.dark-mode :is(.room-badge,.room-badge.owner) { background: #303030; color: var(--text); border-color: var(--light); }
 .dark-mode .list-header { border-bottom-color: var(--shadow); }
 .dark-mode .file-list-pane { border-right-color: var(--shadow); }
 .dark-mode .room-details { border-bottom-color: var(--shadow); }
 .dark-mode .room-footer { border-top-color: var(--light); }
-.dark-mode .file-row[aria-selected="true"], .dark-mode .file-row[aria-selected="true"] .file-date { background: #29437a; color: #fff; }
+.dark-mode .file-row[aria-selected="true"], .dark-mode .file-row[aria-selected="true"] .file-date { background: #174778; color: #fff; }
 .dark-mode .file-empty { color: #c6c6c6; }
 .dark-mode .settings-group { border-color: var(--light); }
 .dark-mode :is(button,input,textarea,select):focus-visible { outline-color: #fff; }
@@ -226,3 +226,8 @@ body.dark-mode { background: #252525; color: #efefef; color-scheme: dark; }
 .dark-mode .titlebar { color: #fff; }
 .dark-mode .desktop-icon { color: #fff; }
 @media (max-width:650px) { .settings-group { padding: 8px 10px; } }
+
+/* Shared Windows 95/98 reference geometry (also used by keep). */
+.titlebar { min-height:29px; height:29px; }
+.title-button { min-width:22px; width:22px; height:20px; font-size:13px; line-height:18px; }
+.menu-bar { min-height:29px; }

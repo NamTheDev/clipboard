@@ -23,7 +23,7 @@ function applyAppearance() {
   const dark = preferences.theme === 'dark';
   document.body.classList.toggle('dark-mode', dark);
   document.querySelector('.desktop')?.classList.toggle('dark-mode', dark);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#252525' : '#008080');
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#181818' : '#008080');
 }
 function savePreferences(next) {
   try { localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next)); }
@@ -495,6 +495,13 @@ document.addEventListener('keydown', e => {
 });
 function updateClock() { $('#clock').textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
 updateClock(); setInterval(updateClock, 15000);
+// Keep the canonical GitHub Pages address free of click-source tracking parameters.
+const pageAddress = new URL(location.href);
+let cleanTracking = false;
+for (const key of [...pageAddress.searchParams.keys()]) {
+  if (/^utm_/i.test(key)) { pageAddress.searchParams.delete(key); cleanTracking = true; }
+}
+if (cleanTracking) history.replaceState(null, '', pageAddress);
 applyAppearance();
 syncButtons();
 const initialCode = new URLSearchParams(location.search).get('room');
