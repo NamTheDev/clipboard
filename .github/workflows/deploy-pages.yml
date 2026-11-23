@@ -1,0 +1,36 @@
+name: Deploy GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Configure public API URL
+        env:
+          CLIPBOARD_API_BASE: ${{ vars.CLIPBOARD_API_BASE }}
+        run: |
+          node --input-type=module -e '
+            import {writeFileSync} from "node:fs";
+            const base = (process.env.CLIPBOARD_API_BASE || "").replace(/\/+$/, "");
+            if (base && !/^https:\/\/[^\s]+$/.test(base)) throw new Error("CLIPBOARD_API_BASE must be an HTTPS URL");
+            writeFileSync("public/config.js", `window.CLIPBOARD_API_BASE = ${JSON.stringify(base)};\n`);
+          '
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+      - id: deployment
+        uses: actions/deploy-pages@v4

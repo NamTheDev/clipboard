@@ -1,0 +1,16 @@
+services:
+  clipboard:
+    build: .
+    container_name: clipboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - clipboard_data:/data
+    environment:
+      PORT: "3000"
+      DATA_DIR: /data
+      HOST: "0.0.0.0"
+
+volumes:
+  clipboard_data:
