@@ -1,0 +1,37 @@
+name: Sync shared design from keep
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: clipboard-design-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch canonical design stylesheet
+        run: |
+          curl --fail --location --silent --show-error --retry 3 \
+            https://raw.githubusercontent.com/NamTheDev/keep/main/src/style.css \
+            --output /tmp/keep-style.css
+          test -s /tmp/keep-style.css
+          cp /tmp/keep-style.css public/style.css
+      - name: Commit changes only if the source changed
+        run: |
+          if git diff --quiet -- public/style.css; then
+            echo 'Clipboard design is already synchronized.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/style.css
+          git commit -m "Sync: Update shared keep design
+
+          $(date -u +%d-%m-%Y)
+
+          - Synchronize clipboard styling with canonical keep CSS."
+          git push
