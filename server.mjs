@@ -167,7 +167,15 @@ for (const [url, [name, type]] of staticFiles) {
 }
 
 const server = createServer(async (req, res) => {
-  const path = new URL(req.url || '/', 'http://localhost').pathname;
+  const requestUrl = new URL(req.url || '/', 'http://localhost');
+  const path = requestUrl.pathname;
+  // Railway remains an API host. Browser visits to its home page use GitHub Pages.
+  if ((req.method === 'GET' || req.method === 'HEAD') && (path === '/' || path === '/index.html') &&
+      /\.up\.railway\.app(?::\d+)?$/i.test(req.headers.host || '')) {
+    res.writeHead(302, { Location: 'https://namthedev.github.io/clipboard/' + requestUrl.search,
+      'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' });
+    res.end(); return;
+  }
   // Allow the optional GitHub Pages frontend to contact a separately hosted API.
   // Do not use wildcard CORS for endpoints with an owner bearer token.
   if (ALLOWED_ORIGIN && req.headers.origin === ALLOWED_ORIGIN && path.startsWith('/api/')) {

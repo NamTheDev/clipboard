@@ -6,6 +6,34 @@ let statusTimer = null;
 let previousFocus = null;
 const CODE_RE = /^[A-HJ-KM-NP-Z2-9]{6}$/;
 
+const PREFERENCES_KEY = 'clipboard.preferences.v1';
+const DEFAULT_PREFERENCES = Object.freeze({ theme: 'light', defaultDuration: '24h', refreshSeconds: 5 });
+function loadPreferences() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PREFERENCES_KEY) || '{}');
+    return {
+      theme: saved.theme === 'dark' ? 'dark' : 'light',
+      defaultDuration: saved.defaultDuration === '7d' ? '7d' : '24h',
+      refreshSeconds: [0, 5, 15, 30].includes(saved.refreshSeconds) ? saved.refreshSeconds : 5
+    };
+  } catch { return { ...DEFAULT_PREFERENCES }; }
+}
+let preferences = loadPreferences();
+function applyAppearance() {
+  const dark = preferences.theme === 'dark';
+  document.body.classList.toggle('dark-mode', dark);
+  document.querySelector('.desktop')?.classList.toggle('dark-mode', dark);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#252525' : '#008080');
+}
+function savePreferences(next) {
+  try { localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next)); }
+  catch { throw new Error('Browser storage is unavailable; settings could not be saved.'); }
+  preferences = next;
+  applyAppearance();
+  if (state.room) startRoomRefresh(state.room.code);
+}
+
+
 function formatRoomCodeInput(event) {
   const input = event.currentTarget;
   // Display AAA-234 while accepting upper/lowercase letters and pasted codes.
@@ -80,6 +108,15 @@ function setUrl(code = null) {
   history.replaceState(null, '', next);
 }
 function stopPolling() { clearInterval(refreshTimer); refreshTimer = null; }
+
+function startRoomRefresh(code) {
+  stopPolling();
+  if (preferences.refreshSeconds === 0) return;
+  refreshTimer = setInterval(() => {
+    if (!document.hidden && state.room?.code === code) fetchRoom(code, { silent: true }).catch(() => {});
+  }, preferences.refreshSeconds * 1000);
+}
+
 function setWindowVisible(visible) {
   state.minimized = !visible;
   $('#app-window').hidden = !visible;
@@ -238,9 +275,7 @@ async function joinRoom(rawCode) {
   renderRoom();
   setWindowVisible(true);
   setStatus('Connected to ' + displayCode(code));
-  refreshTimer = setInterval(() => {
-    if (!document.hidden && state.room?.code === code) fetchRoom(code, { silent: true }).catch(() => {});
-  }, 5000);
+  startRoomRefresh(code);
 }
 function createVaultDialog() {
   openDialog('Create a New Vault', `
@@ -261,6 +296,7 @@ function createVaultDialog() {
       } catch(e) { showError(e); }
     }}, { text: 'Cancel', onClick: closeDialog },
   ]);
+  $('#new-vault-duration').value = preferences.defaultDuration;
   $('#new-vault-name').select();
 }
 function joinVaultDialog() {
@@ -334,6 +370,39 @@ function deleteVaultDialog() {
     }}, { text: 'Cancel', onClick: closeDialog },
   ]);
 }
+
+function settingsDialog() {
+  openDialog('clipboard - Settings', [
+    '<fieldset class="settings-group"><legend>Appearance</legend>',
+    '<label for="setting-theme">Color scheme</label>',
+    '<select id="setting-theme"><option value="light">Classic Windows 98</option><option value="dark">Dark Windows 98</option></select>',
+    '</fieldset>',
+    '<fieldset class="settings-group"><legend>Vault defaults</legend>',
+    '<label for="setting-duration">New vault expires after</label>',
+    '<select id="setting-duration"><option value="24h">24 hours</option><option value="7d">7 days</option></select>',
+    '<label for="setting-refresh">Auto-refresh shared items</label>',
+    '<select id="setting-refresh"><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option><option value="0">Off (manual refresh)</option></select>',
+    '</fieldset>',
+    '<p class="modal-hint">Preferences are stored in this browser only. The classic four-tone Windows 98 borders are retained in both themes.</p>'
+  ].join(''), [
+    { text: 'Save', primary: true, onClick: () => {
+      try {
+        savePreferences({
+          theme: $('#setting-theme').value,
+          defaultDuration: $('#setting-duration').value,
+          refreshSeconds: Number($('#setting-refresh').value)
+        });
+        closeDialog();
+        setStatus('Settings saved');
+      } catch (error) { showError(error); }
+    }},
+    { text: 'Cancel', onClick: closeDialog }
+  ]);
+  $('#setting-theme').value = preferences.theme;
+  $('#setting-duration').value = preferences.defaultDuration;
+  $('#setting-refresh').value = String(preferences.refreshSeconds);
+}
+
 function infoDialog(privacy = false) {
   openDialog(privacy ? 'Privacy & Sharing' : 'About clipboard', privacy ? `
     <p>Vaults are <strong>not encrypted end-to-end</strong>. Anyone who knows or guesses a room ID can read its items.</p>
@@ -365,6 +434,7 @@ async function action(name) {
       case 'delete-room': deleteVaultDialog(); break;
       case 'refresh': if (state.room) await fetchRoom(state.room.code); break;
       case 'maximize': toggleMaximize(); break;
+      case 'settings': settingsDialog(); break;
       case 'about': infoDialog(); break;
       case 'privacy': infoDialog(true); break;
     }
@@ -425,6 +495,7 @@ document.addEventListener('keydown', e => {
 });
 function updateClock() { $('#clock').textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }); }
 updateClock(); setInterval(updateClock, 15000);
+applyAppearance();
 syncButtons();
 const initialCode = new URLSearchParams(location.search).get('room');
 if (initialCode) joinRoom(initialCode).catch(e => { renderHome(); setStatus('Room unavailable: ' + e.message); });

@@ -1,5 +1,12 @@
 # clipboard
 
+**Primary web app:** https://namthedev.github.io/clipboard/ — this is the public frontend and the canonical share-link origin. Railway is used only for the JSON sharing API. Visiting the Railway app root redirects to GitHub Pages; `/api/` endpoints stay available.
+
+**Settings:** Open **View → Settings**, the toolbar Settings control, or Start → Settings. Appearance (classic light / neutral dark), default vault expiration, and automatic refresh cadence are saved to this browser only. UI icons are monochrome; both themes use four-tone Windows 95/98 bevels.
+
+**AI disclosure:** See [AI_DISCLAIMER.md](AI_DISCLAIMER.md) and [design attribution](CREDITS.md).
+
+
 ## Live deployment
 
 - **GitHub Pages (primary):** https://namthedev.github.io/clipboard/
@@ -18,7 +25,7 @@ A shared, temporary **text clipboard vault** with a Windows 95/98-style interfac
 4. On the second device, open the app and enter the room ID, such as `K7P-4MX`. The guest can select any item and choose **Copy text**.
 5. The creator can add, edit, and delete items. The owner key is held in the creator's browser `localStorage`, **never** in shared links.
 
-Vault content is fetched every five seconds while a room is open. Room IDs are case-insensitive; the code alphabet avoids ambiguous characters (`I`, `L`, `O`, `0`, `1`). Vault IDs are **access codes, not passwords**.
+Vault content is fetched at the interval set in Settings (five seconds by default) while a room is open. Room IDs are case-insensitive; the code alphabet avoids ambiguous characters (`I`, `L`, `O`, `0`, `1`). Vault IDs are **access codes, not passwords**.
 
 ## GitHub Pages + a hosted sharing API
 
@@ -165,3 +172,7 @@ CSS follows [Chris Lemke's Windows 95/98 reference](https://chrislemke.github.io
 ## License
 
 MIT. The interface is inspired by the linked historical UI design reference; this is an independent implementation. GitHub Pages publishing uses relative asset paths so the app can live at `/clipboard/`.
+
+## Development policies
+
+Commits use [commit_message_format.txt](commit_message_format.txt). GitHub Actions check new commit message format and the structure/linkage of the [AI disclosure](AI_DISCLAIMER.md); branch rules are required to make checks block direct pushes.

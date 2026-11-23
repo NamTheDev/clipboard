@@ -53,6 +53,8 @@
           <div class="popup-menu" data-menu-popup="view" hidden>
             <button type="button" data-action="refresh">Refresh vault <kbd>F5</kbd></button>
             <button type="button" data-action="maximize">Maximize / Restore</button>
+            <div class="menu-separator"></div>
+            <button type="button" data-action="settings">Settings...</button>
           </div>
         </div>
         <div class="menu-wrap">
@@ -71,6 +73,8 @@
         <button type="button" class="tool-button" data-action="paste" id="toolbar-paste"><span class="mini-icon">▣</span> Paste text</button>
         <button type="button" class="tool-button" data-action="copy" id="toolbar-copy"><span class="mini-icon">▦</span> Copy</button>
         <button type="button" class="tool-button" data-action="refresh" id="toolbar-refresh"><span class="mini-icon">↻</span> Refresh</button>
+        <div class="toolbar-divider"></div>
+        <button type="button" class="tool-button" data-action="settings" id="toolbar-settings"><span class="mini-icon">⚙︎</span> Settings</button>
       </div>
       <div class="address-bar"><span class="address-label">Address</span><div class="win98-sunken address-field" id="breadcrumb">C:\Clipboard\</div><button type="button" class="win98-button compact" data-action="home">Go</button></div>
       <div class="app-content">
@@ -107,7 +111,7 @@
       <footer class="status-bar"><span id="status-text" class="status-pane win98-sunken" role="status">Ready</span><span class="status-pane win98-sunken" id="status-count">0 item(s)</span><span class="status-pane win98-sunken" id="status-mode">Vault Explorer</span></footer>
     </main>
   </div>
-  <div class="taskbar win98-raised"><div class="taskbar-start-wrap"><button type="button" id="start-button" class="win98-button start-btn"><span class="start-logo">▦</span> Start</button><div id="start-menu" class="start-menu win98-raised" hidden><div class="start-brand">clipboard 98</div><div class="start-options"><button type="button" data-action="home">▣ Vault Explorer</button><button type="button" data-action="new">▣ New Vault</button><button type="button" data-action="join">▤ Join Room</button><div class="menu-separator"></div><button type="button" data-action="about">ⓘ About</button></div></div></div><div class="taskbar-divider"></div><button type="button" id="taskbar-app" class="taskbar-app win98-sunken"><img src="./favicon.svg" width="16" height="16" alt=""> clipboard</button><div class="taskbar-spacer"></div><div class="clock win98-sunken" id="clock" aria-label="Local time"></div></div>
+  <div class="taskbar win98-raised"><div class="taskbar-start-wrap"><button type="button" id="start-button" class="win98-button start-btn"><span class="start-logo">▦</span> Start</button><div id="start-menu" class="start-menu win98-raised" hidden><div class="start-brand">clipboard 98</div><div class="start-options"><button type="button" data-action="home">▣ Vault Explorer</button><button type="button" data-action="new">▣ New Vault</button><button type="button" data-action="join">▤ Join Room</button><div class="menu-separator"></div><button type="button" data-action="settings">⚙︎ Settings</button><button type="button" data-action="about">ⓘ About</button></div></div></div><div class="taskbar-divider"></div><button type="button" id="taskbar-app" class="taskbar-app win98-sunken"><img src="./favicon.svg" width="16" height="16" alt=""> clipboard</button><div class="taskbar-spacer"></div><div class="clock win98-sunken" id="clock" aria-label="Local time"></div></div>
 
   <div class="modal-backdrop" id="modal-backdrop" hidden><section class="modal win98-raised" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><header class="titlebar"><span class="title-group"><img src="./favicon.svg" width="16" height="16" alt=""><span id="dialog-title">Dialog</span></span><button type="button" class="title-button close" id="dialog-close" aria-label="Close dialog">×</button></header><div class="modal-body" id="dialog-body"></div><div class="modal-actions" id="dialog-actions"></div></section></div>
 </body>

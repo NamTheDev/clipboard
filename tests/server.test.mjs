@@ -89,3 +89,15 @@ test.after(async () => {
   await Promise.race([once(child, 'exit'), new Promise(resolve => setTimeout(resolve, 1000))]);
   rmSync(dataDir, { recursive: true, force: true });
 });
+
+
+test('Railway website redirects to canonical GitHub Pages while API stays available', async () => {
+  await ready();
+  const response = await fetch(base + '/?room=ABC-234', {
+    redirect: 'manual',
+    headers: { Host: 'clipboard-production-afe5e7e4.up.railway.app' }
+  });
+  assert.equal(response.status, 302);
+  assert.equal(response.headers.get('location'), 'https://namthedev.github.io/clipboard/?room=ABC-234');
+  assert.equal((await request('/api/health')).status, 200);
+});
