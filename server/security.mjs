@@ -1,10 +1,7 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // No ambiguous I, L, O, 0, 1.
 const CODE_LENGTH = 6;
-const MAX_ITEMS = 100;
-const MAX_CONTENT = 16000;
 const CODE_PATTERN = /^[A-HJ-KM-NP-Z2-9]{6}$/;
-const MAX_BODY_BYTES = 100_000;
 const STALE_AFTER_MS = 90_000;
 const rateBuckets = new Map();
 

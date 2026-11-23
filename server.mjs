@@ -50,6 +50,10 @@ const sql = {
   deleteRoom: db.prepare('DELETE FROM rooms WHERE code = ?'),
 };
 
+const MAX_ITEMS = 100;
+const MAX_CONTENT = 16000;
+const MAX_BODY_BYTES = 100_000;
+
 const HEADERS = {
   'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
   'X-Content-Type-Options': 'nosniff',

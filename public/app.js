@@ -1,4 +1,4 @@
-import { $, $ } from './js/ui/dom.js';
+import { $, $$ } from './js/ui/dom.js';
 import { createDialog } from './js/ui/dialog.js';
 import { createSidebar } from './js/ui/sidebar.js';
 import { loadPreferences, PREFERENCES_KEY } from './js/core/preferences.js';
