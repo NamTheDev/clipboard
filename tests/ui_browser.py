@@ -22,6 +22,20 @@ with sync_playwright() as playwright:
     assert page.locator(".taskbar").count() == 0
     assert page.locator(".tool-button .ui-icon").first.evaluate("(e) => e.complete && e.naturalWidth > 0")
     assert page.title() == "clipboard"
+    def assert_theme_signal(expected):
+        values = page.evaluate("""() => ({
+          meta: document.querySelector('meta[name="color-scheme"]')?.content,
+          root: document.documentElement.dataset.theme,
+          computed: getComputedStyle(document.documentElement).colorScheme,
+          browser: document.querySelector('meta[name="theme-color"]')?.content,
+          locked: !!document.querySelector('meta[name="darkreader-lock"]')
+        })""")
+        assert values == {
+          "meta": expected, "root": expected, "computed": expected,
+          "browser": "#181818" if expected == "dark" else "#008080",
+          "locked": False
+        }, values
+    assert_theme_signal("light")
     assert page.locator('link[rel="icon"]').get_attribute("href") == "./favicon.svg"
     classic = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--desktop').trim()")
     assert classic == "#008080", classic
@@ -36,6 +50,7 @@ with sync_playwright() as playwright:
     page.locator("#setting-refresh").select_option("0")
     page.locator("#dialog-actions .primary").click()
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
+    assert_theme_signal("dark")
     dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--surface').trim()")
     assert dark == "#303030", dark
     filter_value = page.locator(".tool-button .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
@@ -45,6 +60,7 @@ with sync_playwright() as playwright:
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     prefs = page.evaluate("JSON.parse(localStorage.getItem('clipboard.preferences.v1'))")
     assert prefs == {"theme": "dark", "defaultDuration": "7d", "refreshSeconds": 0}, prefs
+    assert_theme_signal("dark")
 
     page.locator(".toolbar [data-action='new']").click()
     assert page.locator("#new-vault-duration").input_value() == "7d"
@@ -79,6 +95,13 @@ with sync_playwright() as playwright:
     assert no_overflow, "Mobile viewport has horizontal overflow"
     guest.screenshot(path=str(EVIDENCE / "clipboard-guest-mobile.png"))
 
+    # Return to native light mode; extensions should see the actual change.
+    page.locator("#toolbar-settings").click()
+    page.locator("#setting-dark").uncheck()
+    page.locator("#dialog-actions .primary").click()
+    assert_theme_signal("light")
+    page.reload(wait_until="load")
+    assert_theme_signal("light")
     assert not errors, "Browser errors: " + " | ".join(errors)
     print("✓ Fullscreen Windows 98 classic/dark appearance and white Lucide dark icons")
     print("✓ Settings persisted and 7-day vault default applied")
