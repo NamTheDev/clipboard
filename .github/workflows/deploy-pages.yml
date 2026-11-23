@@ -15,12 +15,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Lucide icon assets
+        run: |
+          npm install --no-audit --no-fund
+          npm run icons
       - name: Validate static source
         run: |
           test -s public/index.html
           test -s public/app.js
           test -s public/style.css
           test -s public/favicon.svg
+          test -s public/icons/settings.svg
+          test -s public/icons/clipboard.svg
       - name: Configure public API URL
         env:
           CLIPBOARD_API_BASE: ${{ vars.CLIPBOARD_API_BASE }}

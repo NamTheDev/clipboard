@@ -1,0 +1,11 @@
+import { mkdir, copyFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
+const root = fileURLToPath(new URL('../', import.meta.url));
+const source = join(root, 'node_modules', 'lucide-static', 'icons');
+const dest = join(root, 'public', 'icons');
+await mkdir(dest,{recursive:true});
+const names = ["clipboard","file-text","settings","plus","log-in","pencil","clipboard-paste","copy","refresh-cw","folder-open","folder","notebook-pen","info","x"];
+await Promise.all(names.map(name=>copyFile(join(source,name+'.svg'),join(dest,name+'.svg'))));
+await copyFile(join(source,'clipboard.svg'),join(root,'public','favicon.svg'));
+console.log('Installed '+names.length+' Lucide monochrome SVG icons for clipboard');

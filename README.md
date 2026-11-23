@@ -47,3 +47,11 @@ Vault IDs are **access codes, not passwords**. Anyone who knows or guesses a roo
 ## License
 
 MIT. Original design reference is separately attributed in [CREDITS.md](CREDITS.md).
+
+## Unified fullscreen shell and icon pack
+
+The app now fills the browser viewport rather than simulating an OS desktop, window controls, or taskbar. File/Edit/View/Help menus, quick-action toolbar, address strip, status strip, dialogs and room-sharing workflow remain. Both clipboard and keep share the same Windows 95/98 visual tokens and a Dark mode checkbox in Settings.
+
+Icons and the transparent favicon are installed from the [Lucide Static icon pack](https://lucide.dev/) (version `1.77.0`), not manually drawn. The Pages workflow installs this package and copies only selected monochrome SVG icons into the static artifact. In dark mode, their strokes are rendered light.
+
+For complete local frontend preview, run `npm install && npm run icons && npm start`. The public app remains on GitHub Pages, and Railway serves only the cross-device sharing API.
