@@ -16,3 +16,7 @@
 
 /* Persistent desktop navigation; mobile uses the drawer and scrim. */
 @media(min-width:840px){.sidebar{position:relative;display:block;left:auto;top:auto;bottom:auto;transform:none}.mobile-nav-toggle,.mobile-scrim{display:none!important}}
+
+/* Material Symbols Rounded: MD3 v1.2 iconography. */
+.ui-icon.material-symbols-rounded{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;min-width:24px;font-family:"Material Symbols Rounded",sans-serif;font-size:24px;line-height:1;font-weight:normal;font-style:normal;letter-spacing:normal;text-transform:none;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:"liga";-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased;opacity:1;filter:none!important;font-variation-settings:"FILL" 0,"wght" 400,"GRAD" 0,"opsz" 24}
+.tool-btn .ui-icon.material-symbols-rounded,.menu-btn .ui-icon.material-symbols-rounded,.nav-btn .ui-icon.material-symbols-rounded{color:inherit}
