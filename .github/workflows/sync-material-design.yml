@@ -1,0 +1,42 @@
+name: Sync shared Material Design CSS
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '34 3 * * *'
+permissions:
+  contents: write
+concurrency:
+  group: shared-material-design-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    name: Update vendored design system
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch canonical CSS from util
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --silent --show-error --retry 3 \
+            https://raw.githubusercontent.com/NamTheDev/util/main/css/material_design.css \
+            -o /tmp/material_design.css
+          test -s /tmp/material_design.css
+          cp /tmp/material_design.css public/style.css
+      - name: Commit only changed stylesheet
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- public/style.css; then
+            echo 'Already synchronized with util.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/style.css
+          git commit -m "Sync: Update shared Material Design CSS
+
+          $(date -u +%d-%m-%Y)
+
+          - Mirror util/css/material_design.css into clipboard."
+          git push
