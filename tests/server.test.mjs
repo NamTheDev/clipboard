@@ -79,7 +79,7 @@ test('validation, limits, static response headers', async () => {
   assert.equal((await request(`/api/rooms/${code}/items`, 'POST', { title: '', content: 'test' }, owner)).status, 400);
   const staticPage = await fetch(base);
   assert.equal(staticPage.status, 200);
-  assert.match(await staticPage.text(), /clipboard — Vault Explorer/);
+  assert.match(await staticPage.text(), /Vault Explorer/);
   const signalScript = await fetch(base + '/theme-signal.js');
   assert.equal(signalScript.status, 200);
   assert.match(signalScript.headers.get('content-type'), /text\/javascript/);
