@@ -202,7 +202,6 @@ function renderRoom() {
   $('#sidebar-room').textContent = displayCode(room.code);
   $('#sidebar-home').classList.remove('active');
   $('#sidebar-active').classList.add('active');
-  closeSidebar();
   $('#room-title').textContent = room.title;
   $('#room-caption').textContent = `Created ${timeLabel(room.createdAt)}`;
   $('#room-code').textContent = displayCode(room.code);
@@ -280,6 +279,7 @@ async function joinRoom(rawCode) {
   state.ownerToken = localStorage.getItem(ownerStorageKey(code));
   setUrl(code);
   renderRoom();
+  closeSidebar();
   setStatus('Connected to ' + displayCode(code));
   startRoomRefresh(code);
 }
@@ -460,7 +460,7 @@ document.addEventListener('click', event => {
 $('#modal-backdrop').addEventListener('click', e => { if (e.target === $('#modal-backdrop')) closeDialog(); });
 $('#join-form').addEventListener('submit', async e => { e.preventDefault(); try { await joinRoom($('#join-code').value); } catch(error) { showError(error); } });
 $('#join-code').addEventListener('input', formatRoomCodeInput);
-$('#sidebar-active').addEventListener('click', () => state.room && renderRoom());
+$('#sidebar-active').addEventListener('click', () => { if (state.room) { renderRoom(); closeSidebar(); } });
 $('#copy-code').addEventListener('click', () => state.room && copyText(displayCode(state.room.code), 'Room ID copied').catch(showError));
 $('#copy-link').addEventListener('click', () => {
   if (!state.room) return;
