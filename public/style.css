@@ -20,3 +20,32 @@
 /* Material Symbols Rounded: MD3 v1.2 iconography. */
 .ui-icon.material-symbols-rounded{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;min-width:24px;font-family:"Material Symbols Rounded",sans-serif;font-size:24px;line-height:1;font-weight:normal;font-style:normal;letter-spacing:normal;text-transform:none;white-space:nowrap;word-wrap:normal;direction:ltr;font-feature-settings:"liga";-webkit-font-feature-settings:"liga";-webkit-font-smoothing:antialiased;opacity:1;filter:none!important;font-variation-settings:"FILL" 0,"wght" 400,"GRAD" 0,"opsz" 24}
 .tool-btn .ui-icon.material-symbols-rounded,.menu-btn .ui-icon.material-symbols-rounded,.nav-btn .ui-icon.material-symbols-rounded{color:inherit}
+
+/* v1.3: compact density and no redundant application title strip. */
+.title-bar.app-header{display:none!important}
+:root{--space:12px;--radius:12px}
+.menu-bar{padding:2px 16px;gap:2px}
+.menu-btn{min-height:32px;padding:4px 10px}
+.toolbar{padding:6px 16px;gap:6px}
+.tool-btn,.chrome-btn,.nav-btn,.popup-item{min-height:36px;padding:6px 12px}
+.sidebar{width:224px;padding:10px 8px}
+.sidebar-heading,.sidebar-group{padding:8px}
+.sidebar-divider{margin:8px}
+.nav-btn{min-height:40px}
+.sidebar-foot{margin-top:16px;padding:10px}
+.content-heading{padding:12px 20px;gap:12px}
+.page-title{font-size:24px;line-height:30px}
+.quick-bar{margin:0 20px 10px;padding:10px 14px;gap:10px}
+.board-scroll{padding:8px 20px 24px}
+.note-grid{gap:12px}
+.note-titlebar{padding:6px 12px;min-height:32px}
+.note-paper{padding:12px 14px;min-height:72px}
+.note-heading{margin-bottom:6px}
+.note-foot{padding:4px 10px 8px;gap:4px}
+.status-bar{min-height:32px;padding:6px 20px}
+.search-box{min-height:44px;border-radius:12px}
+.win-input,.input-inline,.field input,.field textarea,.field select{min-height:44px;padding:10px 12px;border-radius:12px}
+.dialog-window,.modal-window{padding:16px}
+.dialog-footer,.modal-actions{padding-top:12px}
+@media(max-width:839px){.menu-bar{padding:2px 10px}.toolbar{padding:6px 10px}.content-heading{padding:10px 12px}.quick-bar{margin:0 12px 8px;padding:10px}.board-scroll{padding:8px 12px 20px}.status-bar{padding:6px 12px}}
+@media(max-width:599px){.toolbar .tool-btn{min-width:40px}.note-grid{gap:10px}.dialog-window,.modal-window{padding:12px}}
