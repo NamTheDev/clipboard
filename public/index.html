@@ -61,35 +61,35 @@
         </div>
       </nav>
       <div class="toolbar" aria-label="Quick actions">
-        <button type="button" class="tool-btn mobile-nav-toggle" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><img class="ui-icon" src="./icons/folder.svg" alt=""></button>
-        <button type="button" class="tool-btn tool-button" data-action="new"><img class="ui-icon" src="./icons/plus.svg" alt=""> <span>New vault</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="join"><img class="ui-icon" src="./icons/log-in.svg" alt=""> <span>Join</span></button>
+        <button type="button" class="tool-btn mobile-nav-toggle" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="new"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> <span>New vault</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="join"><span class="ui-icon material-symbols-rounded" aria-hidden="true">login</span> <span>Join</span></button>
         <div class="tool-separator"></div>
-        <button type="button" class="tool-btn tool-button" data-action="add" id="toolbar-add"><img class="ui-icon" src="./icons/pencil.svg" alt=""> <span>New item</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="paste" id="toolbar-paste"><img class="ui-icon" src="./icons/clipboard-paste.svg" alt=""> <span>Paste text</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="copy" id="toolbar-copy"><img class="ui-icon" src="./icons/copy.svg" alt=""> <span>Copy</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="refresh" id="toolbar-refresh"><img class="ui-icon" src="./icons/refresh-cw.svg" alt=""> <span>Refresh</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="add" id="toolbar-add"><span class="ui-icon material-symbols-rounded" aria-hidden="true">edit</span> <span>New item</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="paste" id="toolbar-paste"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_paste</span> <span>Paste text</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="copy" id="toolbar-copy"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_copy</span> <span>Copy</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="refresh" id="toolbar-refresh"><span class="ui-icon material-symbols-rounded" aria-hidden="true">refresh</span> <span>Refresh</span></button>
         <div class="tool-separator"></div>
-        <button type="button" class="tool-btn tool-button" data-action="settings" id="toolbar-settings"><img class="ui-icon" src="./icons/settings.svg" alt=""> <span>Settings</span></button>
+        <button type="button" class="tool-btn tool-button" data-action="settings" id="toolbar-settings"><span class="ui-icon material-symbols-rounded" aria-hidden="true">settings</span> <span>Settings</span></button>
       </div>
       <div class="address-bar">
         <span class="address-label">Address</span>
-        <div class="address-input"><img class="ui-icon" src="./icons/folder-open.svg" alt=""><span class="address-path" id="breadcrumb">C:\Clipboard\</span></div>
+        <div class="address-input"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder_open</span><span class="address-path" id="breadcrumb">C:\Clipboard\</span></div>
         <button type="button" class="chrome-btn" data-action="home">Go</button>
       </div>
       <div class="workspace app-content">
         <aside class="sidebar" aria-label="Vault navigation" id="sidebar">
           <div class="sidebar-heading">Clipboard Explorer</div>
           <div class="sidebar-group">
-            <button type="button" class="nav-btn active" data-action="home" id="sidebar-home"><img class="ui-icon" src="./icons/folder-open.svg" alt=""> Vault Explorer</button>
-            <button type="button" class="nav-btn" data-action="new"><img class="ui-icon" src="./icons/plus.svg" alt=""> Create vault</button>
-            <button type="button" class="nav-btn" data-action="join"><img class="ui-icon" src="./icons/log-in.svg" alt=""> Join vault</button>
+            <button type="button" class="nav-btn active" data-action="home" id="sidebar-home"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder_open</span> Vault Explorer</button>
+            <button type="button" class="nav-btn" data-action="new"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> Create vault</button>
+            <button type="button" class="nav-btn" data-action="join"><span class="ui-icon material-symbols-rounded" aria-hidden="true">login</span> Join vault</button>
           </div>
           <div class="sidebar-divider"></div>
           <div class="sidebar-heading">Active vault</div>
-          <button type="button" class="nav-btn" id="sidebar-active" hidden><img class="ui-icon" src="./icons/folder.svg" alt=""><span id="sidebar-room"></span></button>
+          <button type="button" class="nav-btn" id="sidebar-active" hidden><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder</span><span id="sidebar-room"></span></button>
           <div class="sidebar-none" id="sidebar-none">(none)</div>
-          <div class="sidebar-foot"><img class="ui-icon" src="./icons/info.svg" alt=""><span>Vaults are temporary. Anyone with a room ID can read its contents.</span></div>
+          <div class="sidebar-foot"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span><span>Vaults are temporary. Anyone with a room ID can read its contents.</span></div>
         </aside>
         <div class="mobile-scrim" id="mobile-scrim"></div>
         <section class="content-pane" id="content" aria-label="Vault contents">
@@ -101,12 +101,12 @@
               <p class="home-intro">Store text snippets in a temporary vault, then open them on another device with a room ID.</p>
               <div class="home-choices note-grid">
                 <section class="groupbox note-window">
-                  <div class="note-titlebar"><img class="ui-icon" src="./icons/plus.svg" alt=""><span class="note-titlebar-text">new_vault</span></div>
+                  <div class="note-titlebar"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span><span class="note-titlebar-text">new_vault</span></div>
                   <div class="note-paper"><h2 class="note-heading">Create a vault</h2><p class="note-text">Make a temporary space for one or more clipboard items.</p></div>
                   <div class="note-foot"><button class="chrome-btn primary" type="button" data-action="new">Create Vault...</button></div>
                 </section>
                 <section class="groupbox note-window">
-                  <div class="note-titlebar"><img class="ui-icon" src="./icons/log-in.svg" alt=""><span class="note-titlebar-text">join_vault</span></div>
+                  <div class="note-titlebar"><span class="ui-icon material-symbols-rounded" aria-hidden="true">login</span><span class="note-titlebar-text">join_vault</span></div>
                   <form id="join-form">
                     <div class="note-paper"><h2 class="note-heading">Join a vault</h2><label class="field-label" for="join-code">Room ID</label><input class="win-input code-input" id="join-code" maxlength="7" autocomplete="off" spellcheck="false" placeholder="ABC-234" required></div>
                     <div class="note-foot"><button type="submit" class="chrome-btn primary">Join</button></div>
@@ -135,7 +135,7 @@
               <div class="preview-pane">
                 <div class="board-label">Item preview</div>
                 <div class="preview-card note-window">
-                  <div class="note-titlebar"><img class="ui-icon" src="./icons/file-text.svg" alt=""><span class="note-titlebar-text" id="preview-meta">Select an item</span></div>
+                  <div class="note-titlebar"><span class="ui-icon material-symbols-rounded" aria-hidden="true">description</span><span class="note-titlebar-text" id="preview-meta">Select an item</span></div>
                   <pre id="preview-content" class="note-paper preview-content">No item selected.</pre>
                   <div class="note-foot preview-actions">
                     <button type="button" class="chrome-btn primary" id="copy-selected">Copy text</button>
@@ -146,8 +146,8 @@
               </div>
             </div>
             <div class="room-footer">
-              <button type="button" class="chrome-btn" id="add-item"><img class="ui-icon" src="./icons/plus.svg" alt=""> New item...</button>
-              <button type="button" class="chrome-btn" data-action="paste" id="paste-item"><img class="ui-icon" src="./icons/clipboard-paste.svg" alt=""> Paste text...</button>
+              <button type="button" class="chrome-btn" id="add-item"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> New item...</button>
+              <button type="button" class="chrome-btn" data-action="paste" id="paste-item"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_paste</span> Paste text...</button>
               <span id="room-expiry"></span>
             </div>
           </div>
