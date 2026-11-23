@@ -5,22 +5,22 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
-  pages: write
-  id-token: write
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: clipboard-github-pages
+  cancel-in-progress: false
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
+    name: Prepare static GitHub Pages artifact
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
+      - name: Validate static source
+        run: |
+          test -s public/index.html
+          test -s public/app.js
+          test -s public/style.css
+          test -s public/favicon.svg
       - name: Configure public API URL
         env:
           CLIPBOARD_API_BASE: ${{ vars.CLIPBOARD_API_BASE }}
@@ -34,6 +34,20 @@ jobs:
       - uses: actions/upload-pages-artifact@v4
         with:
           path: public
+
+  deploy:
+    name: Publish and verify GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
       - id: deployment
         uses: actions/deploy-pages@v4
       - name: Smoke test public Pages and shared-room API
