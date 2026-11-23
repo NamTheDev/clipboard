@@ -231,7 +231,7 @@ function renderItems() {
       row.setAttribute('aria-selected', String(state.selectedId === item.id));
       row.dataset.itemId = item.id;
       const top = document.createElement('span'); top.className = 'note-titlebar';
-      const fileIcon = document.createElement('img'); fileIcon.className = 'ui-icon'; fileIcon.src = './icons/file-text.svg'; fileIcon.alt = ''; fileIcon.setAttribute('aria-hidden','true');
+      const fileIcon = document.createElement('span'); fileIcon.className = 'ui-icon material-symbols-rounded'; fileIcon.textContent = 'description'; fileIcon.setAttribute('aria-hidden','true');
       const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text'; descriptor.textContent = 'text_snippet';
       const date = document.createElement('span'); date.className = 'note-titlebar-text file-date'; date.textContent = dateLabel(item.created_at);
       top.append(fileIcon, descriptor, date);
