@@ -55,3 +55,7 @@ The app now fills the browser viewport rather than simulating an OS desktop, win
 Icons and the transparent favicon are installed from the [Lucide Static icon pack](https://lucide.dev/) (version `1.77.0`), not manually drawn. The Pages workflow installs this package and copies only selected monochrome SVG icons into the static artifact. In dark mode, their strokes are rendered light.
 
 For complete local frontend preview, run `npm install && npm run icons && npm start`. The public app remains on GitHub Pages, and Railway serves only the cross-device sharing API.
+
+## Native dark-mode detection for browser extensions
+
+Both clipboard and [keep](https://namthedev.github.io/keep/) advertise their **actual native theme**, not the OS preference. `theme-signal.js` runs before the stylesheet and sets `<meta name="color-scheme" content="light|dark">`, the `<html data-theme="light|dark">` attribute, root `color-scheme`, and the browser theme-color. The theme is also announced through `app-theme-change` whenever Settings saves it. This follows [Dark Reader's official native-dark-theme detection recommendation](https://github.com/darkreader/darkreader/discussions/15128). No extension is installed or forcibly disabled; in light mode, Dark Reader can continue to offer its transformations.

@@ -80,6 +80,10 @@ test('validation, limits, static response headers', async () => {
   const staticPage = await fetch(base);
   assert.equal(staticPage.status, 200);
   assert.match(await staticPage.text(), /clipboard — Vault Explorer/);
+  const signalScript = await fetch(base + '/theme-signal.js');
+  assert.equal(signalScript.status, 200);
+  assert.match(signalScript.headers.get('content-type'), /text\/javascript/);
+  assert.match(await signalScript.text(), /color-scheme/);
   assert.match(staticPage.headers.get('content-security-policy'), /script-src 'self'/);
   assert.equal(staticPage.headers.get('x-content-type-options'), 'nosniff');
 });

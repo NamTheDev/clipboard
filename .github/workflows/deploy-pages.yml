@@ -26,6 +26,7 @@ jobs:
         run: |
           test -s public/index.html
           test -s public/app.js
+          test -s public/theme-signal.js
           test -s public/style.css
           test -s public/favicon.svg
           test -s public/icons/settings.svg

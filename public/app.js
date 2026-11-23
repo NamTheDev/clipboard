@@ -23,7 +23,8 @@ function applyAppearance() {
   const dark = preferences.theme === 'dark';
   document.body.classList.toggle('dark-mode', dark);
   document.querySelector('.desktop')?.classList.toggle('dark-mode', dark);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', dark ? '#181818' : '#008080');
+  // Publish the native app theme to Dark Reader and other browser integrations.
+  window.dispatchEvent(new CustomEvent('app-theme-change', { detail: { dark } }));
 }
 function savePreferences(next) {
   try { localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next)); }
