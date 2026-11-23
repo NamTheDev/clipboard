@@ -1,7 +1,7 @@
 import { createServer } from 'node:http';
 import { DatabaseSync } from 'node:sqlite';
 import { randomBytes } from 'node:crypto';
-import { rateLimit, generateCode, isOwner, normalizeCode, cleanupRateBuckets } from './server/security.mjs';
+import { rateLimit, generateCode, isOwner, normalizeCode, cleanupRateBuckets, digest } from './server/security.mjs';
 import { readFileSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';

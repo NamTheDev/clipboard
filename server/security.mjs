@@ -33,7 +33,7 @@ export function generateCode() {
   return s;
 }
 
-const digest = token => createHash('sha256').update(token).digest('hex');
+export const digest = token => createHash('sha256').update(token).digest('hex');
 export function isOwner(req, room) {
   const match = /^Bearer ([A-Za-z0-9_-]{32,128})$/.exec(req.headers.authorization || '');
   if (!match) return false;
