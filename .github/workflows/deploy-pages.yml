@@ -27,7 +27,7 @@ jobs:
         run: |
           node --input-type=module -e '
             import {writeFileSync} from "node:fs";
-            const base = (process.env.CLIPBOARD_API_BASE || "").replace(/\/+$/, "");
+            const base = (process.env.CLIPBOARD_API_BASE || "https://clipboard-production-afe5e7e4.up.railway.app").replace(/\/+$/, "");
             if (base && !/^https:\/\/[^\s]+$/.test(base)) throw new Error("CLIPBOARD_API_BASE must be an HTTPS URL");
             writeFileSync("public/config.js", `window.CLIPBOARD_API_BASE = ${JSON.stringify(base)};\n`);
           '
