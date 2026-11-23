@@ -1,23 +1,14 @@
-const $ = (selector, root = document) => root.querySelector(selector);
-const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+import { $, $ } from './js/ui/dom.js';
+import { createDialog } from './js/ui/dialog.js';
+import { createSidebar } from './js/ui/sidebar.js';
+import { loadPreferences, PREFERENCES_KEY } from './js/core/preferences.js';
+import { createApi } from './js/core/api.js';
+import { createClipboard } from './js/core/clipboard.js';
+import { formatRoomCodeInput, codeFrom, displayCode, dateLabel, timeLabel, ownerStorageKey } from './js/core/room-code.js';
 const state = { room: null, items: [], ownerToken: null, selectedId: null, minimized: false, maximized: false, refreshPending: false };
 let refreshTimer = null;
 let statusTimer = null;
-let previousFocus = null;
-const CODE_RE = /^[A-HJ-KM-NP-Z2-9]{6}$/;
 
-const PREFERENCES_KEY = 'clipboard.preferences.v1';
-const DEFAULT_PREFERENCES = Object.freeze({ theme: 'dark', defaultDuration: '24h', refreshSeconds: 5 });
-function loadPreferences() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(PREFERENCES_KEY) || '{}');
-    return {
-      theme: saved.theme === 'light' ? 'light' : 'dark',
-      defaultDuration: saved.defaultDuration === '7d' ? '7d' : '24h',
-      refreshSeconds: [0, 5, 15, 30].includes(saved.refreshSeconds) ? saved.refreshSeconds : 5
-    };
-  } catch { return { ...DEFAULT_PREFERENCES }; }
-}
 let preferences = loadPreferences();
 function applyAppearance() {
   const dark = preferences.theme === 'dark';
@@ -35,20 +26,6 @@ function savePreferences(next) {
 }
 
 
-function formatRoomCodeInput(event) {
-  const input = event.currentTarget;
-  // Display AAA-234 while accepting upper/lowercase letters and pasted codes.
-  const raw = input.value.toUpperCase().replace(/[^A-Z2-9]/g, '').slice(0, 6);
-  input.value = raw.length > 3 ? raw.slice(0, 3) + '-' + raw.slice(3) : raw;
-}
-function codeFrom(value) {
-  const code = String(value || '').toUpperCase().replace(/[\s-]/g, '');
-  return CODE_RE.test(code) ? code : null;
-}
-function displayCode(code) { return code.slice(0, 3) + '-' + code.slice(3); }
-function dateLabel(value) { return new Date(value).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }); }
-function timeLabel(value) { return new Date(value).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }); }
-function ownerStorageKey(code) { return 'clipboard.owner.' + code; }
 function setStatus(text) {
   $('#status-text').textContent = text;
   clearTimeout(statusTimer);
@@ -62,46 +39,8 @@ function showError(error) {
   ]);
   $('#error-message').textContent = msg;
 }
-async function api(path, options = {}) {
-  const headers = { Accept: 'application/json', ...options.headers };
-  if (options.body) headers['Content-Type'] = 'application/json';
-  if (options.authorize && state.ownerToken) headers.Authorization = 'Bearer ' + state.ownerToken;
-  const configuredBase = String(window.CLIPBOARD_API_BASE || '').trim();
-  if (location.hostname.endsWith('.github.io') && !configuredBase) {
-    throw new Error('Sharing backend not configured. Deploy the API and set the GitHub repository variable CLIPBOARD_API_BASE.');
-  }
-  const baseUrl = configuredBase ? configuredBase.replace(/\/+$/, '') : location.origin;
-  const endpoint = new URL(baseUrl + path);
-  if (configuredBase && endpoint.protocol !== 'https:' && endpoint.hostname !== 'localhost') {
-    throw new Error('The sharing API must use HTTPS.');
-  }
-  const response = await fetch(endpoint, { method: options.method || 'GET', headers, body: options.body ? JSON.stringify(options.body) : undefined, cache: 'no-store', credentials: 'omit' });
-  let body;
-  try { body = await response.json(); } catch { throw new Error('Server returned an invalid response.'); }
-  if (!response.ok) throw new Error(body.error || `Request failed (${response.status})`);
-  return body;
-}
-async function copyText(value, label = 'Copied to clipboard') {
-  try {
-    if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
-    await navigator.clipboard.writeText(value);
-  } catch {
-    const box = document.createElement('textarea');
-    box.value = value;
-    box.setAttribute('readonly', '');
-    box.style.position = 'fixed'; box.style.left = '-9999px';
-    document.body.append(box); box.select();
-    const copied = document.execCommand('copy');
-    box.remove();
-    if (!copied) throw new Error('Could not copy automatically. Select the text and copy manually.');
-  }
-  setStatus(label);
-}
-async function readClipboard() {
-  if (!navigator.clipboard?.readText) throw new Error('Clipboard reading needs HTTPS or localhost. Use Ctrl+V in the editor instead.');
-  try { return await navigator.clipboard.readText(); }
-  catch { throw new Error('Clipboard access denied. Use Ctrl+V in the editor instead.'); }
-}
+const api = createApi(() => state.ownerToken);
+const { copyText, readClipboard } = createClipboard(setStatus);
 function setUrl(code = null) {
   const next = new URL(location.href);
   if (code) next.searchParams.set('room', code);
@@ -118,58 +57,14 @@ function startRoomRefresh(code) {
   }, preferences.refreshSeconds * 1000);
 }
 
-function closeSidebar() {
-  $('#sidebar').classList.remove('mobile-open');
-  $('#mobile-scrim').classList.remove('show');
-  $('#toggle-nav').setAttribute('aria-expanded','false');
-}
-function closeMenus() {
-  $$('[data-menu-popup]').forEach(x => { x.hidden = true; });
-  $$('[data-menu]').forEach(x => x.setAttribute('aria-expanded', 'false'));
-}
-function openMenu(name) {
-  const popup = $(`[data-menu-popup="${name}"]`);
-  const isOpen = !popup.hidden;
-  closeMenus();
-  popup.hidden = isOpen;
-  $(`[data-menu="${name}"]`).setAttribute('aria-expanded', String(!isOpen));
-}
-function openDialog(title, html, actions = []) {
-  closeMenus();
-  previousFocus = document.activeElement;
-  $('#dialog-title').textContent = title;
-  $('#dialog-body').innerHTML = html; // Only application-owned constant markup; never untrusted vault content.
-  $('#dialog-body').querySelectorAll('.modal-field').forEach(field => field.classList.add('field'));
-  $('#dialog-body').querySelectorAll('.modal-field label').forEach(label => label.classList.add('field-label'));
-  $('#dialog-body').querySelectorAll('.modal-field input, .modal-field textarea, .modal-field select').forEach(input => input.classList.add('win-input'));
-  $('#dialog-body').querySelectorAll('.modal-hint').forEach(hint => hint.classList.add('dialog-note'));
-  $('#dialog-actions').replaceChildren();
-  for (const action of actions) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = action.text;
-    button.className = 'chrome-btn' + (action.primary ? ' primary' : '');
-    button.addEventListener('click', action.onClick);
-    $('#dialog-actions').append(button);
-  }
-  $('#modal-backdrop').hidden = false;
-  const first = $('#dialog-body input, #dialog-body textarea, #dialog-body select') || $('#dialog-actions button');
-  first?.focus();
-}
-function closeDialog() {
-  $('#modal-backdrop').hidden = true;
-  $('#dialog-body').replaceChildren();
-  $('#dialog-actions').replaceChildren();
-  previousFocus?.focus?.();
-}
+const closeSidebar = createSidebar($);
+const { openDialog, closeDialog } = createDialog($);
 function renderHome() {
   state.room = null; state.items = []; state.ownerToken = null; state.selectedId = null;
   stopPolling(); setUrl();
   $('#home-screen').hidden = false;
   $('#room-screen').hidden = true;
   $('#sidebar-active').hidden = true; $('#sidebar-none').hidden = false;
-  $('#breadcrumb').textContent = 'C:\\Clipboard\\';
-  $('#window-title').textContent = 'clipboard - Vault Explorer';
   $('#status-count').textContent = '0 item(s)';
   $('#status-mode').textContent = 'Vault Explorer';
   $('#sidebar-home').classList.add('active');
@@ -181,11 +76,9 @@ function renderHome() {
 function syncButtons() {
   const canEdit = Boolean(state.room && state.ownerToken);
   const selected = Boolean(state.room && state.selectedId && state.items.some(x => x.id === state.selectedId));
-  $('#toolbar-add').disabled = !canEdit;
-  $('#toolbar-paste').disabled = !canEdit;
-  $('#toolbar-copy').disabled = !selected;
-  $('#toolbar-refresh').disabled = !state.room;
   $('#add-item').hidden = !canEdit;
+  $('#paste-item').hidden = !canEdit;
+  $('#delete-room').hidden = !canEdit;
   $('#copy-selected').disabled = !selected;
   $('#edit-selected').hidden = !canEdit;
   $('#delete-selected').hidden = !canEdit;
@@ -206,8 +99,6 @@ function renderRoom() {
   $('#room-caption').textContent = `Created ${timeLabel(room.createdAt)}`;
   $('#room-code').textContent = displayCode(room.code);
   $('#room-expiry').textContent = `Expires ${timeLabel(room.expiresAt)}`;
-  $('#breadcrumb').textContent = `C:\\Clipboard\\${displayCode(room.code)}\\`;
-  $('#window-title').textContent = `${room.title} - clipboard`;
   $('#status-count').textContent = `${state.items.length} item(s)`;
   $('#status-mode').textContent = state.ownerToken ? 'Owner' : 'Read only';
   $('#access-badge').textContent = state.ownerToken ? 'OWNER' : 'READ ONLY';
@@ -420,7 +311,7 @@ function infoDialog(privacy = false) {
   `, [{ text: 'OK', primary: true, onClick: closeDialog }]);
 }
 async function action(name) {
-  closeMenus();
+  closeSidebar();
   try {
     switch (name) {
       case 'new': createVaultDialog(); break;
@@ -445,18 +336,14 @@ async function action(name) {
   } catch (e) { showError(e); }
 }
 
-// Application menus and persistent navigation.
+// Application navigation and contextual actions.
 $$('[data-action]').forEach(el => el.addEventListener('click', () => action(el.dataset.action)));
-$$('[data-menu]').forEach(el => el.addEventListener('click', e => { e.stopPropagation(); openMenu(el.dataset.menu); }));
 $('#toggle-nav').addEventListener('click', () => {
   const open = $('#sidebar').classList.toggle('mobile-open');
   $('#mobile-scrim').classList.toggle('show',open);
   $('#toggle-nav').setAttribute('aria-expanded',String(open));
 });
 $('#mobile-scrim').addEventListener('click', closeSidebar);
-document.addEventListener('click', event => {
-  if (!event.target.closest('.menu-wrap')) closeMenus();
-});
 $('#modal-backdrop').addEventListener('click', e => { if (e.target === $('#modal-backdrop')) closeDialog(); });
 $('#join-form').addEventListener('submit', async e => { e.preventDefault(); try { await joinRoom($('#join-code').value); } catch(error) { showError(error); } });
 $('#join-code').addEventListener('input', formatRoomCodeInput);
@@ -477,7 +364,7 @@ $('#file-list').addEventListener('keydown', e => {
   if (next >= 0 && state.items[next]) { e.preventDefault(); state.selectedId = state.items[next].id; renderItems(); $(`[data-item-id="${state.selectedId}"]`)?.focus(); }
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (!$('#modal-backdrop').hidden) closeDialog(); else closeMenus(); return; }
+  if (e.key === 'Escape') { if (!$('#modal-backdrop').hidden) closeDialog(); else closeSidebar(); return; }
   if (!$('#modal-backdrop').hidden) {
     if (e.key === 'Enter' && (e.ctrlKey || (e.target.tagName === 'INPUT' && !e.shiftKey))) {
       const primary = $('#dialog-actions .primary');

@@ -22,7 +22,8 @@ with sync_playwright() as playwright:
     assert page.locator(".taskbar").count() == 0
     assert page.locator("link[href=\"./clipboard.css\"]").count() == 1
     assert page.locator(".note-window").count() >= 2
-    assert page.locator(".toolbar .tool-btn").count() >= 6
+    assert page.locator(".toolbar, .menu-bar").count() == 0
+    assert page.locator('#sidebar [data-action="settings"]').is_visible()
     assert page.locator(".dialog-window").count() == 1
     assert page.locator(".tool-button .ui-icon").first.evaluate("(e) => e.textContent.trim().length > 0")
     assert page.title() == "clipboard"
@@ -45,7 +46,7 @@ with sync_playwright() as playwright:
     assert md3 == "#121212", md3
     page.screenshot(path=str(EVIDENCE / "clipboard-md3-dark.png"))
 
-    page.locator("#toolbar-settings").click()
+    page.locator('#sidebar [data-action="settings"]').click()
     assert page.locator("#setting-dark").is_checked()
     assert page.locator("#setting-duration").input_value() == "24h"
     assert page.locator("#setting-refresh").input_value() == "5"
@@ -67,14 +68,14 @@ with sync_playwright() as playwright:
     assert prefs == {"theme": "dark", "defaultDuration": "7d", "refreshSeconds": 0}, prefs
     assert_theme_signal("dark")
 
-    page.locator(".toolbar [data-action='new']").click()
+    page.locator(".home-choices [data-action='new']").click()
     assert page.locator("#new-vault-duration").input_value() == "7d"
     page.locator("#new-vault-name").fill("QA Shared Vault")
     page.locator("#dialog-actions .primary").click()
     page.locator("#room-screen").wait_for(state="visible", timeout=15000)
     code = page.locator("#room-code").inner_text()
     assert len(code) == 7 and code[3] == "-", code
-    page.locator("#toolbar-add").click()
+    page.locator("#add-item").click()
     page.locator("#item-title").fill("Snippet one")
     text = "  exact indentation\nline 2\n"
     page.locator("#item-content").fill(text)
@@ -93,7 +94,7 @@ with sync_playwright() as playwright:
     guest.goto(BASE + "/?room=" + quote(code), wait_until="load")
     guest.locator("#room-screen").wait_for(state="visible", timeout=15000)
     assert guest.locator("#room-code").inner_text() == code
-    assert guest.locator("#toolbar-add").is_disabled()
+    assert guest.locator("#add-item").is_hidden()
     assert guest.locator("#add-item").is_hidden()
     guest.locator("#copy-selected").click()
     guest_copied = guest.evaluate("navigator.clipboard.readText()")
@@ -103,7 +104,7 @@ with sync_playwright() as playwright:
     guest.screenshot(path=str(EVIDENCE / "clipboard-guest-mobile.png"))
 
     # Return to native light mode; extensions should see the actual change.
-    page.locator("#toolbar-settings").click()
+    page.locator('#sidebar [data-action="settings"]').click()
     page.locator("#setting-dark").uncheck()
     page.locator("#dialog-actions .primary").click()
     assert_theme_signal("light")

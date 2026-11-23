@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import { DatabaseSync } from 'node:sqlite';
-import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
+import { randomBytes } from 'node:crypto';
+import { rateLimit, generateCode, isOwner, normalizeCode, cleanupRateBuckets } from './server/security.mjs';
 import { readFileSync, mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -48,57 +49,6 @@ const sql = {
   deleteItem: db.prepare('DELETE FROM items WHERE id = ? AND room_code = ?'),
   deleteRoom: db.prepare('DELETE FROM rooms WHERE code = ?'),
 };
-
-const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // No ambiguous I, L, O, 0, 1.
-const CODE_LENGTH = 6;
-const MAX_ITEMS = 100;
-const MAX_CONTENT = 16000;
-const CODE_PATTERN = /^[A-HJ-KM-NP-Z2-9]{6}$/;
-const MAX_BODY_BYTES = 100_000;
-const STALE_AFTER_MS = 90_000;
-const rateBuckets = new Map();
-
-function rateLimit(req, kind, limit) {
-  // Use direct peer address; untrusted X-Forwarded-For cannot bypass the limiter.
-  const key = `${req.socket.remoteAddress || 'unknown'}:${kind}`;
-  const now = Date.now();
-  const bucket = rateBuckets.get(key) || [];
-  const active = bucket.filter(t => t > now - 60_000);
-  if (active.length >= limit) {
-    rateBuckets.set(key, active);
-    return false;
-  }
-  active.push(now);
-  rateBuckets.set(key, active);
-  return true;
-}
-
-function generateCode() {
-  // Rejection sampling prevents biased mappings of random bytes to alphabet positions.
-  let s = '';
-  while (s.length < CODE_LENGTH) {
-    for (const byte of randomBytes(12)) {
-      if (byte >= Math.floor(256 / CODE_ALPHABET.length) * CODE_ALPHABET.length) continue;
-      s += CODE_ALPHABET[byte % CODE_ALPHABET.length];
-      if (s.length === CODE_LENGTH) break;
-    }
-  }
-  return s;
-}
-
-const digest = token => createHash('sha256').update(token).digest('hex');
-function isOwner(req, room) {
-  const match = /^Bearer ([A-Za-z0-9_-]{32,128})$/.exec(req.headers.authorization || '');
-  if (!match) return false;
-  const provided = Buffer.from(digest(match[1]), 'hex');
-  const expected = Buffer.from(room.owner_hash, 'hex');
-  return provided.length === expected.length && timingSafeEqual(provided, expected);
-}
-
-function normalizeCode(raw) {
-  const code = String(raw || '').toUpperCase().replace(/-/g, '');
-  return CODE_PATTERN.test(code) ? code : null;
-}
 
 const HEADERS = {
   'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
@@ -203,6 +153,17 @@ const server = createServer(async (req, res) => {
       res.end(buffer);
       return;
     }
+    if (req.method === 'GET' && /^\/js\/(?:core|ui)\/[a-z0-9-]+\.js$/.test(path)) {
+      try {
+        const buffer = readFileSync(join(ROOT, 'public', path.slice(1)));
+        res.writeHead(200, { ...HEADERS, 'Content-Type': 'text/javascript; charset=utf-8', 'Cache-Control': 'public, max-age=300' });
+        res.end(buffer);
+      } catch (error) {
+        if (error.code === 'ENOENT') return bad(res, 404, 'Module not found.');
+        throw error;
+      }
+      return;
+    }
     if (req.method === 'GET' && /^\/icons\/[a-z0-9-]+\.svg$/.test(path)) {
       try {
         const buffer = readFileSync(join(ROOT, 'public', path.slice(1)));
@@ -288,10 +249,7 @@ const server = createServer(async (req, res) => {
 
 const cleanup = setInterval(() => {
   sql.purge.run(Date.now());
-  const now = Date.now();
-  for (const [key, bucket] of rateBuckets) {
-    if (bucket.every(t => t < now - STALE_AFTER_MS)) rateBuckets.delete(key);
-  }
+  cleanupRateBuckets();
 }, 30 * 60_000);
 cleanup.unref();
 server.listen(PORT, HOST, () => console.log(`clipboard on http://${HOST}:${server.address().port}`));

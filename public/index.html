@@ -21,65 +21,6 @@
 <body>
   <div class="desktop" id="desktop">
     <main id="app-window" class="window main-window" aria-label="clipboard application">
-      <header class="title-bar app-header">
-        <span class="app-icon"><img class="ui-icon" src="./favicon.svg" alt="" width="18" height="18"></span>
-        <span class="title-text" id="window-title">clipboard — Vault Explorer</span>
-      </header>
-      <nav class="menu-bar" aria-label="Application menu">
-        <div class="menu-wrap">
-          <button class="menu-btn" type="button" data-menu="file">File</button>
-          <div class="popup popup-menu" data-menu-popup="file" hidden>
-            <button class="popup-item" type="button" data-action="new">New vault <kbd>Ctrl+N</kbd></button>
-            <button class="popup-item" type="button" data-action="join">Join vault <kbd>Ctrl+O</kbd></button>
-            <div class="popup-divider"></div>
-            <button class="popup-item" type="button" data-action="home">Vault Explorer</button>
-            <button class="popup-item" type="button" data-action="leave">Leave current vault</button>
-            <button class="popup-item" type="button" data-action="delete-room">Delete current vault...</button>
-          </div>
-        </div>
-        <div class="menu-wrap">
-          <button class="menu-btn" type="button" data-menu="edit">Edit</button>
-          <div class="popup popup-menu" data-menu-popup="edit" hidden>
-            <button class="popup-item" type="button" data-action="add">New item</button>
-            <button class="popup-item" type="button" data-action="paste">Paste clipboard <kbd>Ctrl+V</kbd></button>
-            <button class="popup-item" type="button" data-action="copy">Copy selected item</button>
-            <div class="popup-divider"></div>
-            <button class="popup-item" type="button" data-action="remove">Delete selected item</button>
-          </div>
-        </div>
-        <div class="menu-wrap">
-          <button class="menu-btn" type="button" data-menu="view">View</button>
-          <div class="popup popup-menu" data-menu-popup="view" hidden>
-            <button class="popup-item" type="button" data-action="refresh">Refresh vault <kbd>F5</kbd></button>
-            <div class="popup-divider"></div>
-            <button class="popup-item" type="button" data-action="settings">Settings...</button>
-          </div>
-        </div>
-        <div class="menu-wrap">
-          <button class="menu-btn" type="button" data-menu="help">Help</button>
-          <div class="popup popup-menu" data-menu-popup="help" hidden>
-            <button class="popup-item" type="button" data-action="about">About clipboard</button>
-            <button class="popup-item" type="button" data-action="privacy">Privacy &amp; sharing</button>
-          </div>
-        </div>
-      </nav>
-      <div class="toolbar" aria-label="Quick actions">
-        <button type="button" class="tool-btn mobile-nav-toggle" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="new"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> <span>New vault</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="join"><span class="ui-icon material-symbols-rounded" aria-hidden="true">login</span> <span>Join</span></button>
-        <div class="tool-separator"></div>
-        <button type="button" class="tool-btn tool-button" data-action="add" id="toolbar-add"><span class="ui-icon material-symbols-rounded" aria-hidden="true">edit</span> <span>New item</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="paste" id="toolbar-paste"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_paste</span> <span>Paste text</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="copy" id="toolbar-copy"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_copy</span> <span>Copy</span></button>
-        <button type="button" class="tool-btn tool-button" data-action="refresh" id="toolbar-refresh"><span class="ui-icon material-symbols-rounded" aria-hidden="true">refresh</span> <span>Refresh</span></button>
-        <div class="tool-separator"></div>
-        <button type="button" class="tool-btn tool-button" data-action="settings" id="toolbar-settings"><span class="ui-icon material-symbols-rounded" aria-hidden="true">settings</span> <span>Settings</span></button>
-      </div>
-      <div class="address-bar">
-        <span class="address-label">Address</span>
-        <div class="address-input"><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder_open</span><span class="address-path" id="breadcrumb">C:\Clipboard\</span></div>
-        <button type="button" class="chrome-btn" data-action="home">Go</button>
-      </div>
       <div class="workspace app-content">
         <aside class="sidebar" aria-label="Vault navigation" id="sidebar">
           <div class="sidebar-heading">Clipboard Explorer</div>
@@ -92,10 +33,17 @@
           <div class="sidebar-heading">Active vault</div>
           <button type="button" class="nav-btn" id="sidebar-active" hidden><span class="ui-icon material-symbols-rounded" aria-hidden="true">folder</span><span id="sidebar-room"></span></button>
           <div class="sidebar-none" id="sidebar-none">(none)</div>
+          <div class="sidebar-divider"></div>
+          <div class="sidebar-group" aria-label="Application options">
+            <button type="button" class="nav-btn" data-action="settings"><span class="ui-icon material-symbols-rounded" aria-hidden="true">settings</span> Settings</button>
+            <button type="button" class="nav-btn" data-action="privacy"><span class="ui-icon material-symbols-rounded" aria-hidden="true">policy</span> Privacy &amp; sharing</button>
+            <button type="button" class="nav-btn" data-action="about"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span> About</button>
+          </div>
           <div class="sidebar-foot"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span><span>Vaults are temporary. Anyone with a room ID can read its contents.</span></div>
         </aside>
         <div class="mobile-scrim" id="mobile-scrim"></div>
         <section class="content-pane" id="content" aria-label="Vault contents">
+          <button type="button" class="chrome-btn mobile-nav-toggle" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded" aria-hidden="true">menu</span></button>
           <div class="home-screen" id="home-screen">
             <div class="content-heading">
               <div><div class="page-kicker">Your shared clipboard</div><h1 class="page-title">clipboard</h1><p class="page-desc">Copy here. Paste anywhere.</p></div>
@@ -129,6 +77,7 @@
               <span class="toolbar-caption">Room ID</span><strong class="room-code" id="room-code"></strong>
               <button type="button" class="chrome-btn" id="copy-code">Copy ID</button>
               <button type="button" class="chrome-btn" id="copy-link">Copy link</button>
+              <button type="button" class="chrome-btn" data-action="refresh" id="room-refresh" title="Refresh vault"><span class="ui-icon material-symbols-rounded" aria-hidden="true">refresh</span> Refresh</button>
             </div>
             <div class="file-surface">
               <div class="file-list-pane board-scroll">
@@ -152,6 +101,8 @@
               <button type="button" class="chrome-btn" id="add-item"><span class="ui-icon material-symbols-rounded" aria-hidden="true">add</span> New item...</button>
               <button type="button" class="chrome-btn" data-action="paste" id="paste-item"><span class="ui-icon material-symbols-rounded" aria-hidden="true">content_paste</span> Paste text...</button>
               <span id="room-expiry"></span>
+              <button type="button" class="chrome-btn" data-action="leave">Leave vault</button>
+              <button type="button" class="chrome-btn" id="delete-room" data-action="delete-room" hidden>Delete vault...</button>
             </div>
           </div>
         </section>

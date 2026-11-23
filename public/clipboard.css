@@ -18,3 +18,13 @@
 .preview-content.note-paper{min-height:100px;padding:12px}
 @media(max-width:839px){.home-body{padding:10px 12px 20px}.room-details.quick-bar{margin:0 12px 8px}.file-surface{padding:0 12px 12px}}
 @media(max-width:599px){.home-choices{gap:10px}.file-list-pane,.preview-pane{padding:10px}}
+
+/* Navigation without legacy menu/toolbar chrome. */
+.content-pane{position:relative}
+.room-details .chrome-btn{min-height:36px}
+.room-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 20px}
+.room-footer #room-expiry{margin-right:auto}
+#delete-room{color:var(--error)}
+.mobile-nav-toggle{position:absolute;top:8px;left:10px;z-index:5;min-width:40px;min-height:40px}
+@media(min-width:840px){.mobile-nav-toggle{display:none!important}}
+@media(max-width:839px){.home-screen>.content-heading,.room-bar.content-heading{padding-left:64px}.room-footer{padding:10px 12px}}
