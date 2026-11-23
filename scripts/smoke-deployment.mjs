@@ -10,7 +10,7 @@ async function req(url, options = {}) {
 }
 async function deployed() {
   const page = await req(site + '?smoke=' + Date.now());
-  if (!page.ok || !(await page.text()).includes('Clipboard Vault Explorer')) return false;
+  if (!page.ok || !(await page.text()).includes('<title>clipboard</title>')) return false;
   const js = await req(site + 'config.js?smoke=' + Date.now());
   return js.ok && (await js.text()).includes(api);
 }
@@ -21,7 +21,7 @@ for (let n = 0; n < 12; n++) {
   if (n < 11) await new Promise(resolve => setTimeout(resolve, 5000));
 }
 assert.ok(ready, 'GitHub Pages did not serve the app with its configured sharing API');
-console.log('✓ GitHub Pages serves the clipboard app and correct API config');
+console.log('✓ GitHub Pages serves the fullscreen clipboard app and correct API config');
 
 const health = await req(api + '/api/health');
 assert.equal(health.status, 200);

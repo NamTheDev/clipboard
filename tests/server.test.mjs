@@ -79,7 +79,7 @@ test('validation, limits, static response headers', async () => {
   assert.equal((await request(`/api/rooms/${code}/items`, 'POST', { title: '', content: 'test' }, owner)).status, 400);
   const staticPage = await fetch(base);
   assert.equal(staticPage.status, 200);
-  assert.match(await staticPage.text(), /Clipboard Vault Explorer/);
+  assert.match(await staticPage.text(), /clipboard — Vault Explorer/);
   assert.match(staticPage.headers.get('content-security-policy'), /script-src 'self'/);
   assert.equal(staticPage.headers.get('x-content-type-options'), 'nosniff');
 });
