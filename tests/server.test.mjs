@@ -93,11 +93,19 @@ test.after(async () => {
 
 test('Railway website redirects to canonical GitHub Pages while API stays available', async () => {
   await ready();
-  const response = await fetch(base + '/?room=ABC-234', {
-    redirect: 'manual',
-    headers: { Host: 'clipboard-production-afe5e7e4.up.railway.app' }
+  const { request: httpRequest } = await import('node:http');
+  const response = await new Promise((resolve, reject) => {
+    const connection = httpRequest({
+      hostname: '127.0.0.1', port, path: '/?room=ABC-234', method: 'GET',
+      headers: { Host: 'clipboard-production-afe5e7e4.up.railway.app' }
+    }, result => {
+      result.resume();
+      resolve({ status: result.statusCode, location: result.headers.location });
+    });
+    connection.on('error', reject);
+    connection.end();
   });
   assert.equal(response.status, 302);
-  assert.equal(response.headers.get('location'), 'https://namthedev.github.io/clipboard/?room=ABC-234');
+  assert.equal(response.location, 'https://namthedev.github.io/clipboard/?room=ABC-234');
   assert.equal((await request('/api/health')).status, 200);
 });
