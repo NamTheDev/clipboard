@@ -1,5 +1,13 @@
 # clipboard
 
+## Live deployment
+
+- **GitHub Pages (primary):** https://namthedev.github.io/clipboard/
+- **API (Railway):** https://clipboard-production-afe5e7e4.up.railway.app/
+
+GitHub Pages hosts the Windows 98 interface; the Railway service stores shared rooms and pasted items. The API must allow origin `https://namthedev.github.io` via the Railway `ALLOWED_ORIGIN` setting. The Pages workflow uses the Railway API URL by default. Rooms are short-lived and not end-to-end encrypted.
+
+
 A shared, temporary **text clipboard vault** with a Windows 95/98-style interface. Create a vault, add multiple snippets, share an easy-to-type **six-character room ID**, and copy the snippets from another browser or device.
 
 ## How it works

@@ -68,6 +68,7 @@
         <button type="button" class="tool-button" data-action="join"><span class="mini-icon">▤</span> Join</button>
         <div class="toolbar-divider"></div>
         <button type="button" class="tool-button" data-action="add" id="toolbar-add"><span class="mini-icon">✎</span> New item</button>
+        <button type="button" class="tool-button" data-action="paste" id="toolbar-paste"><span class="mini-icon">▣</span> Paste text</button>
         <button type="button" class="tool-button" data-action="copy" id="toolbar-copy"><span class="mini-icon">▦</span> Copy</button>
         <button type="button" class="tool-button" data-action="refresh" id="toolbar-refresh"><span class="mini-icon">↻</span> Refresh</button>
       </div>
@@ -99,7 +100,7 @@
             <div class="room-bar"><div class="room-identity"><div class="room-name" id="room-title"></div><div class="room-caption" id="room-caption"></div></div><div class="room-badge" id="access-badge">READ ONLY</div></div>
             <div class="room-details"><span>Room ID:</span><strong id="room-code" class="room-code"></strong><button type="button" class="win98-button compact" id="copy-code">Copy ID</button><button type="button" class="win98-button compact" id="copy-link">Copy link</button></div>
             <div class="file-surface"><div class="file-list-pane"><div class="list-header"><span>Name</span><span>Added</span></div><div class="file-list" id="file-list" role="listbox" aria-label="Clipboard items" tabindex="0"></div></div><div class="preview-pane"><div class="preview-label">Item preview</div><div class="preview-meta" id="preview-meta">Select an item</div><pre id="preview-content" class="preview-content win98-sunken">No item selected.</pre><div class="preview-actions"><button type="button" class="win98-button" id="copy-selected">Copy text</button><button type="button" class="win98-button" id="edit-selected" hidden>Edit...</button><button type="button" class="win98-button" id="delete-selected" hidden>Delete</button></div></div></div>
-            <div class="room-footer"><button type="button" class="win98-button" id="add-item">+ New item...</button><span id="room-expiry"></span></div>
+            <div class="room-footer"><button type="button" class="win98-button" id="add-item">+ New item...</button><button type="button" class="win98-button" data-action="paste" id="paste-item">Paste text...</button><span id="room-expiry"></span></div>
           </div>
         </section>
       </div>

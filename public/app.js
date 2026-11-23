@@ -6,6 +6,12 @@ let statusTimer = null;
 let previousFocus = null;
 const CODE_RE = /^[A-HJ-KM-NP-Z2-9]{6}$/;
 
+function formatRoomCodeInput(event) {
+  const input = event.currentTarget;
+  // Display AAA-234 while accepting upper/lowercase letters and pasted codes.
+  const raw = input.value.toUpperCase().replace(/[^A-Z2-9]/g, '').slice(0, 6);
+  input.value = raw.length > 3 ? raw.slice(0, 3) + '-' + raw.slice(3) : raw;
+}
 function codeFrom(value) {
   const code = String(value || '').toUpperCase().replace(/[\s-]/g, '');
   return CODE_RE.test(code) ? code : null;
@@ -143,6 +149,7 @@ function syncButtons() {
   const canEdit = Boolean(state.room && state.ownerToken);
   const selected = Boolean(state.room && state.selectedId && state.items.some(x => x.id === state.selectedId));
   $('#toolbar-add').disabled = !canEdit;
+  $('#toolbar-paste').disabled = !canEdit;
   $('#toolbar-copy').disabled = !selected;
   $('#toolbar-refresh').disabled = !state.room;
   $('#add-item').hidden = !canEdit;
@@ -267,6 +274,7 @@ function joinVaultDialog() {
       catch(e) { showError(e); }
     }}, { text: 'Cancel', onClick: closeDialog },
   ]);
+  $('#modal-join-code').addEventListener('input', formatRoomCodeInput);
 }
 function itemDialog(editing = false, pasted = '') {
   if (!state.room || !state.ownerToken) return setStatus('Only the vault creator can add or edit items.');
@@ -378,6 +386,7 @@ $('#win-max').addEventListener('click', toggleMaximize);
 $('#dialog-close').addEventListener('click', closeDialog);
 $('#modal-backdrop').addEventListener('click', e => { if (e.target === $('#modal-backdrop')) closeDialog(); });
 $('#join-form').addEventListener('submit', async e => { e.preventDefault(); try { await joinRoom($('#join-code').value); } catch(error) { showError(error); } });
+$('#join-code').addEventListener('input', formatRoomCodeInput);
 $('#sidebar-active').addEventListener('click', () => state.room && renderRoom());
 $('#copy-code').addEventListener('click', () => state.room && copyText(displayCode(state.room.code), 'Room ID copied').catch(showError));
 $('#copy-link').addEventListener('click', () => {
