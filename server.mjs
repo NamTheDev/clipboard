@@ -163,7 +163,11 @@ const staticFiles = new Map([
 ]);
 const staticCache = new Map();
 for (const [url, [name, type]] of staticFiles) {
-  staticCache.set(url, [readFileSync(join(ROOT, 'public', name)), type]);
+  // Production API-only hosting must never require generated Pages assets.
+  try { staticCache.set(url, [readFileSync(join(ROOT, 'public', name)), type]); }
+  catch (error) {
+    if (error.code !== 'ENOENT' || name !== 'favicon.svg') throw error;
+  }
 }
 
 const server = createServer(async (req, res) => {
@@ -195,6 +199,17 @@ const server = createServer(async (req, res) => {
       const [buffer, contentType] = staticCache.get(path);
       res.writeHead(200, { ...HEADERS, 'Content-Type': contentType, 'Cache-Control': 'public, max-age=300' });
       res.end(buffer);
+      return;
+    }
+    if (req.method === 'GET' && /^\/icons\/[a-z0-9-]+\.svg$/.test(path)) {
+      try {
+        const buffer = readFileSync(join(ROOT, 'public', path.slice(1)));
+        res.writeHead(200, { ...HEADERS, 'Content-Type': 'image/svg+xml', 'Cache-Control': 'public, max-age=300' });
+        res.end(buffer);
+      } catch (error) {
+        if (error.code === 'ENOENT') return bad(res, 404, 'Icon not found.');
+        throw error;
+      }
       return;
     }
     if (req.method === 'GET' && path === '/api/health') {
