@@ -65,6 +65,8 @@ with sync_playwright() as playwright:
           "locked": False
         }, values
     assert_theme_signal("dark")
+    assert page.locator("html").get_attribute("data-bs-theme") == "dark"
+    assert page.locator('link[href="./bootstrap.min.css"]').count() == 1
     assert page.locator('link[rel="icon"]').get_attribute("href") == "./favicon.svg"
     md3 = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--bg').trim()")
     assert md3 == "#121212", md3

@@ -1,5 +1,5 @@
 /* Clipboard-only layout. Shared tokens and components live in
- * https://github.com/NamTheDev/util/blob/main/css/material_design.css
+ * https://github.com/NamTheDev/util/blob/main/css/bootstrap.css
  * Keep margins, insets, and gaps on the shared spacing tokens.
  */
 
@@ -144,7 +144,7 @@
   overflow:auto;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  background:var(--raised)!important;
+  background:var(--raised);
   border-radius:16px;
   font:14px/1.65 Roboto,Arial,sans-serif;
 }
@@ -165,10 +165,7 @@
   color:var(--error);
 }
 
-/* Modal and settings structure. */
-.modal{
-  z-index:100;
-}
+/* Dialog and settings structure. */
 .modal-body{
   max-height:65dvh;
 }
@@ -193,7 +190,6 @@
   position:relative;
 }
 .mobile-nav-toggle{
-  display:inline-flex!important;
   position:absolute;
   top:10px;
   left:12px;
