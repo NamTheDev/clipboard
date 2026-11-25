@@ -98,7 +98,10 @@ test('validation, limits, static response headers', async () => {
   const signalScript = await fetch(base + '/theme-signal.js');
   assert.equal(signalScript.status, 200);
   assert.match(signalScript.headers.get('content-type'), /text\/javascript/);
-  assert.match(await signalScript.text(), /color-scheme/);
+  const signal = await signalScript.text();
+  assert.match(signal, /root\.style\.colorScheme = 'dark'/);
+  assert.match(signal, /root\.dataset\.bsTheme = 'dark'/);
+  assert.doesNotMatch(signal, /localStorage/);
   const nestedModule = await fetch(base + '/js/core/api.js');
   assert.equal(nestedModule.status, 200);
   assert.match(nestedModule.headers.get('content-type'), /text\/javascript/);
