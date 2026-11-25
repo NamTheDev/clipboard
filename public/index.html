@@ -61,7 +61,7 @@
           <div class="sidebar-foot d-flex gap-3 fg-2 small p-4 mt-5"><span class="ui-icon material-symbols-rounded align-middle flex-shrink-0" aria-hidden="true">info</span><span>Anyone with a vault ID can read its contents.</span></div>
         </aside>
         <div class="mobile-scrim" id="mobile-scrim"></div>
-        <section class="content-pane d-flex flex-column flex-grow-1 overflow-hidden min-h-0 min-w-0" id="content" aria-label="Vault contents">
+        <section class="content-pane d-flex flex-column flex-grow-1 overflow-hidden min-h-0 min-w-0 position-relative" id="content" aria-label="Vault contents">
           <button type="button" class="chrome-btn mobile-nav-toggle btn-outline theme-secondary btn rounded-5" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded align-middle flex-shrink-0" aria-hidden="true">menu</span></button>
           <div class="home-screen flex-grow-1 min-h-0 overflow-auto" id="home-screen">
             <div class="content-heading d-flex align-items-center justify-content-between"><h1 class="page-title fw-medium m-0">Vaults</h1></div>
@@ -87,12 +87,12 @@
               <span class="room-badge address-badge badge rounded-5" id="access-badge">READ ONLY</span>
             </div>
             <div class="room-details quick-bar card d-flex flex-row align-items-center rounded-6"><strong class="room-code font-monospace fw-medium user-select-all text-break" id="room-code" aria-label="Room ID"></strong></div>
-            <div class="file-surface flex-grow-1 min-h-0">
+            <div class="file-surface d-grid flex-grow-1 min-h-0">
               <div class="file-list-pane board-scroll flex-grow-1 overflow-auto rounded-6 min-h-0 min-w-0">
                 <div class="board-label fg-2 text-uppercase fw-medium">Clipboard items</div>
                 <div class="file-list note-grid d-grid align-items-start" id="file-list" role="listbox" aria-label="Clipboard items" tabindex="0"></div>
               </div>
-              <div class="preview-pane rounded-0 min-w-0 min-h-0">
+              <div class="preview-pane rounded-0 min-w-0 min-h-0 overflow-auto">
                 <div class="board-label fg-2 text-uppercase fw-medium">Item preview</div>
                 <div class="preview-card note-window card rounded-6 min-w-0 overflow-hidden d-flex flex-column">
                   <div class="note-titlebar d-flex align-items-center gap-3 fg-2 pb-0"><span class="ui-icon material-symbols-rounded align-middle flex-shrink-0" aria-hidden="true">description</span><span class="note-titlebar-text flex-grow-1 text-truncate min-w-0 fs-xs" id="preview-meta">Select an item</span></div>
@@ -109,9 +109,9 @@
         </section>
       </div>
       <footer class="status-bar d-flex align-items-center gap-4 border-top fg-2 bg-1 fs-xs">
-        <span class="status-cell " id="status-text" role="status">Ready</span>
-        <span class="status-cell " id="status-count">0 item(s)</span>
-        <span class="status-cell " id="status-mode">Vaults</span>
+        <span class="status-cell flex-grow-1" id="status-text" role="status">Ready</span>
+        <span class="status-cell" id="status-count">0 item(s)</span>
+        <span class="status-cell" id="status-mode">Vaults</span>
       </footer>
     </main>
     <div id="modal-backdrop" class="dialog-backdrop modal-backdrop d-flex align-items-center justify-content-center" hidden>

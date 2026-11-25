@@ -35,16 +35,14 @@
 .room-details.quick-bar{
   margin-bottom:var(--content-gap);
 }
+
 .file-surface{
-  display:grid;
   grid-template-columns:minmax(0,1fr) minmax(260px,42%);
   gap:var(--content-gap);
   padding:0 var(--content-gutter) 16px;
 }
 .file-list-pane,.preview-pane{
   padding:var(--pane-inset);
-  background:var(--surface);
-  border:1px solid var(--outline-soft);
 }
 .file-list{
   grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
@@ -114,9 +112,6 @@
 }
 
 /* Clipboard opens the same mobile drawer as keep. */
-.content-pane{
-  position:relative;
-}
 .mobile-nav-toggle{
   position:absolute;
   top:10px;
@@ -171,7 +166,6 @@
 }
 
 /* Minimal preview and list surfaces retain the existing split layout. */
-.file-list-pane,.preview-pane{background:transparent;border-color:transparent}
 .preview-pane{border-inline-start:1px solid var(--outline-soft)}
 .preview-content.note-paper{background:var(--base)}
 .room-details.quick-bar{--bs-card-bg:var(--mantle)}

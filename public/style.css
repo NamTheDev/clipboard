@@ -24,7 +24,7 @@ img.ui-icon{width:var(--icon-size);height:var(--icon-size)}
 .note-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:var(--content-gap);align-items:start}
 .card{--bs-card-bg:var(--surface);--bs-card-border-color:var(--outline-soft);--bs-card-spacer-x:var(--card-inset);--bs-card-spacer-y:12px;--bs-card-cap-bg:transparent;--bs-card-body-gap:4px}
 .note-window:hover{border-color:var(--outline)}
-.note-titlebar{min-height:32px;padding:6px 12px}
+.note-titlebar{min-height:32px;padding:6px 12px 0}
 .note-paper{min-height:72px}
 .note-heading{font-size:var(--font-size-heading);overflow-wrap:anywhere}
 .note-text{white-space:pre-wrap;overflow-wrap:anywhere}
