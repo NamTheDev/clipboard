@@ -19,7 +19,7 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --silent --show-error --retry 3 \
-            https://raw.githubusercontent.com/NamTheDev/util/main/css/config.css \
+            https://raw.githubusercontent.com/NamTheDev/util/main/design/config.css \
             -o /tmp/config.css
           test -s /tmp/config.css
           cp /tmp/config.css public/config.css
@@ -38,5 +38,5 @@ jobs:
 
           $(date -u +%d-%m-%Y)
 
-          - Mirror util/css/config.css into clipboard."
+          - Mirror util/design/config.css into clipboard."
           git push
