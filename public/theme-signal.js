@@ -8,6 +8,7 @@
   function signal(dark) {
     const scheme = dark ? 'dark' : 'light';
     root.dataset.theme = scheme;
+    root.dataset.bsTheme = scheme;
     root.style.colorScheme = scheme;
     schemeMeta?.setAttribute('content', scheme);
     themeColor?.setAttribute('content', dark ? '#121212' : '#fafafa');

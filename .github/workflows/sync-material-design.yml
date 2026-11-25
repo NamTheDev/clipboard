@@ -1,4 +1,4 @@
-name: Sync shared Material Design CSS
+name: Sync shared Bootstrap theme CSS
 on:
   workflow_dispatch:
   schedule:
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: shared-material-design-sync
+  group: shared-bootstrap-sync
   cancel-in-progress: false
 jobs:
   sync:
@@ -19,10 +19,10 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --silent --show-error --retry 3 \
-            https://raw.githubusercontent.com/NamTheDev/util/main/css/material_design.css \
-            -o /tmp/material_design.css
-          test -s /tmp/material_design.css
-          cp /tmp/material_design.css public/style.css
+            https://raw.githubusercontent.com/NamTheDev/util/main/css/bootstrap.css \
+            -o /tmp/bootstrap.css
+          test -s /tmp/bootstrap.css
+          cp /tmp/bootstrap.css public/style.css
       - name: Commit only changed stylesheet
         shell: bash
         run: |
@@ -34,9 +34,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add public/style.css
-          git commit -m "Sync: Update shared Material Design CSS
+          git commit -m "Sync: Update shared Bootstrap theme CSS
 
           $(date -u +%d-%m-%Y)
 
-          - Mirror util/css/material_design.css into clipboard."
+          - Mirror util/css/bootstrap.css into clipboard."
           git push

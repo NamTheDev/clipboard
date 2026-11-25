@@ -2,7 +2,7 @@
 
 **Website:** https://namthedev.github.io/clipboard/
 
-A temporary shared clipboard with short vault IDs and a compact, monochrome Material Design 3-inspired interface. Create a vault, save snippets, and share a six-character room ID with another device. Guests can read and copy; owners can add, edit or remove items.
+A temporary shared clipboard with short vault IDs and a compact, monochrome Bootstrap 6-based interface. Create a vault, save snippets, and share a six-character room ID with another device. Guests can read and copy; owners can add, edit or remove items.
 
 ## Using clipboard
 
@@ -12,13 +12,13 @@ Vaults expire after 24 hours or seven days. Settings include the light/dark togg
 
 ## Architecture and hosting
 
-The public frontend is served exclusively from **GitHub Pages**. `public/index.html`, `public/app.js`, `public/js/core/` and `public/js/ui/` are native browser modules. The shared Material Design 3 stylesheet is synchronized from [util/css/material_design.css](https://github.com/NamTheDev/util/blob/main/css/material_design.css); `public/clipboard.css` contains app-specific layouts. See [Architecture](docs/ARCHITECTURE.md) for module responsibilities.
+The public frontend is served exclusively from **GitHub Pages**. `public/index.html`, `public/app.js`, `public/js/core/` and `public/js/ui/` are native browser modules. The shared Bootstrap 6 stylesheet is synchronized from [util/css/bootstrap.css](https://github.com/NamTheDev/util/blob/main/css/bootstrap.css); `public/clipboard.css` contains app-specific layouts. See [Architecture](docs/ARCHITECTURE.md) for module responsibilities.
 
 The cross-device vault backend is separate. Railway hosts the Node.js/SQLite API at `https://clipboard-production-afe5e7e4.up.railway.app/api/` and redirects visits to its homepage to GitHub Pages. The repository variable `CLIPBOARD_API_BASE` configures the public frontend; credentials must never be placed in public JS. Keep `server.mjs`, `server/security.mjs`, `Dockerfile`, and the persisted SQLite volume for sharing. The API permits the configured origin through `ALLOWED_ORIGIN`.
 
 ## Design
 
-The current shared visual system uses Roboto, Material Symbols Rounded, monochrome dark-first/light modes, compact spacing, tonal cards and outlined controls. This supersedes the older Windows 95/98 reference. A Lucide source SVG is still used for the **favicon only**, not interface actions.
+The locally vendored Bootstrap 6.0.0-alpha.2 CSS requires Chrome/Edge 138, Firefox 147, or Safari 26. The current shared visual system uses Roboto, Material Symbols Rounded, monochrome dark-first/light modes, compact spacing, tonal cards and outlined controls. This supersedes the older Windows 95/98 reference. A Lucide source SVG is still used for the **favicon only**, not interface actions.
 
 ## Development and tests
 

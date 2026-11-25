@@ -112,25 +112,25 @@ function renderItems() {
   list.replaceChildren();
   if (!state.items.length) {
     const empty = document.createElement('p');
-    empty.className = 'file-empty';
+    empty.className = 'file-empty fg-2';
     empty.textContent = state.ownerToken ? 'This vault is empty. Select "New item" to add your first snippet.' : 'This vault is empty. Its creator has not added any items yet.';
     list.append(empty);
   } else {
     for (const item of state.items) {
       const row = document.createElement('button');
       row.type = 'button';
-      row.className = 'file-row note-window';
+      row.className = 'file-row note-window card';
       row.setAttribute('role', 'option');
       row.setAttribute('aria-selected', String(state.selectedId === item.id));
       row.dataset.itemId = item.id;
-      const top = document.createElement('span'); top.className = 'note-titlebar';
+      const top = document.createElement('span'); top.className = 'note-titlebar d-flex align-items-center gap-3 fg-2';
       const fileIcon = document.createElement('span'); fileIcon.className = 'ui-icon material-symbols-rounded'; fileIcon.textContent = 'description'; fileIcon.setAttribute('aria-hidden','true');
-      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text'; descriptor.textContent = 'text_snippet';
-      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date'; date.textContent = dateLabel(item.created_at);
+      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text flex-grow-1 text-truncate'; descriptor.textContent = 'text_snippet';
+      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date flex-grow-1 text-truncate fg-2'; date.textContent = dateLabel(item.created_at);
       top.append(fileIcon, descriptor, date);
-      const paper = document.createElement('span'); paper.className = 'note-paper';
-      const name = document.createElement('span'); name.className = 'note-heading file-name'; name.textContent = item.title;
-      const excerpt = document.createElement('span'); excerpt.className = 'note-text file-excerpt'; excerpt.textContent = item.content.length > 175 ? item.content.slice(0,175) + '…' : item.content;
+      const paper = document.createElement('span'); paper.className = 'note-paper card-body';
+      const name = document.createElement('span'); name.className = 'note-heading file-name card-title fw-medium mb-1'; name.textContent = item.title;
+      const excerpt = document.createElement('span'); excerpt.className = 'note-text file-excerpt mb-0'; excerpt.textContent = item.content.length > 175 ? item.content.slice(0,175) + '…' : item.content;
       paper.append(name,excerpt);
       row.append(top,paper);
       row.addEventListener('click', () => { state.selectedId = item.id; renderItems(); });
@@ -179,8 +179,8 @@ async function joinRoom(rawCode) {
 function createVaultDialog() {
   openDialog('Create a New Vault', `
     <p>Create a temporary vault. Anyone with its code can read and copy its contents.</p>
-    <div class="modal-field"><label for="new-vault-name">Vault name:</label><input id="new-vault-name" maxlength="60" value="My Clipboard" required></div>
-    <div class="modal-field"><label for="new-vault-duration">Keep vault for:</label><select id="new-vault-duration"><option value="24h">24 hours</option><option value="7d">7 days</option></select></div>
+    <div class="modal-field"><label for="new-vault-name">Vault name:</label><input id="new-vault-name" maxlength="60" value="My Clipboard" required class="form-control"></div>
+    <div class="modal-field"><label for="new-vault-duration">Keep vault for:</label><select id="new-vault-duration" class="form-control"><option value="24h">24 hours</option><option value="7d">7 days</option></select></div>
     <p class="modal-hint">Only this browser will have the owner key for adding and removing items.</p>
   `, [
     { text: 'Create', primary: true, onClick: async () => {
@@ -201,7 +201,7 @@ function createVaultDialog() {
 function joinVaultDialog() {
   openDialog('Join a Vault', `
     <p>Type the room ID provided by the vault creator.</p>
-    <div class="modal-field"><label for="modal-join-code">Room ID:</label><input id="modal-join-code" class="code-input" maxlength="7" placeholder="K7P-4MX" autocomplete="off" spellcheck="false" required></div>
+    <div class="modal-field"><label for="modal-join-code">Room ID:</label><input id="modal-join-code" class="code-input form-control" maxlength="7" placeholder="K7P-4MX" autocomplete="off" spellcheck="false" required></div>
     <p class="modal-hint">Room codes are case-insensitive. You can copy items without an account.</p>
   `, [
     { text: 'Join', primary: true, onClick: async () => {
@@ -216,8 +216,8 @@ function itemDialog(editing = false, pasted = '') {
   const old = editing ? state.items.find(x => x.id === state.selectedId) : null;
   if (editing && !old) return;
   openDialog(editing ? 'Edit Clipboard Item' : 'New Clipboard Item', `
-    <div class="modal-field"><label for="item-title">Item name:</label><input id="item-title" maxlength="80" placeholder="Snippet name" required></div>
-    <div class="modal-field"><label for="item-content">Text content:</label><textarea id="item-content" maxlength="16000" placeholder="Paste text here (Ctrl+V)..." required></textarea></div>
+    <div class="modal-field"><label for="item-title">Item name:</label><input id="item-title" maxlength="80" placeholder="Snippet name" required class="form-control"></div>
+    <div class="modal-field"><label for="item-content">Text content:</label><textarea id="item-content" maxlength="16000" placeholder="Paste text here (Ctrl+V)..." required class="form-control"></textarea></div>
     <p class="modal-hint">Text only · 16,000 characters per item · 100 items per vault.</p>
     <p id="item-form-error" role="alert" hidden></p>
   `, [
@@ -272,16 +272,16 @@ function deleteVaultDialog() {
 
 function settingsDialog() {
   openDialog('clipboard - Settings', [
-    '<fieldset class="settings-group"><legend>Appearance</legend>',
-    '<label class="simple-choice" for="setting-dark"><input type="checkbox" id="setting-dark"> Dark mode</label>',
+    '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Appearance</legend>',
+    '<label class="simple-choice d-flex align-items-center gap-3" for="setting-dark"><input type="checkbox" id="setting-dark" class="check"> Dark mode</label>',
     '</fieldset>',
-    '<fieldset class="settings-group"><legend>Vault defaults</legend>',
+    '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Vault defaults</legend>',
     '<label for="setting-duration">New vault expires after</label>',
-    '<select id="setting-duration"><option value="24h">24 hours</option><option value="7d">7 days</option></select>',
+    '<select id="setting-duration" class="form-control"><option value="24h">24 hours</option><option value="7d">7 days</option></select>',
     '<label for="setting-refresh">Auto-refresh shared items</label>',
-    '<select id="setting-refresh"><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option><option value="0">Off (manual refresh)</option></select>',
+    '<select id="setting-refresh" class="form-control"><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option><option value="0">Off (manual refresh)</option></select>',
     '</fieldset>',
-    '<p class="modal-hint">Preferences are stored in this browser only. The classic four-tone Windows 98 borders are retained in both themes.</p>'
+    '<p class="modal-hint">Preferences are stored in this browser only. The monochrome theme is shared by both apps.</p>'
   ].join(''), [
     { text: 'Save', primary: true, onClick: () => {
       try {
@@ -309,7 +309,7 @@ function infoDialog(privacy = false) {
   ` : `
     <p><strong>clipboard 1.0</strong></p><p>A compact cross-device clipboard vault with a shared Material Design 3 interface.</p>
     <p>Create a room, paste text items, then enter the six-character room ID on another device.</p>
-    <p class="modal-hint">Visual style uses the shared monochrome Material Design 3 system.</p>
+    <p class="modal-hint">Visual style uses the shared monochrome Bootstrap 6 system.</p>
   `, [{ text: 'OK', primary: true, onClick: closeDialog }]);
 }
 async function action(name) {

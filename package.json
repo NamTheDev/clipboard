@@ -2,7 +2,7 @@
   "name": "clipboard",
   "version": "1.0.0",
   "private": true,
-  "description": "Temporary shared clipboard vaults with compact monochrome Material Design 3",
+  "description": "Temporary shared clipboard vaults with compact monochrome Bootstrap 6",
   "type": "module",
   "engines": {
     "node": ">=22.13.0"
