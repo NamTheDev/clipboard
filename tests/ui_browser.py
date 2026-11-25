@@ -75,7 +75,7 @@ with sync_playwright() as playwright:
     page.screenshot(path=str(EVIDENCE / "clipboard-md3-dark.png"))
 
     page.locator('#sidebar [data-action="settings"]').click()
-    assert page.locator("#setting-dark").is_checked()
+    assert page.locator("#setting-dark").count() == 0
     assert page.locator("#setting-duration").input_value() == "24h"
     assert page.locator("#setting-refresh").input_value() == "5"
     page.locator("#setting-duration").select_option("7d")
@@ -96,7 +96,7 @@ with sync_playwright() as playwright:
     page.reload(wait_until="load")
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     prefs = page.evaluate("JSON.parse(localStorage.getItem('clipboard.preferences.v1'))")
-    assert prefs == {"theme": "dark", "defaultDuration": "7d", "refreshSeconds": 0}, prefs
+    assert prefs == {"defaultDuration": "7d", "refreshSeconds": 0}, prefs
     assert_theme_signal("dark")
 
     page.locator(".home-choices [data-action='new']").click()
@@ -141,15 +141,15 @@ with sync_playwright() as playwright:
     assert no_overflow, "Mobile viewport has horizontal overflow"
     guest.screenshot(path=str(EVIDENCE / "clipboard-guest-mobile.png"))
 
-    # Return to native light mode; extensions should see the actual change.
-    page.locator('#sidebar [data-action="settings"]').click()
-    page.locator("#setting-dark").uncheck()
-    page.locator("#dialog-actions .primary").click()
-    assert_theme_signal("light")
+    # Obsolete preferences cannot activate light mode.
+    page.evaluate("""() => {
+      const p=JSON.parse(localStorage.getItem('clipboard.preferences.v1') || '{}');
+      localStorage.setItem('clipboard.preferences.v1', JSON.stringify({...p,theme:'light'}));
+    }""")
     page.reload(wait_until="load")
-    assert_theme_signal("light")
+    assert_theme_signal("dark")
     assert not errors, "Browser errors: " + " | ".join(errors)
-    print("✓ Fullscreen Catppuccin Mocha / Latte appearance")
+    print("✓ Fullscreen fixed Catppuccin Mocha appearance")
     print("✓ Settings persisted and 7-day vault default applied")
     print("✓ Owner added/copy-pasted exact text; guest joined/copied on mobile")
     print("✓ No JavaScript exceptions or mobile horizontal overflow")

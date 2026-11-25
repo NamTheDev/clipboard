@@ -11,11 +11,8 @@ let statusTimer = null;
 
 let preferences = loadPreferences();
 function applyAppearance() {
-  const dark = preferences.theme === 'dark';
-  document.body.classList.toggle('dark-mode', dark);
-  document.querySelector('.desktop')?.classList.toggle('dark-mode', dark);
-  // Publish the native app theme to Dark Reader and other browser integrations.
-  window.dispatchEvent(new CustomEvent('app-theme-change', { detail: { dark } }));
+  document.body.classList.add('dark-mode');
+  document.querySelector('.desktop')?.classList.add('dark-mode');
 }
 function savePreferences(next) {
   try { localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next)); }
@@ -272,9 +269,6 @@ function deleteVaultDialog() {
 
 function settingsDialog() {
   openDialog('clipboard - Settings', [
-    '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Appearance</legend>',
-    '<label class="simple-choice d-flex align-items-center gap-3 border-bottom" for="setting-dark"><input type="checkbox" id="setting-dark" class="check"> Dark mode</label>',
-    '</fieldset>',
     '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Vault defaults</legend>',
     '<label for="setting-duration">New vault expires after</label>',
     '<select id="setting-duration" class="form-control rounded-5"><option value="24h">24 hours</option><option value="7d">7 days</option></select>',
@@ -286,7 +280,6 @@ function settingsDialog() {
     { text: 'Save', primary: true, onClick: () => {
       try {
         savePreferences({
-          theme: $('#setting-dark').checked ? 'dark' : 'light',
           defaultDuration: $('#setting-duration').value,
           refreshSeconds: Number($('#setting-refresh').value)
         });
@@ -296,7 +289,6 @@ function settingsDialog() {
     }},
     { text: 'Cancel', onClick: closeDialog }
   ]);
-  $('#setting-dark').checked = preferences.theme === 'dark';
   $('#setting-duration').value = preferences.defaultDuration;
   $('#setting-refresh').value = String(preferences.refreshSeconds);
 }
