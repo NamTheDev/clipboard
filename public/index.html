@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#121212">
+  <meta name="theme-color" content="#1e1e2e">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="A monochrome Bootstrap 6 shared clipboard. Create a vault, paste snippets, and share a room ID.">
+  <meta name="description" content="A minimal Catppuccin shared clipboard. Create a vault, paste snippets, and share a room ID.">
   <title>clipboard</title>
   <link rel="canonical" href="https://namthedev.github.io/clipboard/">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg">
@@ -14,6 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400,0,0&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./bootstrap.min.css">
+  <link rel="stylesheet" href="./config.css">
   <link rel="stylesheet" href="./style.css">
   <link rel="stylesheet" href="./clipboard.css">
   <script src="./config.js"></script>
@@ -57,23 +58,23 @@
             <button type="button" class="nav-btn nav-link w-100" data-action="privacy"><span class="ui-icon material-symbols-rounded" aria-hidden="true">policy</span> Privacy &amp; sharing</button>
             <button type="button" class="nav-btn nav-link w-100" data-action="about"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span> About</button>
           </nav>
-          <div class="sidebar-foot d-flex gap-3 fg-2 small"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span><span>Vault IDs allow anyone who has them to read shared content.</span></div>
+          <div class="sidebar-foot d-flex gap-3 fg-2 small"><span class="ui-icon material-symbols-rounded" aria-hidden="true">info</span><span>Anyone with a vault ID can read its contents.</span></div>
         </aside>
         <div class="mobile-scrim" id="mobile-scrim"></div>
         <section class="content-pane d-flex flex-column flex-grow-1 overflow-hidden" id="content" aria-label="Vault contents">
-          <button type="button" class="chrome-btn mobile-nav-toggle btn-outline theme-secondary" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded" aria-hidden="true">menu</span></button>
+          <button type="button" class="chrome-btn mobile-nav-toggle btn-outline theme-secondary btn" id="toggle-nav" aria-label="Toggle navigation" aria-expanded="false"><span class="ui-icon material-symbols-rounded" aria-hidden="true">menu</span></button>
           <div class="home-screen" id="home-screen">
             <div class="content-heading d-flex align-items-center justify-content-between"><h1 class="page-title fw-medium">Vaults</h1></div>
             <div class="home-body">
               <div class="home-choices note-grid d-grid">
                 <section class="groupbox note-window card">
                   <div class="note-paper card-body"><h2 class="note-heading card-title fw-medium mb-1">Create a vault</h2><p class="note-text mb-0">Share temporary snippets.</p></div>
-                  <div class="note-foot d-flex flex-wrap align-items-center"><button class="chrome-btn primary btn-solid theme-primary" type="button" data-action="new">Create Vault...</button></div>
+                  <div class="note-foot d-flex flex-wrap align-items-center"><button class="chrome-btn primary btn-solid theme-primary btn" type="button" data-action="new">Create vault</button></div>
                 </section>
                 <section class="groupbox note-window card">
                   <form id="join-form">
                     <div class="note-paper card-body"><h2 class="note-heading card-title fw-medium mb-1">Join a vault</h2><label class="field-label form-label" for="join-code">Room ID</label><input class="win-input code-input form-control" id="join-code" maxlength="7" autocomplete="off" spellcheck="false" placeholder="ABC-234" required></div>
-                    <div class="note-foot d-flex flex-wrap align-items-center"><button type="submit" class="chrome-btn primary btn-solid theme-primary">Join</button></div>
+                    <div class="note-foot d-flex flex-wrap align-items-center"><button type="submit" class="chrome-btn primary btn-solid theme-primary btn">Join</button></div>
                   </form>
                 </section>
               </div>
@@ -97,9 +98,9 @@
                   <div class="note-titlebar d-flex align-items-center gap-3 fg-2"><span class="ui-icon material-symbols-rounded" aria-hidden="true">description</span><span class="note-titlebar-text flex-grow-1 text-truncate" id="preview-meta">Select an item</span></div>
                   <pre id="preview-content" class="note-paper preview-content card-body">No item selected.</pre>
                   <div class="note-foot preview-actions d-flex flex-wrap align-items-center">
-                    <button type="button" class="chrome-btn primary btn-solid theme-primary" id="copy-selected">Copy text</button>
-                    <button type="button" class="chrome-btn btn-outline theme-secondary" id="edit-selected" hidden>Edit...</button>
-                    <button type="button" class="chrome-btn btn-outline theme-secondary" id="delete-selected" hidden>Delete</button>
+                    <button type="button" class="chrome-btn primary btn-solid theme-primary btn" id="copy-selected">Copy text</button>
+                    <button type="button" class="chrome-btn btn-outline theme-secondary btn" id="edit-selected" hidden>Edit</button>
+                    <button type="button" class="chrome-btn btn-outline theme-secondary btn" id="delete-selected" hidden>Delete</button>
                   </div>
                 </div>
               </div>
@@ -110,7 +111,7 @@
       <footer class="status-bar d-flex align-items-center gap-4 border-top fg-2">
         <span class="status-cell" id="status-text" role="status">Ready</span>
         <span class="status-cell" id="status-count">0 item(s)</span>
-        <span class="status-cell" id="status-mode">Vault Explorer</span>
+        <span class="status-cell" id="status-mode">Vaults</span>
       </footer>
     </main>
     <div id="modal-backdrop" class="dialog-backdrop modal-backdrop d-flex align-items-center justify-content-center" hidden>

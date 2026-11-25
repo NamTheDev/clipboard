@@ -1,4 +1,4 @@
-name: Sync shared Bootstrap theme CSS
+name: Sync shared design configuration
 on:
   workflow_dispatch:
   schedule:
@@ -6,7 +6,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: shared-bootstrap-sync
+  group: shared-design-config-sync
   cancel-in-progress: false
 jobs:
   sync:
@@ -19,24 +19,24 @@ jobs:
         run: |
           set -euo pipefail
           curl --fail --location --silent --show-error --retry 3 \
-            https://raw.githubusercontent.com/NamTheDev/util/main/css/bootstrap.css \
-            -o /tmp/bootstrap.css
-          test -s /tmp/bootstrap.css
-          cp /tmp/bootstrap.css public/style.css
+            https://raw.githubusercontent.com/NamTheDev/util/main/css/config.css \
+            -o /tmp/config.css
+          test -s /tmp/config.css
+          cp /tmp/config.css public/config.css
       - name: Commit only changed stylesheet
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- public/style.css; then
+          if git diff --quiet -- public/config.css; then
             echo 'Already synchronized with util.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add public/style.css
-          git commit -m "Sync: Update shared Bootstrap theme CSS
+          git add public/config.css
+          git commit -m "Sync: Update shared design configuration
 
           $(date -u +%d-%m-%Y)
 
-          - Mirror util/css/bootstrap.css into clipboard."
+          - Mirror util/css/config.css into clipboard."
           git push

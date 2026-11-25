@@ -27,6 +27,8 @@ jobs:
           test -s public/index.html
           test -s public/app.js
           test -s public/theme-signal.js
+          test -s public/config.css
+          test -s public/bootstrap.min.css
           test -s public/style.css
           test -s public/clipboard.css
           test -s public/favicon.svg

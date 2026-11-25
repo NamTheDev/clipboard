@@ -14,7 +14,7 @@ function openDialog(title, html, actions = []) {
     const button = document.createElement('button');
     button.type = 'button';
     button.textContent = action.text;
-    button.className = action.primary ? 'chrome-btn primary btn-solid theme-primary' : 'chrome-btn btn-outline theme-secondary';
+    button.className = action.primary ? 'chrome-btn btn primary btn-solid theme-primary' : 'chrome-btn btn btn-outline theme-secondary';
     button.addEventListener('click', action.onClick);
     $('#dialog-actions').append(button);
   }

@@ -61,15 +61,17 @@ with sync_playwright() as playwright:
         })""")
         assert values == {
           "meta": expected, "root": expected, "computed": expected,
-          "browser": "#121212" if expected == "dark" else "#fafafa",
+          "browser": "#1e1e2e" if expected == "dark" else "#eff1f5",
           "locked": False
         }, values
     assert_theme_signal("dark")
     assert page.locator("html").get_attribute("data-bs-theme") == "dark"
     assert page.locator('link[href="./bootstrap.min.css"]').count() == 1
+    assert page.locator('link[href="./config.css"]').count() == 1
+    assert page.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()") == '#b4befe'
     assert page.locator('link[rel="icon"]').get_attribute("href") == "./favicon.svg"
     md3 = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--bg').trim()")
-    assert md3 == "#121212", md3
+    assert md3 == "#1e1e2e", md3
     page.screenshot(path=str(EVIDENCE / "clipboard-md3-dark.png"))
 
     page.locator('#sidebar [data-action="settings"]').click()
@@ -82,9 +84,9 @@ with sync_playwright() as playwright:
     assert page.locator("body").evaluate("(el) => el.classList.contains('dark-mode')")
     assert_theme_signal("dark")
     dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--face').trim()")
-    assert dark == "#1e1e1e", dark
+    assert dark == "#181825", dark
     radius = page.locator(".note-window").first.evaluate("(el) => getComputedStyle(el).borderRadius")
-    assert radius == "16px", radius
+    assert radius == "10px", radius
     filter_value = page.locator(".sidebar .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
     assert filter_value == "none", filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
@@ -144,7 +146,7 @@ with sync_playwright() as playwright:
     page.reload(wait_until="load")
     assert_theme_signal("light")
     assert not errors, "Browser errors: " + " | ".join(errors)
-    print("✓ Fullscreen monochrome MD3 dark/light appearance")
+    print("✓ Fullscreen Catppuccin Mocha / Latte appearance")
     print("✓ Settings persisted and 7-day vault default applied")
     print("✓ Owner added/copy-pasted exact text; guest joined/copied on mobile")
     print("✓ No JavaScript exceptions or mobile horizontal overflow")

@@ -125,7 +125,7 @@ function renderItems() {
       row.dataset.itemId = item.id;
       const top = document.createElement('span'); top.className = 'note-titlebar d-flex align-items-center gap-3 fg-2';
       const fileIcon = document.createElement('span'); fileIcon.className = 'ui-icon material-symbols-rounded'; fileIcon.textContent = 'description'; fileIcon.setAttribute('aria-hidden','true');
-      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text flex-grow-1 text-truncate'; descriptor.textContent = 'text_snippet';
+      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text flex-grow-1 text-truncate'; descriptor.textContent = '';
       const date = document.createElement('span'); date.className = 'note-titlebar-text file-date flex-grow-1 text-truncate fg-2'; date.textContent = dateLabel(item.created_at);
       top.append(fileIcon, descriptor, date);
       const paper = document.createElement('span'); paper.className = 'note-paper card-body';
@@ -281,7 +281,7 @@ function settingsDialog() {
     '<label for="setting-refresh">Auto-refresh shared items</label>',
     '<select id="setting-refresh" class="form-control"><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option><option value="0">Off (manual refresh)</option></select>',
     '</fieldset>',
-    '<p class="modal-hint">Preferences are stored in this browser only. The monochrome theme is shared by both apps.</p>'
+    '<p class="modal-hint">Preferences are stored in this browser only. The Catppuccin theme is shared by both apps.</p>'
   ].join(''), [
     { text: 'Save', primary: true, onClick: () => {
       try {
@@ -307,9 +307,9 @@ function infoDialog(privacy = false) {
     <p>A random owner key is stored only in the creator's browser. It is never included in the share link. Anyone who obtains that key can edit the vault.</p>
     <p>Rooms expire after 24 hours or 7 days. Use HTTPS when running on the internet. Do not store secrets, passwords, or sensitive personal information.</p>
   ` : `
-    <p><strong>clipboard 1.0</strong></p><p>A compact cross-device clipboard vault with a shared Material Design 3 interface.</p>
+    <p><strong>clipboard 1.0</strong></p><p>A compact cross-device clipboard vault with a minimal Catppuccin interface.</p>
     <p>Create a room, paste text items, then enter the six-character room ID on another device.</p>
-    <p class="modal-hint">Visual style uses the shared monochrome Bootstrap 6 system.</p>
+    <p class="modal-hint">Visual style uses the shared Catppuccin Bootstrap 6 configuration.</p>
   `, [{ text: 'OK', primary: true, onClick: closeDialog }]);
 }
 async function action(name) {

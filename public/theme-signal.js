@@ -11,7 +11,7 @@
     root.dataset.bsTheme = scheme;
     root.style.colorScheme = scheme;
     schemeMeta?.setAttribute('content', scheme);
-    themeColor?.setAttribute('content', dark ? '#121212' : '#fafafa');
+    themeColor?.setAttribute('content', dark ? '#1e1e2e' : '#eff1f5');
   }
   window.addEventListener('app-theme-change', (event) => {
     signal(event.detail?.dark === true);
