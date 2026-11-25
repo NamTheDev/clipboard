@@ -32,3 +32,7 @@ Run `npm test`, `npm run check`, the Playwright UI workflow, and the GitHub Page
 ## Consistent sidebar and minimal page copy
 
 The sidebar groups Navigation, Current vault, room Actions and Preferences using the same `.sidebar-heading`, `.sidebar-group` and `.nav-btn` classes as keep. Room controls live in this sidebar rather than a second toolbar or footer. Desktop uses a persistent sidebar; mobile uses a drawer. Decorative page kickers and duplicate home-card labels were removed. The CSS source of truth is [util/design/config.css](https://github.com/NamTheDev/util/blob/main/design/config.css).
+
+## Bootstrap-first styling
+
+Follow the [shared minimum-custom-CSS standard](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md). Use native components and existing utilities directly in static and generated markup; shared theme values remain in config.css. Remaining local styles cover application-specific responsive geometry, component token overrides, dynamic colors where applicable, compact touch controls, dialogs, and interaction states that existing utilities cannot directly preserve. Avoid reintroducing generic layout or appearance rules.

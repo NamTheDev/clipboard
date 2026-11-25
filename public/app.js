@@ -112,25 +112,25 @@ function renderItems() {
   list.replaceChildren();
   if (!state.items.length) {
     const empty = document.createElement('p');
-    empty.className = 'file-empty fg-2';
+    empty.className = 'file-empty fg-2 fg-3';
     empty.textContent = state.ownerToken ? 'This vault is empty. Select "New item" to add your first snippet.' : 'This vault is empty. Its creator has not added any items yet.';
     list.append(empty);
   } else {
     for (const item of state.items) {
       const row = document.createElement('button');
       row.type = 'button';
-      row.className = 'file-row note-window card rounded-6';
+      row.className = 'file-row note-window card rounded-6 min-w-0 overflow-hidden d-block w-100 p-0 text-start';
       row.setAttribute('role', 'option');
       row.setAttribute('aria-selected', String(state.selectedId === item.id));
       row.dataset.itemId = item.id;
-      const top = document.createElement('span'); top.className = 'note-titlebar d-flex align-items-center gap-3 fg-2';
-      const fileIcon = document.createElement('span'); fileIcon.className = 'ui-icon material-symbols-rounded'; fileIcon.textContent = 'description'; fileIcon.setAttribute('aria-hidden','true');
-      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text flex-grow-1 text-truncate'; descriptor.textContent = '';
-      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date flex-grow-1 text-truncate fg-2'; date.textContent = dateLabel(item.created_at);
+      const top = document.createElement('span'); top.className = 'note-titlebar d-flex align-items-center gap-3 fg-2 pb-0';
+      const fileIcon = document.createElement('span'); fileIcon.className = 'ui-icon material-symbols-rounded align-middle flex-shrink-0'; fileIcon.textContent = 'description'; fileIcon.setAttribute('aria-hidden','true');
+      const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text flex-grow-1 text-truncate min-w-0 fs-xs'; descriptor.textContent = '';
+      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date flex-grow-1 text-truncate fg-2 min-w-0 fs-xs ms-auto text-nowrap text-end fg-3'; date.textContent = dateLabel(item.created_at);
       top.append(fileIcon, descriptor, date);
-      const paper = document.createElement('span'); paper.className = 'note-paper card-body';
-      const name = document.createElement('span'); name.className = 'note-heading file-name card-title fw-medium mb-1'; name.textContent = item.title;
-      const excerpt = document.createElement('span'); excerpt.className = 'note-text file-excerpt mb-0'; excerpt.textContent = item.content.length > 175 ? item.content.slice(0,175) + '…' : item.content;
+      const paper = document.createElement('span'); paper.className = 'note-paper card-body min-w-0 pt-3';
+      const name = document.createElement('span'); name.className = 'note-heading file-name card-title fw-medium mb-1 d-block'; name.textContent = item.title;
+      const excerpt = document.createElement('span'); excerpt.className = 'note-text file-excerpt mb-0 d-block overflow-hidden fg-3'; excerpt.textContent = item.content.length > 175 ? item.content.slice(0,175) + '…' : item.content;
       paper.append(name,excerpt);
       row.append(top,paper);
       row.addEventListener('click', () => { state.selectedId = item.id; renderItems(); });
@@ -179,8 +179,8 @@ async function joinRoom(rawCode) {
 function createVaultDialog() {
   openDialog('Create a New Vault', `
     <p>Create a temporary vault. Anyone with its code can read and copy its contents.</p>
-    <div class="modal-field"><label for="new-vault-name">Vault name:</label><input id="new-vault-name" maxlength="60" value="My Clipboard" required class="form-control rounded-5"></div>
-    <div class="modal-field"><label for="new-vault-duration">Keep vault for:</label><select id="new-vault-duration" class="form-control rounded-5"><option value="24h">24 hours</option><option value="7d">7 days</option></select></div>
+    <div class="modal-field mb-5"><label for="new-vault-name">Vault name:</label><input id="new-vault-name" maxlength="60" value="My Clipboard" required class="form-control rounded-5"></div>
+    <div class="modal-field mb-5"><label for="new-vault-duration">Keep vault for:</label><select id="new-vault-duration" class="form-control rounded-5"><option value="24h">24 hours</option><option value="7d">7 days</option></select></div>
     <p class="modal-hint">Only this browser will have the owner key for adding and removing items.</p>
   `, [
     { text: 'Create', primary: true, onClick: async () => {
@@ -201,7 +201,7 @@ function createVaultDialog() {
 function joinVaultDialog() {
   openDialog('Join a Vault', `
     <p>Type the room ID provided by the vault creator.</p>
-    <div class="modal-field"><label for="modal-join-code">Room ID:</label><input id="modal-join-code" class="code-input form-control rounded-5" maxlength="7" placeholder="K7P-4MX" autocomplete="off" spellcheck="false" required></div>
+    <div class="modal-field mb-5"><label for="modal-join-code">Room ID:</label><input id="modal-join-code" class="code-input form-control rounded-5 font-monospace fw-medium" maxlength="7" placeholder="K7P-4MX" autocomplete="off" spellcheck="false" required></div>
     <p class="modal-hint">Room codes are case-insensitive. You can copy items without an account.</p>
   `, [
     { text: 'Join', primary: true, onClick: async () => {
@@ -216,8 +216,8 @@ function itemDialog(editing = false, pasted = '') {
   const old = editing ? state.items.find(x => x.id === state.selectedId) : null;
   if (editing && !old) return;
   openDialog(editing ? 'Edit Clipboard Item' : 'New Clipboard Item', `
-    <div class="modal-field"><label for="item-title">Item name:</label><input id="item-title" maxlength="80" placeholder="Snippet name" required class="form-control rounded-5"></div>
-    <div class="modal-field"><label for="item-content">Text content:</label><textarea id="item-content" maxlength="16000" placeholder="Paste text here (Ctrl+V)..." required class="form-control rounded-5"></textarea></div>
+    <div class="modal-field mb-5"><label for="item-title">Item name:</label><input id="item-title" maxlength="80" placeholder="Snippet name" required class="form-control rounded-5"></div>
+    <div class="modal-field mb-5"><label for="item-content">Text content:</label><textarea id="item-content" maxlength="16000" placeholder="Paste text here (Ctrl+V)..." required class="form-control rounded-5"></textarea></div>
     <p class="modal-hint">Text only · 16,000 characters per item · 100 items per vault.</p>
     <p id="item-form-error" role="alert" hidden></p>
   `, [
@@ -273,7 +273,7 @@ function deleteVaultDialog() {
 function settingsDialog() {
   openDialog('clipboard - Settings', [
     '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Appearance</legend>',
-    '<label class="simple-choice d-flex align-items-center gap-3" for="setting-dark"><input type="checkbox" id="setting-dark" class="check"> Dark mode</label>',
+    '<label class="simple-choice d-flex align-items-center gap-3 border-bottom" for="setting-dark"><input type="checkbox" id="setting-dark" class="check"> Dark mode</label>',
     '</fieldset>',
     '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Vault defaults</legend>',
     '<label for="setting-duration">New vault expires after</label>',

@@ -4,25 +4,13 @@
  */
 
 /* Home: two compact actions, using the same card insets as keep notes. */
-.home-screen{
-  flex:1;
-  min-height:0;
-  overflow:auto;
-}
 .home-body{
   padding:0 var(--content-gutter) 24px;
 }
 .home-choices{
-  display:grid;
   grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));
   gap:var(--content-gap);
   max-width:652px;
-}
-.home-choices>.note-window{
-  min-width:0;
-}
-.home-choices .note-paper{
-  min-height:72px;
 }
 .home-choices .note-foot{
   justify-content:flex-end;
@@ -30,20 +18,10 @@
 
 /* Vault information and split list/preview workspace. */
 .code-input,.room-code{
-  font-family:var(--font-mono);
-  font-weight:500;
   letter-spacing:.06em;
 }
 .room-code{
   font-size:var(--font-size-title);
-  user-select:all;
-  overflow-wrap:anywhere;
-}
-.room-screen{
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-  height:100%;
 }
 .room-badge{
   padding:6px 12px;
@@ -60,63 +38,37 @@
 .file-surface{
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(260px,42%);
-  flex:1;
-  min-height:0;
   gap:var(--content-gap);
   padding:0 var(--content-gutter) 16px;
 }
 .file-list-pane,.preview-pane{
-  min-width:0;
-  min-height:0;
-  overflow:auto;
   padding:var(--pane-inset);
   background:var(--surface);
   border:1px solid var(--outline-soft);
 }
 .file-list{
-  display:grid;
   grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
-  align-items:start;
   gap:var(--content-gap);
 }
 .file-row{
-  display:block;
-  width:100%;
-  min-width:0;
-  padding:0;
-  text-align:left;
   cursor:pointer;
-  overflow:hidden;
   border:1px solid var(--outline-soft);
   background:var(--surface);
 }
 .file-row:hover{
   border-color:var(--outline);
 }
-.file-row .note-titlebar{
-  display:flex;
-}
 .file-row .note-paper{
   display:block;
   min-height:72px;
 }
 .file-row .file-name{
-  display:block;
-  font-weight:500;
   margin-bottom:8px;
 }
 .file-row .file-excerpt{
-  display:block;
   max-height:66px;
-  overflow:hidden;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  color:var(--muted);
-}
-.file-row .file-date{
-  margin-left:auto;
-  white-space:nowrap;
-  color:var(--muted);
 }
 .file-row[aria-selected="true"]{
   outline:1px solid var(--accent);
@@ -128,8 +80,6 @@
   color:var(--muted);
 }
 .preview-card{
-  display:flex;
-  flex-direction:column;
   gap:var(--content-gap);
   min-height:200px;
   max-height:100%;
@@ -138,23 +88,15 @@
   flex:1;
   min-height:100px;
   padding:12px var(--card-inset);
-  overflow:auto;
   white-space:pre-wrap;
   overflow-wrap:anywhere;
   background:var(--raised);
   font:var(--font-size)/1.65 var(--font-ui);
 }
-.preview-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-}
 
 /* Shared navigation pattern, clipboard-only supporting information. */
 .sidebar-expiry{
   padding:8px 20px;
-  color:var(--muted);
-  font-size:12px;
   line-height:18px;
 }
 #delete-room{
@@ -165,20 +107,10 @@
 .modal-body{
   max-height:65dvh;
 }
-.modal-actions{
-  justify-content:flex-end;
-}
 .modal-room-id{
   font-size:22px;
   font-weight:500;
   letter-spacing:.08em;
-}
-.settings-group{
-  display:grid;
-  gap:12px;
-}
-.simple-choice{
-  border-bottom:1px solid var(--outline-soft);
 }
 
 /* Clipboard opens the same mobile drawer as keep. */
@@ -241,8 +173,6 @@
 /* Minimal preview and list surfaces retain the existing split layout. */
 .file-list-pane,.preview-pane{background:transparent;border-color:transparent}
 .preview-pane{border-inline-start:1px solid var(--outline-soft)}
-.preview-content.note-paper{background:var(--base);margin:0}
-.file-row .note-titlebar{padding-bottom:0}
-.file-row .file-date{text-align:right}
+.preview-content.note-paper{background:var(--base)}
 .room-details.quick-bar{--bs-card-bg:var(--mantle)}
 @media (width < 600px){.preview-pane{border-inline-start:0;border-top:1px solid var(--outline-soft)}}
