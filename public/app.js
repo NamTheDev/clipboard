@@ -119,7 +119,7 @@ function renderItems() {
     for (const item of state.items) {
       const row = document.createElement('button');
       row.type = 'button';
-      row.className = 'file-row note-window card';
+      row.className = 'file-row note-window card rounded-6';
       row.setAttribute('role', 'option');
       row.setAttribute('aria-selected', String(state.selectedId === item.id));
       row.dataset.itemId = item.id;
@@ -179,8 +179,8 @@ async function joinRoom(rawCode) {
 function createVaultDialog() {
   openDialog('Create a New Vault', `
     <p>Create a temporary vault. Anyone with its code can read and copy its contents.</p>
-    <div class="modal-field"><label for="new-vault-name">Vault name:</label><input id="new-vault-name" maxlength="60" value="My Clipboard" required class="form-control"></div>
-    <div class="modal-field"><label for="new-vault-duration">Keep vault for:</label><select id="new-vault-duration" class="form-control"><option value="24h">24 hours</option><option value="7d">7 days</option></select></div>
+    <div class="modal-field"><label for="new-vault-name">Vault name:</label><input id="new-vault-name" maxlength="60" value="My Clipboard" required class="form-control rounded-5"></div>
+    <div class="modal-field"><label for="new-vault-duration">Keep vault for:</label><select id="new-vault-duration" class="form-control rounded-5"><option value="24h">24 hours</option><option value="7d">7 days</option></select></div>
     <p class="modal-hint">Only this browser will have the owner key for adding and removing items.</p>
   `, [
     { text: 'Create', primary: true, onClick: async () => {
@@ -201,7 +201,7 @@ function createVaultDialog() {
 function joinVaultDialog() {
   openDialog('Join a Vault', `
     <p>Type the room ID provided by the vault creator.</p>
-    <div class="modal-field"><label for="modal-join-code">Room ID:</label><input id="modal-join-code" class="code-input form-control" maxlength="7" placeholder="K7P-4MX" autocomplete="off" spellcheck="false" required></div>
+    <div class="modal-field"><label for="modal-join-code">Room ID:</label><input id="modal-join-code" class="code-input form-control rounded-5" maxlength="7" placeholder="K7P-4MX" autocomplete="off" spellcheck="false" required></div>
     <p class="modal-hint">Room codes are case-insensitive. You can copy items without an account.</p>
   `, [
     { text: 'Join', primary: true, onClick: async () => {
@@ -216,8 +216,8 @@ function itemDialog(editing = false, pasted = '') {
   const old = editing ? state.items.find(x => x.id === state.selectedId) : null;
   if (editing && !old) return;
   openDialog(editing ? 'Edit Clipboard Item' : 'New Clipboard Item', `
-    <div class="modal-field"><label for="item-title">Item name:</label><input id="item-title" maxlength="80" placeholder="Snippet name" required class="form-control"></div>
-    <div class="modal-field"><label for="item-content">Text content:</label><textarea id="item-content" maxlength="16000" placeholder="Paste text here (Ctrl+V)..." required class="form-control"></textarea></div>
+    <div class="modal-field"><label for="item-title">Item name:</label><input id="item-title" maxlength="80" placeholder="Snippet name" required class="form-control rounded-5"></div>
+    <div class="modal-field"><label for="item-content">Text content:</label><textarea id="item-content" maxlength="16000" placeholder="Paste text here (Ctrl+V)..." required class="form-control rounded-5"></textarea></div>
     <p class="modal-hint">Text only · 16,000 characters per item · 100 items per vault.</p>
     <p id="item-form-error" role="alert" hidden></p>
   `, [
@@ -277,9 +277,9 @@ function settingsDialog() {
     '</fieldset>',
     '<fieldset class="settings-group d-grid gap-3 mb-3"><legend>Vault defaults</legend>',
     '<label for="setting-duration">New vault expires after</label>',
-    '<select id="setting-duration" class="form-control"><option value="24h">24 hours</option><option value="7d">7 days</option></select>',
+    '<select id="setting-duration" class="form-control rounded-5"><option value="24h">24 hours</option><option value="7d">7 days</option></select>',
     '<label for="setting-refresh">Auto-refresh shared items</label>',
-    '<select id="setting-refresh" class="form-control"><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option><option value="0">Off (manual refresh)</option></select>',
+    '<select id="setting-refresh" class="form-control rounded-5"><option value="5">Every 5 seconds</option><option value="15">Every 15 seconds</option><option value="30">Every 30 seconds</option><option value="0">Off (manual refresh)</option></select>',
     '</fieldset>',
     '<p class="modal-hint">Preferences are stored in this browser only. The Catppuccin theme is shared by both apps.</p>'
   ].join(''), [

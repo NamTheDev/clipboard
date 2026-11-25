@@ -46,7 +46,6 @@
   height:100%;
 }
 .room-badge{
-  border-radius:var(--radius-control);
   padding:6px 12px;
   background:var(--bs-primary-bg-subtle);
   color:var(--bs-primary-fg);
@@ -73,7 +72,6 @@
   padding:var(--pane-inset);
   background:var(--surface);
   border:1px solid var(--outline-soft);
-  border-radius:var(--radius-card);
 }
 .file-list{
   display:grid;
@@ -90,7 +88,6 @@
   cursor:pointer;
   overflow:hidden;
   border:1px solid var(--outline-soft);
-  border-radius:var(--radius-card);
   background:var(--surface);
 }
 .file-row:hover{
@@ -145,7 +142,6 @@
   white-space:pre-wrap;
   overflow-wrap:anywhere;
   background:var(--raised);
-  border-radius:var(--radius-card);
   font:var(--font-size)/1.65 var(--font-ui);
 }
 .preview-actions{
@@ -244,7 +240,7 @@
 
 /* Minimal preview and list surfaces retain the existing split layout. */
 .file-list-pane,.preview-pane{background:transparent;border-color:transparent}
-.preview-pane{border-inline-start:1px solid var(--outline-soft);border-radius:0}
+.preview-pane{border-inline-start:1px solid var(--outline-soft)}
 .preview-content.note-paper{background:var(--base);margin:0}
 .file-row .note-titlebar{padding-bottom:0}
 .file-row .file-date{text-align:right}

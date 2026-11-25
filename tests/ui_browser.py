@@ -87,6 +87,9 @@ with sync_playwright() as playwright:
     assert dark == "#181825", dark
     radius = page.locator(".note-window").first.evaluate("(el) => getComputedStyle(el).borderRadius")
     assert radius == "10px", radius
+    assert "rounded-6" in page.locator(".note-window").first.get_attribute("class").split()
+    assert "rounded-5" in page.locator("#join-code").get_attribute("class").split()
+    assert page.locator("#join-code").evaluate("(e) => getComputedStyle(e).borderRadius") == "8px"
     filter_value = page.locator(".sidebar .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
     assert filter_value == "none", filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
