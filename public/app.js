@@ -67,7 +67,7 @@ function renderHome() {
   $('#sidebar-room-actions').hidden = true;
   $('#sidebar-active').hidden = true; $('#sidebar-none').hidden = false;
   $('#status-count').textContent = '0 item(s)';
-  $('#status-mode').textContent = 'Vault Explorer';
+  $('#status-mode').textContent = 'Vaults';
   $('#sidebar-home').classList.add('active');
   $('#sidebar-active').classList.remove('active');
   closeSidebar();
