@@ -18,7 +18,7 @@ The cross-device vault backend is separate. Railway hosts the Node.js/SQLite API
 
 ## Design
 
-The locally vendored Bootstrap 6.0.0-alpha.2 CSS requires Chrome/Edge 138, Firefox 147, or Safari 26. The current shared visual system uses Roboto, Material Symbols Rounded, Catppuccin dark-first/light modes, compact spacing, tonal cards and outlined controls. This supersedes the older Windows 95/98 reference. A Lucide source SVG is still used for the **favicon only**, not interface actions.
+The locally vendored Bootstrap 6.0.0-alpha.2 CSS requires Chrome/Edge 138, Firefox 147, or Safari 26. The current shared visual system uses Roboto, Material Symbols Rounded, Catppuccin dark-first/light modes, compact spacing, tonal cards and outlined controls. A Lucide source SVG is still used for the **favicon only**, not interface actions.
 
 ## Development and tests
 

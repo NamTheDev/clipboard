@@ -11,7 +11,9 @@
 - `public/js/core/clipboard.js` — copy/paste browser abstraction.
 - `public/js/core/preferences.js` — settings persistence, defaults and validation.
 - `public/js/core/room-code.js` — room ID validation and formatting.
-- `public/style.css` — vendored canonical Material Design 3 stylesheet from `NamTheDev/util/css/material_design.css`.
+- `public/config.css` — synchronized [shared design configuration](https://github.com/NamTheDev/util/blob/main/design/config.css).
+- `public/bootstrap.min.css` — vendored Bootstrap 6 stylesheet.
+- `public/style.css` — shared application layout and component styling.
 - `public/clipboard.css` — clipboard-only layout overrides.
 
 ## Server
@@ -29,4 +31,4 @@ Run `npm test`, `npm run check`, the Playwright UI workflow, and the GitHub Page
 
 ## Consistent sidebar and minimal page copy
 
-The sidebar groups Navigation, Current vault, room Actions and Preferences using the same `.sidebar-heading`, `.sidebar-group` and `.nav-btn` classes as keep. Room controls live in this sidebar rather than a second toolbar or footer. Desktop uses a persistent sidebar; mobile uses a drawer. Decorative page kickers and duplicate home-card labels were removed. The CSS source of truth is [util/css/material_design.css](https://github.com/NamTheDev/util/blob/main/css/material_design.css).
+The sidebar groups Navigation, Current vault, room Actions and Preferences using the same `.sidebar-heading`, `.sidebar-group` and `.nav-btn` classes as keep. Room controls live in this sidebar rather than a second toolbar or footer. Desktop uses a persistent sidebar; mobile uses a drawer. Decorative page kickers and duplicate home-card labels were removed. The CSS source of truth is [util/design/config.css](https://github.com/NamTheDev/util/blob/main/design/config.css).
