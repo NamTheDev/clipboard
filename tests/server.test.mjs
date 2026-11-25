@@ -79,7 +79,22 @@ test('validation, limits, static response headers', async () => {
   assert.equal((await request(`/api/rooms/${code}/items`, 'POST', { title: '', content: 'test' }, owner)).status, 400);
   const staticPage = await fetch(base);
   assert.equal(staticPage.status, 200);
-  assert.match(await staticPage.text(), /Vault Explorer/);
+  const html = await staticPage.text();
+  assert.match(html, /<title>clipboard<\/title>/);
+  assert.match(html, /id="home-screen"/);
+  assert.match(html, /id="join-form"/);
+  assert.match(html, /href="\.\/config\.css"/);
+  for (const asset of ['/bootstrap.min.css', '/config.css', '/style.css', '/clipboard.css']) {
+    const response = await fetch(base + asset);
+    assert.equal(response.status, 200, asset);
+    assert.match(response.headers.get('content-type'), /text\/css/, asset);
+    const css = await response.text();
+    assert.ok(css.trim().length > 0, asset);
+    if (asset === '/config.css') {
+      assert.match(css, /--accent:\s*#b4befe/i);
+      assert.match(css, /--base:\s*#1e1e2e/i);
+    }
+  }
   const signalScript = await fetch(base + '/theme-signal.js');
   assert.equal(signalScript.status, 200);
   assert.match(signalScript.headers.get('content-type'), /text\/javascript/);
