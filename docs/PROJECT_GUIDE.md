@@ -22,7 +22,7 @@ The locally vendored Bootstrap 6.0.0-alpha.2 CSS requires Chrome/Edge 138, Firef
 
 ## Development and tests
 
-Requires Node.js 22.13+.
+Requires Node.js 24.15+ (SQLite release-candidate API).
 
 ```sh
 npm install

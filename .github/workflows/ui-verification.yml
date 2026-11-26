@@ -15,11 +15,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7.0.1
+      - uses: actions/setup-node@v7.1.0
         with:
-          node-version: '22'
-      - uses: actions/setup-python@v5
+          node-version: '24'
+      - uses: actions/setup-python@v7.1.0
         with:
           python-version: '3.12'
       - name: Install Lucide static icons
@@ -48,7 +48,7 @@ jobs:
           python tests/ui_browser.py
       - name: Upload UI screenshots
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: clipboard-browser-evidence
           path: test-results/

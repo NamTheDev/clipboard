@@ -5,13 +5,13 @@
   "description": "Temporary shared clipboard vaults with compact monochrome Bootstrap 6",
   "type": "module",
   "engines": {
-    "node": ">=22.13.0"
+    "node": ">=24.15.0"
   },
   "scripts": {
     "start": "node server.mjs",
     "dev": "node --watch server.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check server.mjs && node --check public/app.js",
+    "check": "node --check server.mjs && find public server scripts tests -type f \\( -name '*.js' -o -name '*.mjs' \\) -exec node --check {} \\;",
     "icons": "node scripts/prepare-icons.mjs"
   },
   "license": "MIT",

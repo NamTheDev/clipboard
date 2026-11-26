@@ -5,7 +5,7 @@ import { loadPreferences, PREFERENCES_KEY } from './js/core/preferences.js';
 import { createApi } from './js/core/api.js';
 import { createClipboard } from './js/core/clipboard.js';
 import { formatRoomCodeInput, codeFrom, displayCode, dateLabel, timeLabel, ownerStorageKey } from './js/core/room-code.js';
-const state = { room: null, items: [], ownerToken: null, selectedId: null, minimized: false, maximized: false, refreshPending: false };
+const state = { room: null, items: [], ownerToken: null, selectedId: null, refreshPending: false };
 let refreshTimer = null;
 let statusTimer = null;
 
@@ -18,10 +18,8 @@ function savePreferences(next) {
   try { localStorage.setItem(PREFERENCES_KEY, JSON.stringify(next)); }
   catch { throw new Error('Browser storage is unavailable; settings could not be saved.'); }
   preferences = next;
-  applyAppearance();
   if (state.room) startRoomRefresh(state.room.code);
 }
-
 
 function setStatus(text) {
   $('#status-text').textContent = text;
