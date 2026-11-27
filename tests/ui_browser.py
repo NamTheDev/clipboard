@@ -30,7 +30,6 @@ with sync_playwright() as playwright:
         gutter:root.getPropertyValue('--content-gutter').trim(),
         gap:root.getPropertyValue('--content-gap').trim(),
         cardInset:root.getPropertyValue('--card-inset').trim(),
-        sidebarWidth:style('#sidebar').width,
         headingLeft:style('.content-heading').paddingLeft,
         cardInsetActual:style('.home-choices .note-paper').paddingLeft,
         gridGap:style('.home-choices').columnGap
@@ -38,7 +37,7 @@ with sync_playwright() as playwright:
     }""")
     assert spacing == {
         'gutter':'20px','gap':'12px','cardInset':'14px',
-        'sidebarWidth':'224px','headingLeft':'20px',
+        'headingLeft':'20px',
         'cardInsetActual':'14px','gridGap':'12px'
     }, spacing
     heading_x=page.locator('.home-screen .page-title').bounding_box()['x']
@@ -46,10 +45,11 @@ with sync_playwright() as playwright:
     assert abs(heading_x-cards_x)<=1, (heading_x,cards_x)
     assert page.locator(".toolbar, .menu-bar").count() == 0
     assert page.locator(".page-kicker, .home-intro").count() == 0
-    assert page.locator(".sidebar-heading").first.inner_text() == "Navigation"
-    assert page.locator('#sidebar [data-action="settings"]').is_visible()
+    assert page.locator("#sidebar").count() == 0
+    assert page.locator(".brand-name").inner_text() == "namchill235 / clipboard"
+    assert page.locator('#app-navigation [data-action="settings"]').is_visible()
     assert page.locator(".dialog-window").count() == 1
-    assert page.locator(".sidebar .ui-icon").first.evaluate("(e) => e.textContent.trim().length > 0")
+    assert page.locator("#app-navigation .ui-icon").first.evaluate("(e) => e.textContent.trim().length > 0")
     assert page.title() == "clipboard"
     def assert_theme_signal(expected):
         values = page.evaluate("""() => ({
@@ -74,7 +74,7 @@ with sync_playwright() as playwright:
     assert md3 == "#1e1e2e", md3
     page.screenshot(path=str(EVIDENCE / "clipboard-md3-dark.png"))
 
-    page.locator('#sidebar [data-action="settings"]').click()
+    page.locator('#app-navigation [data-action="settings"]').click()
     assert page.locator("#setting-dark").count() == 0
     assert page.locator("#setting-duration").input_value() == "24h"
     assert page.locator("#setting-refresh").input_value() == "5"
@@ -86,11 +86,11 @@ with sync_playwright() as playwright:
     dark = page.locator(".desktop").evaluate("(el) => getComputedStyle(el).getPropertyValue('--face').trim()")
     assert dark == "#181825", dark
     radius = page.locator(".note-window").first.evaluate("(el) => getComputedStyle(el).borderRadius")
-    assert radius == "10px", radius
+    assert radius == "8px", radius
     assert "rounded-6" in page.locator(".note-window").first.get_attribute("class").split()
     assert "rounded-5" in page.locator("#join-code").get_attribute("class").split()
-    assert page.locator("#join-code").evaluate("(e) => getComputedStyle(e).borderRadius") == "8px"
-    filter_value = page.locator(".sidebar .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
+    assert page.locator("#join-code").evaluate("(e) => getComputedStyle(e).borderRadius") == "6px"
+    filter_value = page.locator("#app-navigation .ui-icon").first.evaluate("(e) => getComputedStyle(e).filter")
     assert filter_value == "none", filter_value
     page.screenshot(path=str(EVIDENCE / "clipboard-dark.png"))
     page.reload(wait_until="load")

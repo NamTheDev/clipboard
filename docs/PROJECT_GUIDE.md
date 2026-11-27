@@ -6,7 +6,7 @@ A temporary shared clipboard with short vault IDs and a compact, Catppuccin Boot
 
 ## Using clipboard
 
-Create or join a vault from the home cards or sidebar. Inside a vault, **New item**, **Paste text**, **Copy ID**, **Copy link**, **Refresh**, **Leave vault**, and owner-only **Delete vault** live in the sidebar. The list/preview interface provides **Copy text**, **Edit**, and **Delete** for selected items. **Settings**, **Privacy & sharing**, and **About** are also in the sidebar; use the menu button on smaller screens. The redundant File/Edit/View/Help menu and separate toolbar are removed.
+Create or join a vault from the home cards or top navigation. Inside a vault, **New item**, **Paste text**, **Copy ID**, **Copy link**, **Refresh**, **Leave vault**, and owner-only **Delete vault** live in the top navigation. The list/preview interface provides **Copy text**, **Edit**, and **Delete** for selected items. **Settings**, **Privacy & sharing**, and **About** are also in the top navigation; use the menu button on smaller screens. The redundant File/Edit/View/Help menu and separate toolbar are removed.
 
 Vaults expire after 24 hours or seven days. Settings include default expiry, and automatic refresh (off / 5 / 15 / 30 seconds). Preference keys, owner tokens and API routes remain compatible with earlier builds.
 
@@ -18,7 +18,7 @@ The cross-device vault backend is separate. Railway hosts the Node.js/SQLite API
 
 ## Design
 
-The locally vendored Bootstrap 6.0.0-alpha.2 CSS requires Chrome/Edge 138, Firefox 147, or Safari 26. The current shared visual system uses Roboto, Material Symbols Rounded, fixed Catppuccin Mocha dark theme, compact spacing, tonal cards and outlined controls. A Lucide source SVG is still used for the **favicon only**, not interface actions.
+The locally vendored Bootstrap 6.0.0-alpha.2 CSS requires Chrome/Edge 138, Firefox 147, or Safari 26. The current shared visual system uses Source Sans 3, Material Symbols Rounded, fixed Catppuccin Mocha dark theme, compact spacing, tonal cards and outlined controls. A Lucide source SVG is still used for the **favicon only**, not interface actions.
 
 ## Development and tests
 

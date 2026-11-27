@@ -1,6 +1,5 @@
 import { $, $$ } from './js/ui/dom.js';
 import { createDialog } from './js/ui/dialog.js';
-import { createSidebar } from './js/ui/sidebar.js';
 import { loadPreferences, PREFERENCES_KEY } from './js/core/preferences.js';
 import { createApi } from './js/core/api.js';
 import { createClipboard } from './js/core/clipboard.js';
@@ -52,7 +51,6 @@ function startRoomRefresh(code) {
   }, preferences.refreshSeconds * 1000);
 }
 
-const closeSidebar = createSidebar($);
 const { openDialog, closeDialog } = createDialog($);
 function renderHome() {
   state.room = null; state.items = []; state.ownerToken = null; state.selectedId = null;
@@ -60,12 +58,11 @@ function renderHome() {
   $('#home-screen').hidden = false;
   $('#room-screen').hidden = true;
   $('#sidebar-room-actions').hidden = true;
-  $('#sidebar-active').hidden = true; $('#sidebar-none').hidden = false;
+  $('#sidebar-active').hidden = true;
   $('#status-count').textContent = '0 item(s)';
   $('#status-mode').textContent = 'Vaults';
   $('#sidebar-home').classList.add('active');
   $('#sidebar-active').classList.remove('active');
-  closeSidebar();
   syncButtons();
   setStatus('Ready');
 }
@@ -167,7 +164,6 @@ async function joinRoom(rawCode) {
   state.ownerToken = localStorage.getItem(ownerStorageKey(code));
   setUrl(code);
   renderRoom();
-  closeSidebar();
   setStatus('Connected to ' + displayCode(code));
   startRoomRefresh(code);
 }
@@ -303,7 +299,6 @@ function infoDialog(privacy = false) {
   `, [{ text: 'OK', primary: true, onClick: closeDialog }]);
 }
 async function action(name) {
-  closeSidebar();
   try {
     switch (name) {
       case 'new': createVaultDialog(); break;
@@ -330,16 +325,10 @@ async function action(name) {
 
 // Application navigation and contextual actions.
 $$('[data-action]').forEach(el => el.addEventListener('click', () => action(el.dataset.action)));
-$('#toggle-nav').addEventListener('click', () => {
-  const open = $('#sidebar').classList.toggle('mobile-open');
-  $('#mobile-scrim').classList.toggle('show',open);
-  $('#toggle-nav').setAttribute('aria-expanded',String(open));
-});
-$('#mobile-scrim').addEventListener('click', closeSidebar);
 $('#modal-backdrop').addEventListener('click', e => { if (e.target === $('#modal-backdrop')) closeDialog(); });
 $('#join-form').addEventListener('submit', async e => { e.preventDefault(); try { await joinRoom($('#join-code').value); } catch(error) { showError(error); } });
 $('#join-code').addEventListener('input', formatRoomCodeInput);
-$('#sidebar-active').addEventListener('click', () => { if (state.room) { renderRoom(); closeSidebar(); } });
+$('#sidebar-active').addEventListener('click', () => { if (state.room) { renderRoom(); } });
 $('#copy-code').addEventListener('click', () => state.room && copyText(displayCode(state.room.code), 'Room ID copied').catch(showError));
 $('#copy-link').addEventListener('click', () => {
   if (!state.room) return;
@@ -355,7 +344,7 @@ $('#file-list').addEventListener('keydown', e => {
   if (next >= 0 && state.items[next]) { e.preventDefault(); state.selectedId = state.items[next].id; renderItems(); $(`[data-item-id="${state.selectedId}"]`)?.focus(); }
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if (!$('#modal-backdrop').hidden) closeDialog(); else closeSidebar(); return; }
+  if (e.key === 'Escape') { if (!$('#modal-backdrop').hidden) closeDialog(); return; }
   if (!$('#modal-backdrop').hidden) {
     if (e.key === 'Enter' && (e.ctrlKey || (e.target.tagName === 'INPUT' && !e.shiftKey))) {
       const primary = $('#dialog-actions .primary');

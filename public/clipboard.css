@@ -92,11 +92,6 @@
   font:var(--font-size)/1.65 var(--font-ui);
 }
 
-/* Shared navigation pattern, clipboard-only supporting information. */
-.sidebar-expiry{
-  padding:8px 20px;
-  line-height:18px;
-}
 #delete-room{
   color:var(--error);
 }
@@ -111,25 +106,7 @@
   letter-spacing:.08em;
 }
 
-/* Clipboard opens the same mobile drawer as keep. */
-.mobile-nav-toggle{
-  position:absolute;
-  top:10px;
-  left:12px;
-  z-index:5;
-  min-width:40px;
-  min-height:40px;
-}
-@media(min-width:840px){
-  .mobile-nav-toggle{
-    display:none!important;
-  }
-}
 @media(max-width:839px){
-  .home-screen>.content-heading,
-  .room-bar.content-heading{
-    padding-left:64px;
-  }
   .home-body{
     padding-bottom:20px;
   }
