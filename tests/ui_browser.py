@@ -17,6 +17,16 @@ with sync_playwright() as playwright:
     page.goto(BASE + "/?utm_source=chatgpt.com", wait_until="load")
     assert "utm_source" not in page.url, "Tracking query should be removed from canonical app URL"
     assert page.locator("#home-screen").is_visible()
+    page.locator(".marquee-track").wait_for(state="visible")
+    assert page.locator(".marquee-toggle").count() == 0
+    page.mouse.move(0, 500)
+    start = page.locator(".header-links").evaluate("(el) => el.scrollLeft")
+    page.wait_for_function("(start) => Math.abs(document.querySelector('.header-links').scrollLeft-start)>10", arg=start, timeout=4000)
+    page.locator(".header-links").hover()
+    start = page.locator(".header-links").evaluate("(el) => el.scrollLeft")
+    page.mouse.wheel(80, 0)
+    page.wait_for_function("(start) => Math.abs(document.querySelector('.header-links').scrollLeft-start)>10", arg=start, timeout=4000)
+    page.mouse.move(0, 500)
     assert page.locator("#app-window").evaluate("(e) => Math.round(e.getBoundingClientRect().height) == Math.round(window.innerHeight)")
     assert page.locator("#win-min").count() == 0 and page.locator("#win-max").count() == 0
     assert page.locator(".taskbar").count() == 0
