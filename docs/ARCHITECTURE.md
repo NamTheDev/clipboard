@@ -30,7 +30,7 @@ Run `npm test`, `npm run check`, the Playwright UI workflow, and the GitHub Page
 
 ## Shared fullscreen shell
 
-The header and marquee are maintained locally. Vault operations live in compact horizontal navigation above the fullscreen list and preview; no persistent sidebar or mobile drawer.
+The header displays the stationary GitHub repository description. Vault operations live in compact horizontal navigation above the fullscreen list and preview; no persistent sidebar or mobile drawer.
 
 ## Bootstrap-first styling
 
