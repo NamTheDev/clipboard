@@ -14,7 +14,6 @@ A temporary cross-device clipboard using short vault IDs and a compact Catppucci
 
 - [Usage and development](docs/PROJECT_GUIDE.md)
 - [Architecture](docs/ARCHITECTURE.md)
-- [Shared design principles](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md)
 - [Credits](CREDITS.md)
 
 ## License

@@ -12,7 +12,7 @@ Vaults expire after 24 hours or seven days. Settings include default expiry, and
 
 ## Architecture and hosting
 
-The public frontend is served exclusively from **GitHub Pages**. `public/index.html`, `public/app.js`, `public/js/core/` and `public/js/ui/` are native browser modules. The shared design configuration is synchronized from [util/design/config.css](https://github.com/NamTheDev/util/blob/main/design/config.css); `public/style.css` contains shell and component styling, and `public/clipboard.css` contains vault-specific layouts. See [Architecture](ARCHITECTURE.md) for module responsibilities.
+The public frontend is served exclusively from **GitHub Pages**. `public/index.html`, `public/app.js`, `public/js/core/` and `public/js/ui/` are native browser modules. The design configuration is maintained locally in `public/config.css`; `public/style.css` contains shell and component styling, and `public/clipboard.css` contains vault-specific layouts. See [Architecture](ARCHITECTURE.md) for module responsibilities.
 
 The cross-device vault backend is separate. Railway hosts the Node.js/SQLite API at `https://clipboard-production-afe5e7e4.up.railway.app/api/` and redirects visits to its homepage to GitHub Pages. The repository variable `CLIPBOARD_API_BASE` configures the public frontend; credentials must never be placed in public JS. Keep `server.mjs`, `server/security.mjs`, `Dockerfile`, and the persisted SQLite volume for sharing. The API permits the configured origin through `ALLOWED_ORIGIN`.
 

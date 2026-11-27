@@ -10,7 +10,7 @@
 - `public/js/core/clipboard.js` — copy/paste browser abstraction.
 - `public/js/core/preferences.js` — settings persistence, defaults and validation.
 - `public/js/core/room-code.js` — room ID validation and formatting.
-- `public/config.css` — synchronized [shared design configuration](https://github.com/NamTheDev/util/blob/main/design/config.css).
+- `public/config.css` — locally maintained design configuration.
 - `public/bootstrap.min.css` — vendored Bootstrap 6 stylesheet.
 - `public/style.css` — shared application layout and component styling.
 - `public/clipboard.css` — clipboard-only layout overrides.
@@ -30,8 +30,8 @@ Run `npm test`, `npm run check`, the Playwright UI workflow, and the GitHub Page
 
 ## Shared fullscreen shell
 
-The shared header and marquee are vendored from util. Vault operations live in compact horizontal navigation above the fullscreen list and preview; no persistent sidebar or mobile drawer.
+The header and marquee are maintained locally. Vault operations live in compact horizontal navigation above the fullscreen list and preview; no persistent sidebar or mobile drawer.
 
 ## Bootstrap-first styling
 
-Follow the [shared minimum-custom-CSS standard](https://github.com/NamTheDev/util/blob/main/design/DESIGN_PRINCIPLES.md). Use native components and existing utilities directly in static and generated markup; shared theme values remain in config.css. Remaining local styles cover application-specific responsive geometry, component token overrides, dynamic colors where applicable, compact touch controls, dialogs, and interaction states that existing utilities cannot directly preserve. Avoid reintroducing generic layout or appearance rules.
+Minimize custom CSS. Use native components and existing utilities directly in static and generated markup; shared theme values remain in config.css. Remaining local styles cover application-specific responsive geometry, component token overrides, dynamic colors where applicable, compact touch controls, dialogs, and interaction states that existing utilities cannot directly preserve. Avoid reintroducing generic layout or appearance rules.
