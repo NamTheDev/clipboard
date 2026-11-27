@@ -129,11 +129,10 @@ with sync_playwright() as playwright:
     guest.locator("#room-screen").wait_for(state="visible", timeout=15000)
     assert guest.evaluate("getComputedStyle(document.documentElement).getPropertyValue('--content-gutter').trim()") == '12px'
     assert guest.locator("#room-code").inner_text() == code
-    guest.locator("#toggle-nav").click()
-    assert guest.locator("#sidebar").is_visible()
+    assert guest.locator("#app-navigation").is_visible()
+    assert guest.locator("#sidebar").count()==0
     assert guest.locator("#copy-link").is_visible()
     assert guest.locator("#add-item").is_hidden()
-    guest.locator("#mobile-scrim").click(position={"x":345,"y":20})
     guest.locator("#copy-selected").click()
     guest_copied = guest.evaluate("navigator.clipboard.readText()")
     assert guest_copied == text, repr(guest_copied)
