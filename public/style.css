@@ -1,5 +1,5 @@
 /* Clipboard shell and component exceptions. Shared design tokens: config.css. */
-html,body,#app{height:100%;min-width:320px}
+html,body{height:100%;min-width:320px}
 [hidden]{display:none!important}
 .btn,.btn-solid,.btn-outline,.btn-text,.btn-subtle,.form-control,.check,.nav-link{transition-duration:var(--motion-duration)}
 .form-control{--bs-control-border-color:var(--outline);--bs-control-font-size:var(--font-size)}
@@ -26,7 +26,7 @@ img.ui-icon{width:var(--icon-size);height:var(--icon-size)}
 .note-foot{padding:4px 10px 8px}
 .status-bar{min-height:32px;padding:6px var(--content-gutter)}
 .dialog-backdrop{position:fixed;inset:0;background:var(--scrim);z-index:1040;padding:16px}
-.dialog-window.dialog[open]{--bs-dialog-bg:var(--raised);--bs-dialog-width:560px;--bs-dialog-border-color:var(--outline-soft);--bs-dialog-transition-duration:0s;position:relative;inset:auto;margin:0;width:min(100%,560px);max-height:90dvh;overflow:auto;flex:none;transform:none;opacity:1}
+.dialog-window.dialog[open]{--bs-dialog-bg:var(--raised);--bs-dialog-width:560px;--bs-dialog-border-color:var(--outline-soft);--bs-dialog-transition-duration:0s;position:relative;inset:auto;margin:0;padding:var(--pane-inset);width:min(100%,560px);max-height:90dvh;overflow:auto;flex:none;transform:none;opacity:1}
 @media (width < 840px){
   .content-heading{flex-wrap:wrap;padding:10px var(--content-gutter)}
 }
@@ -41,7 +41,6 @@ img.ui-icon{width:var(--icon-size);height:var(--icon-size)}
 .btn-text.theme-secondary{--bs-btn-color:var(--muted)}
 .btn-text.theme-secondary:hover{color:var(--bs-primary-fg)}
 .quick-bar{--bs-card-bg:var(--base)}
-.dialog-window.dialog[open]{padding:var(--pane-inset)}
 :where(button,a,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 #app-navigation .nav-link{white-space:nowrap}

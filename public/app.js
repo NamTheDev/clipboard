@@ -103,7 +103,7 @@ function renderItems() {
   list.replaceChildren();
   if (!state.items.length) {
     const empty = document.createElement('p');
-    empty.className = 'file-empty fg-2 fg-3';
+    empty.className = 'file-empty fg-3';
     empty.textContent = state.ownerToken ? 'This vault is empty. Select "New item" to add your first snippet.' : 'This vault is empty. Its creator has not added any items yet.';
     list.append(empty);
   } else {
@@ -117,7 +117,7 @@ function renderItems() {
       const top = document.createElement('span'); top.className = 'note-titlebar d-flex align-items-center gap-3 fg-2 pb-0';
       const fileIcon = document.createElement('span'); fileIcon.className = 'ui-icon material-symbols-rounded align-middle flex-shrink-0'; fileIcon.textContent = 'description'; fileIcon.setAttribute('aria-hidden','true');
       const descriptor = document.createElement('span'); descriptor.className = 'note-titlebar-text flex-grow-1 text-truncate min-w-0 fs-xs'; descriptor.textContent = '';
-      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date flex-grow-1 text-truncate fg-2 min-w-0 fs-xs ms-auto text-nowrap text-end fg-3'; date.textContent = dateLabel(item.created_at);
+      const date = document.createElement('span'); date.className = 'note-titlebar-text file-date flex-grow-1 text-truncate min-w-0 fs-xs ms-auto text-nowrap text-end fg-3'; date.textContent = dateLabel(item.created_at);
       top.append(fileIcon, descriptor, date);
       const paper = document.createElement('span'); paper.className = 'note-paper card-body min-w-0 pt-3';
       const name = document.createElement('span'); name.className = 'note-heading file-name card-title fw-medium mb-1 d-block'; name.textContent = item.title;

@@ -88,7 +88,7 @@
   padding:12px var(--card-inset);
   white-space:pre-wrap;
   overflow-wrap:anywhere;
-  background:var(--raised);
+  background:var(--base);
   font:var(--font-size)/1.65 var(--font-ui);
 }
 
@@ -144,6 +144,5 @@
 
 /* Minimal preview and list surfaces retain the existing split layout. */
 .preview-pane{border-inline-start:1px solid var(--outline-soft)}
-.preview-content.note-paper{background:var(--base)}
 .room-details.quick-bar{--bs-card-bg:var(--mantle)}
 @media (width < 600px){.preview-pane{border-inline-start:0;border-top:1px solid var(--outline-soft)}}
