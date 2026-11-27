@@ -85,7 +85,6 @@ function renderRoom() {
   $('#room-screen').hidden = false;
   $('#sidebar-room-actions').hidden = false;
   $('#sidebar-active').hidden = false;
-  $('#sidebar-none').hidden = true;
   $('#sidebar-room').textContent = displayCode(room.code);
   $('#sidebar-home').classList.remove('active');
   $('#sidebar-active').classList.add('active');
